@@ -240,7 +240,7 @@ custom_css:
 # 网页访问统计
 # Analysis of website visitors
 web_analytics:  # 网页访问统计
-  enable: false
+  enable: true
 
   # 遵循访客浏览器"请勿追踪"的设置，如果开启则不统计其访问
   # Follow the "Do Not Track" setting of the visitor's browser
@@ -423,12 +423,14 @@ footer:
     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
     <i class="iconfont icon-love"></i>
     <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    <br>
+    <p>Copyright© 2020-2023 <a href="/">YangTY''s Blog</a></p>
   '
 
   # 展示网站的 PV、UV 统计数
   # Display website PV and UV statistics
   statistics:
-    enable: false
+    enable: true
 
     # 统计数据来源，使用 leancloud 需要设置 `web_analytics: leancloud` 中的参数；使用 busuanzi 不需要额外设置，但是有时不稳定，另外本地运行时 busuanzi 显示统计数据很大属于正常现象，部署后会正常
     # Data source. If use leancloud, you need to set the parameter in `web_analytics: leancloud`
@@ -542,7 +544,7 @@ post:
     # 作者，优先根据 front-matter 里 author 字段，其次是 hexo 配置中 author 值
     # Author, based on `author` field in front-matter, if not set, based on `author` value in hexo config
     author:
-      enable: false
+      enable: true
 
     # 文章日期，优先根据 front-matter 里 date 字段，其次是 md 文件日期
     # Post date, based on `date` field in front-matter, if not set, based on create date of .md file
@@ -551,7 +553,7 @@ post:
       # 格式参照 ISO-8601 日期格式化
       # ISO-8601 date format
       # See: http://momentjs.cn/docs/#/parsing/string-format/
-      format: "LL a"
+      format: "LLL"
 
     # 字数统计
     # Word count
@@ -581,12 +583,12 @@ post:
   # 在文章开头显示文章更新时间，该时间默认是 md 文件更新时间，可通过 front-matter 中 `updated` 手动指定（和 date 一样格式）
   # Update date is displayed at the beginning of the post. The default date is the update date of the md file, which can be manually specified by `updated` in front-matter (same format as date)
   updated:
-    enable: false
+    enable: true
 
     # 格式参照 ISO-8601 日期格式化
     # ISO-8601 date format
     # See: http://momentjs.cn/docs/#/parsing/string-format/
-    date_format: "LL a"
+    date_format: "LLL"
 
     # 是否使用相对时间表示，比如："3 天前"
     # If true, it will be a relative time, such as: "3 days ago"
@@ -735,131 +737,6 @@ post:
 # Enable comments need to be set `post: comments: enable: true`, then set the corresponding comment plugin parameters below according to `type`
 #---------------------------
 
-# Utterances
-# 基于 GitHub Issues
-# Based on GitHub Issues
-# See: https://utteranc.es
-utterances:
-  repo:
-  issue_term: pathname
-  label: utterances
-  theme: github-light
-  theme_dark: github-dark
-
-# Disqus
-# 基于第三方的服务，国内用户直接使用容易被墙，建议配合 Disqusjs
-# Based on third-party service
-# See: https://disqus.com
-disqus:
-  shortname:
-  # 以下为 Disqusjs 支持, 国内用户如果想使用 Disqus 建议配合使用
-  # The following are Disqusjs configurations, please ignore if DisqusJS is not required
-  # See: https://github.com/SukkaW/DisqusJS
-  disqusjs: false
-  apikey:
-
-# Gitalk
-# 基于 GitHub Issues
-# Based on GitHub Issues
-# See: https://github.com/gitalk/gitalk#options
-gitalk:
-  clientID:
-  clientSecret:
-  repo:
-  owner:
-  admin: ['name']
-  language: zh-CN
-  labels: ['Gitalk']
-  perPage: 10
-  pagerDirection: last
-  distractionFreeMode: false
-  createIssueManually: true
-  # 默认 proxy 可能会失效，解决方法请见下方链接
-  # The default proxy may be invalid, refer to the links for solutions
-  # https://github.com/gitalk/gitalk/issues/429
-  # https://github.com/Zibri/cloudflare-cors-anywhere
-  proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token
-
-# Valine
-# 基于 LeanCloud
-# Based on LeanCloud
-# See: https://valine.js.org/
-valine:
-  appId:
-  appKey:
-  path: window.location.pathname
-  placeholder:
-  avatar: 'retro'
-  meta: ['nick', 'mail', 'link']
-  requiredFields: []
-  pageSize: 10
-  lang: 'zh-CN'
-  highlight: false
-  recordIP: false
-  serverURLs: ''
-  emojiCDN:
-  emojiMaps:
-  enableQQ: false
-
-# Waline
-# 从 Valine 衍生而来，额外增加了服务端和多种功能
-# Derived from Valine, with self-hosted service and new features
-# See: https://waline.js.org/
-waline:
-  serverURL: ''
-  path: window.location.pathname
-  meta: ['nick', 'mail', 'link']
-  requiredMeta: ['nick']
-  lang: 'zh-CN'
-  emoji: ['https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo']
-  dark: 'html[data-user-color-scheme="dark"]'
-  wordLimit: 0
-  pageSize: 10
-
-# 畅言 Changyan
-# 基于第三方的服务
-# Based on third-party service, insufficient support for regions outside China
-# http://changyan.kuaizhan.com
-changyan:
-  appid: ''
-  appkey: ''
-
-# 来必力 Livere
-# 基于第三方的服务
-# Based on third-party service
-# See: https://www.livere.com
-livere:
-  uid: ''
-
-# Remark42
-# 需要自托管服务端
-# Based on self-hosted service
-# See: https://remark42.com
-remark42:
-  host:
-  site_id:
-  max_shown_comments: 10
-  locale: zh
-  components: ['embed']
-
-# Twikoo
-# 支持腾讯云、Vercel、Railway 等多种平台部署
-# Based on Tencent CloudBase
-# See: https://twikoo.js.org
-twikoo:
-  envId:
-  region: ap-shanghai
-  path: window.location.pathname
-
-# Cusdis
-# 基于第三方服务或自托管服务
-# Based on third-party or self-hosted service
-# See https://cusdis.com
-cusdis:
-  host:
-  app_id:
-  lang: zh-cn
-
 # Giscus
 # 基于 GitHub Discussions，类似于 Utterances
 # Based on GitHub Discussions, similar to Utterances
@@ -876,14 +753,6 @@ giscus:
   emit-metadata: 0
   input-position: top
   lang: zh-CN
-
-# Discuss
-# 多平台、多数据库、自托管、免费开源评论系统
-# Self-hosted, small size, multi-platform, multi-database, free and open source commenting system
-# See: https://discuss.js.org
-discuss:
-  serverURLs:
-  path: window.location.pathname
 
 
 #---------------------------
