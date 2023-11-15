@@ -8,7 +8,7 @@
     <link href="/note-intro2computing/agda/"/>
     <url>/note-intro2computing/agda/</url>
     
-    <content type="html"><![CDATA[<h2 id="intro-to-calculational-programming"><a class="markdownIt-Anchor" href="#intro-to-calculational-programming"></a> Intro to Calculational Programming</h2><ul><li><p>Specification</p><p>可以理解为“目的”一类的东西。</p><ul><li>describes <strong>what</strong> task an algorithm is to perform,</li><li>expresses the programmers’ intent,</li><li>should be as clear as possible.</li></ul></li><li><p>Implementation</p><p>字面意思，实现。</p><ul><li>describes <strong>how</strong> task is to perform,</li><li>expresses an algorithm (an execution),</li><li>should be effciently done within the time and space available.</li></ul></li></ul><p>The link is that the implementation should be <strong>proved</strong> to satisfy the specification.</p><p>Specification 可以用 predicates（谓词）表达，亦可以用 functions 表达。</p><p>主要将目光聚焦于 functional specification, since</p><ul><li>It’s <strong>executable</strong></li><li>It’s powerful to express intended mappings directly by functions or through their <em>composition</em></li><li>It’s suitable for <strong>reasoning</strong>（推理）, when functions used are <em>well-structured</em> with good algebraic properties（性质）</li></ul><hr /><p>注意到，对于最大子段和问题，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> 的贪心做法和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 的朴素做法是有很大的区别的。</p><p>如果对于 more general case 我们能够有通用的 calculation 从朴素做法得到一个高效率做法，这就是 program calculation 做的事情。不过好像 It’s still under research. Whatever.</p><p>不是很重要，重要的是 Agda 好他妈难啊。</p><h2 id="概要"><a class="markdownIt-Anchor" href="#概要"></a> 概要</h2><blockquote><p>Program testing can be used to show the presence of bugs, but never to show their absence!</p><p>Edsger Dijkstra</p></blockquote><p>现在的核心思想是，we can verify software correctness by writing mathematical proofs about it.</p><p>Agda 是一种函数式语言，事已至此先吃饭吧。</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="intro-to-calculational-programming"><a class="markdownIt-Anchor" href="#intro-to-calculational-programming"></a> Intro to Calculational Programming</h2><ul><li><p>Specification</p><p>可以理解为“目的”一类的东西。</p><ul><li>describes <strong>what</strong> task an algorithm is to perform,</li><li>expresses the programmers’ intent,</li><li>should be as clear as possible.</li></ul></li><li><p>Implementation</p><p>字面意思，实现。</p><ul><li>describes <strong>how</strong> task is to perform,</li><li>expresses an algorithm (an execution),</li><li>should be effciently done within the time and space available.</li></ul></li></ul><p>The link is that the implementation should be <strong>proved</strong> to satisfy the specification.</p><p>Specification 可以用 predicates（谓词）表达，亦可以用 functions 表达。</p><p>主要将目光聚焦于 functional specification, since</p><ul><li>It’s <strong>executable</strong></li><li>It’s powerful to express intended mappings directly by functions or through their <em>composition</em></li><li>It’s suitable for <strong>reasoning</strong>（推理）, when functions used are <em>well-structured</em> with good algebraic properties（性质）</li></ul><hr /><p>注意到，对于最大子段和问题，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> 的贪心做法和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 的朴素做法是有很大的区别的。</p><p>如果对于 more general case 我们能够有通用的 calculation 从朴素做法得到一个高效率做法，这就是 program calculation 做的事情。不过好像 It’s still under research. Whatever.</p><p>不是很重要，重要的是 Agda 好他妈难啊。</p><blockquote><p>Program testing can be used to show the presence of bugs, but never to show their absence!</p><p>Edsger Dijkstra</p></blockquote><p>现在的核心思想是，we can verify software correctness by writing mathematical proofs about it.</p><p>Agda 是一种函数式语言 which is implemented in Haskell。他除了要求 pure functional 外还要求 always terminate.</p><ul><li><strong>Types: Propositions</strong>：命题是通过类型的方式书写的。</li><li><strong>Terms (functional programs): Proofs</strong>：写出来的这段程序就是证明。</li></ul><h2 id="agda-and-booleans"><a class="markdownIt-Anchor" href="#agda-and-booleans"></a> Agda and Booleans</h2><p>基本操作：</p><ul><li>Load/加载文件：<code>C-c C-l</code>，其中 <code>C-a</code> 表示 <code>Ctrl+A</code>；</li><li>Compile/编译：<code>C-x C-c</code>；</li><li>Compute/Normalize/计算：<code>C-c C-n</code>。</li><li>Type inference/类型推断：<code>C-c C-d</code></li></ul><p>下面来看 <code>bool</code> 标准库。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs agda">module bool where<br><br>open import level<br><br>--------------------------------------------------------<br>-- datatypes<br>--------------------------------------------------------<br><br>data 𝔹 : Set where<br>  tt : 𝔹<br>  ff : 𝔹<br></code></pre></td></tr></table></figure><p><code>module</code>：每个 Agda 文件都要包含一个模块声明，而且和文件名必须一样。</p><p>注释的规则与 Haskell 几乎是一样的。</p><p><code>𝔹</code> 是一个 type constructor，里面包含了两个 data constructor：一个 <code>tt</code> 一个 <code>ff</code>。</p><p>同时，<code>𝔹</code> 的类型是 <code>Set</code>。Agda 用了一个很巧妙的方法来避免罗素悖论：给 <code>Set</code> 赋予层级，其中 <code>Set</code> 就是 <code>Set 0</code> 的简写。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs agda">~_ : 𝔹 → 𝔹<br>~ tt = ff <br>~ ff = tt<br><br>_&amp;&amp;_ : 𝔹 → 𝔹 → 𝔹<br>tt &amp;&amp; b = b<br>ff &amp;&amp; b = ff<br><br>_||_ : 𝔹 → 𝔹 → 𝔹<br>tt || b = tt<br>ff || b = b<br></code></pre></td></tr></table></figure><p>函数的声明和 Haskell 的感觉很像，<code>~</code> 后面加下划线表示接收参数。Pattern matching 的思路和 Haskell 的也是几乎一模一样的。但是<strong>注意一定要加空格</strong>，写成 <code>~tt</code> 是会 parse error 的，Agda 会把 <code>~tt</code> 整体当成一个标识符。</p><p>二元运算符被定义为 curried function 也是和 Haskell 类似，此处略过。</p><p>注意 Agda 对缩进同样敏感。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs agda">if_then_else_ : ∀ &#123;ℓ&#125; &#123;A : Set ℓ&#125; <br>                  → 𝔹 → A → A → A<br>if tt then y else z = y<br>if ff then y else z = z<br></code></pre></td></tr></table></figure><p>调用的时候还可以写 <code>if_then_else_ x y z</code> 的。此处可以按下 <code>C-c C-n</code>，然后输入 <code>if tt then tt else ff</code>，Agda 会给你返回 <code>tt</code>。<code>∀</code> 通过 <code>\all</code> 输入，<code>ℓ</code> 通过 <code>\ell</code> 输入。</p>]]></content>
     
     
     <categories>
@@ -24,9 +24,9 @@
       
       <tag>笔记</tag>
       
-      <tag>Agda</tag>
-      
       <tag>函数式编程</tag>
+      
+      <tag>Agda</tag>
       
     </tags>
     
@@ -53,9 +53,9 @@
     
     <tags>
       
-      <tag>笔记</tag>
-      
       <tag>线性代数</tag>
+      
+      <tag>笔记</tag>
       
     </tags>
     
@@ -82,9 +82,9 @@
     
     <tags>
       
-      <tag>高等数学</tag>
-      
       <tag>笔记</tag>
+      
+      <tag>高等数学</tag>
       
     </tags>
     
@@ -111,9 +111,9 @@
     
     <tags>
       
-      <tag>高等数学</tag>
-      
       <tag>笔记</tag>
+      
+      <tag>高等数学</tag>
       
     </tags>
     
@@ -142,9 +142,9 @@
       
       <tag>笔记</tag>
       
-      <tag>函数式编程</tag>
-      
       <tag>Haskell</tag>
+      
+      <tag>函数式编程</tag>
       
     </tags>
     
