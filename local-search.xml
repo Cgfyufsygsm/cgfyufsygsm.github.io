@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>计算概论 A 课程笔记：Agda</title>
+    <link href="/note-intro2computing/agda/"/>
+    <url>/note-intro2computing/agda/</url>
+    
+    <content type="html"><![CDATA[<h2 id="intro-to-calculational-programming"><a class="markdownIt-Anchor" href="#intro-to-calculational-programming"></a> Intro to Calculational Programming</h2><ul><li><p>Specification</p><p>可以理解为“目的”一类的东西。</p><ul><li>describes <strong>what</strong> task an algorithm is to perform,</li><li>expresses the programmers’ intent,</li><li>should be as clear as possible.</li></ul></li><li><p>Implementation</p><p>字面意思，实现。</p><ul><li>describes <strong>how</strong> task is to perform,</li><li>expresses an algorithm (an execution),</li><li>should be effciently done within the time and space available.</li></ul></li></ul><p>The link is that the implementation should be <strong>proved</strong> to satisfy the specification.</p><p>Specification 可以用 predicates（谓词）表达，亦可以用 functions 表达。</p><p>主要将目光聚焦于 functional specification, since</p><ul><li>It’s <strong>executable</strong></li><li>It’s powerful to express intended mappings directly by functions or through their <em>composition</em></li><li>It’s suitable for <strong>reasoning</strong>（推理）, when functions used are <em>well-structured</em> with good algebraic properties（性质）</li></ul><hr /><p>注意到，对于最大子段和问题，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> 的贪心做法和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 的朴素做法是有很大的区别的。</p><p>如果对于 more general case 我们能够有通用的 calculation 从朴素做法得到一个高效率做法，这就是 program calculation 做的事情。不过好像 It’s still under research. Whatever.</p><p>不是很重要，重要的是 Agda 好他妈难啊。</p><h2 id="概要"><a class="markdownIt-Anchor" href="#概要"></a> 概要</h2><blockquote><p>Program testing can be used to show the presence of bugs, but never to show their absence!</p><p>Edsger Dijkstra</p></blockquote><p>现在的核心思想是，we can verify software correctness by writing mathematical proofs about it.</p><p>Agda 是一种函数式语言，事已至此先吃饭吧。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>笔记</category>
+      
+      <category>本科课程</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>笔记</tag>
+      
+      <tag>函数式编程</tag>
+      
+      <tag>Agda</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>线性代数 A (I) 课程笔记</title>
     <link href="/note-linear-algebra-a1/"/>
     <url>/note-linear-algebra-a1/</url>
@@ -91,7 +122,7 @@
   
   
   <entry>
-    <title>计算概论 A 课程笔记——范畴论与 Monad 部分</title>
+    <title>计算概论 A 课程笔记：范畴论与 Monad 部分</title>
     <link href="/note-intro2computing/CT/"/>
     <url>/note-intro2computing/CT/</url>
     

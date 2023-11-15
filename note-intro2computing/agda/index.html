@@ -18,23 +18,24 @@
   <meta name="author" content="YangTY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="期中有小点寄，加训。 太长了所以拆成了好几篇。 3b1b 的一些观后感见这里。 第一章至第二章的小总结在这里。  向量空间 拆成了若干几部分。  第一部分：向量空间的基本定义&#x2F;线性相关与线性无关 第二部分：向量组的极大无关组与秩 第三部分：子空间的基&#x2F;维数与矩阵的秩 第四部分：线性方程组的解   矩阵的运算 我们容易验证，同阶的矩阵是满足线性空间的八大公理的，所以构成线性空间。数域 KKK 上全体">
+    <meta name="description" content="Intro to Calculational Programming   Specification 可以理解为“目的”一类的东西。  describes what task an algorithm is to perform, expresses the programmers’ intent, should be as clear as possible.    Implementatio">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线性代数 A (I) 课程笔记">
-<meta property="og:url" content="https://blog.imyangty.com/note-linear-algebra-a1/index.html">
+<meta property="og:title" content="计算概论 A 课程笔记：Agda">
+<meta property="og:url" content="https://blog.imyangty.com/note-intro2computing/agda/index.html">
 <meta property="og:site_name" content="YangTY&#39;s Blog">
-<meta property="og:description" content="期中有小点寄，加训。 太长了所以拆成了好几篇。 3b1b 的一些观后感见这里。 第一章至第二章的小总结在这里。  向量空间 拆成了若干几部分。  第一部分：向量空间的基本定义&#x2F;线性相关与线性无关 第二部分：向量组的极大无关组与秩 第三部分：子空间的基&#x2F;维数与矩阵的秩 第四部分：线性方程组的解   矩阵的运算 我们容易验证，同阶的矩阵是满足线性空间的八大公理的，所以构成线性空间。数域 KKK 上全体">
+<meta property="og:description" content="Intro to Calculational Programming   Specification 可以理解为“目的”一类的东西。  describes what task an algorithm is to perform, expresses the programmers’ intent, should be as clear as possible.    Implementatio">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-12T05:30:12.000Z">
-<meta property="article:modified_time" content="2023-11-15T03:42:37.300Z">
+<meta property="article:published_time" content="2023-11-15T09:00:01.000Z">
+<meta property="article:modified_time" content="2023-11-15T09:50:50.589Z">
 <meta property="article:author" content="YangTY">
 <meta property="article:tag" content="笔记">
-<meta property="article:tag" content="线性代数">
+<meta property="article:tag" content="函数式编程">
+<meta property="article:tag" content="Agda">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>线性代数 A (I) 课程笔记 - YangTY&#39;s Blog</title>
+  <title>计算概论 A 课程笔记：Agda - YangTY&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="线性代数 A (I) 课程笔记"></span>
+            <span id="subtitle" data-typed-text="计算概论 A 课程笔记：Agda"></span>
           
         </div>
 
@@ -225,8 +226,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-12 13:30" pubdate>
-          2023年11月12日 下午
+        <time datetime="2023-11-15 17:00" pubdate>
+          2023年11月15日 下午
         </time>
       </span>
     
@@ -237,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          289 字
+          1k 字
         
       </span>
     
@@ -248,7 +249,7 @@
         
         
         
-          3 分钟
+          9 分钟
         
       </span>
     
@@ -285,30 +286,51 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">线性代数 A (I) 课程笔记</h1>
+            <h1 id="seo-header">计算概论 A 课程笔记：Agda</h1>
             
             
               <div class="markdown-body">
                 
-                <p>期中有小点寄，加训。</p>
-<p>太长了所以拆成了好几篇。</p>
-<p>3b1b 的一些观后感见<a href="/note-linear-algebra-a1/0/">这里</a>。</p>
-<p>第一章至第二章的小总结在<a href="/note-linear-algebra-a1/1/">这里</a>。</p>
-<h2 id="向量空间"><a class="markdownIt-Anchor" href="#向量空间"></a> 向量空间</h2>
-<p>拆成了若干几部分。</p>
+                <h2 id="intro-to-calculational-programming"><a class="markdownIt-Anchor" href="#intro-to-calculational-programming"></a> Intro to Calculational Programming</h2>
 <ul>
-<li><a href="/note-linear-algebra-a1/2/">第一部分</a>：向量空间的基本定义/线性相关与线性无关</li>
-<li><a href="/note-linear-algebra-a1/3/">第二部分</a>：向量组的极大无关组与秩</li>
-<li><a href="/note-linear-algebra-a1/4/">第三部分</a>：子空间的基/维数与矩阵的秩</li>
-<li><a href="/note-linear-algebra-a1/5/">第四部分</a>：线性方程组的解</li>
-</ul>
-<h2 id="矩阵的运算"><a class="markdownIt-Anchor" href="#矩阵的运算"></a> 矩阵的运算</h2>
-<p>我们容易验证，同阶的矩阵是满足线性空间的八大公理的，所以构成线性空间。数域 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 上全体 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m\times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> 矩阵在加法和数乘下构成的线性空间简称矩阵空间，记作 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>m</mi><mo separator="true">,</mo><mi>n</mi></mrow></msub><mo stretchy="false">(</mo><mi>K</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">M_{m,n}(K)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mclose">)</span></span></span></span>。</p>
+<li>
+<p>Specification</p>
+<p>可以理解为“目的”一类的东西。</p>
 <ul>
-<li><a href="/note-linear-algebra-a1/6/">第一部分</a>：矩阵乘法/转置以及特殊矩阵</li>
-<li><a href="/note-linear-algebra-a1/7/">第二部分</a>：矩阵乘积的秩与行列式</li>
-<li><a href="/note-linear-algebra-a1/8/">第三部分</a>：矩阵的逆</li>
+<li>describes <strong>what</strong> task an algorithm is to perform,</li>
+<li>expresses the programmers’ intent,</li>
+<li>should be as clear as possible.</li>
 </ul>
+</li>
+<li>
+<p>Implementation</p>
+<p>字面意思，实现。</p>
+<ul>
+<li>describes <strong>how</strong> task is to perform,</li>
+<li>expresses an algorithm (an execution),</li>
+<li>should be effciently done within the time and space available.</li>
+</ul>
+</li>
+</ul>
+<p>The link is that the implementation should be <strong>proved</strong> to satisfy the specification.</p>
+<p>Specification 可以用 predicates（谓词）表达，亦可以用 functions 表达。</p>
+<p>主要将目光聚焦于 functional specification, since</p>
+<ul>
+<li>It’s <strong>executable</strong></li>
+<li>It’s powerful to express intended mappings directly by functions or through their <em>composition</em></li>
+<li>It’s suitable for <strong>reasoning</strong>（推理）, when functions used are <em>well-structured</em> with good algebraic properties（性质）</li>
+</ul>
+<hr />
+<p>注意到，对于最大子段和问题，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> 的贪心做法和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 的朴素做法是有很大的区别的。</p>
+<p>如果对于 more general case 我们能够有通用的 calculation 从朴素做法得到一个高效率做法，这就是 program calculation 做的事情。不过好像 It’s still under research. Whatever.</p>
+<p>不是很重要，重要的是 Agda 好他妈难啊。</p>
+<h2 id="概要"><a class="markdownIt-Anchor" href="#概要"></a> 概要</h2>
+<blockquote>
+<p>Program testing can be used to show the presence of bugs, but never to show their absence!</p>
+<p>Edsger Dijkstra</p>
+</blockquote>
+<p>现在的核心思想是，we can verify software correctness by writing mathematical proofs about it.</p>
+<p>Agda 是一种函数式语言，事已至此先吃饭吧。</p>
 
                 
               </div>
@@ -351,7 +373,9 @@
       
         <a href="/tags/%E7%AC%94%E8%AE%B0/" class="print-no-link">#笔记</a>
       
-        <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" class="print-no-link">#线性代数</a>
+        <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="print-no-link">#函数式编程</a>
+      
+        <a href="/tags/Agda/" class="print-no-link">#Agda</a>
       
     </div>
   
@@ -363,8 +387,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>线性代数 A (I) 课程笔记</div>
-      <div>https://blog.imyangty.com/note-linear-algebra-a1/</div>
+      <div>计算概论 A 课程笔记：Agda</div>
+      <div>https://blog.imyangty.com/note-intro2computing/agda/</div>
     </div>
     <div class="license-meta">
       
@@ -376,7 +400,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月12日</div>
+          <div>2023年11月15日</div>
         </div>
       
       
@@ -408,18 +432,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/note-intro2computing/agda/" title="计算概论 A 课程笔记：Agda">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">计算概论 A 课程笔记：Agda</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/note-advmathA1-midterm-review/" title="高数 A (I) 期中复习">
-                        <span class="hidden-mobile">高数 A (I) 期中复习</span>
+                      <a href="/note-linear-algebra-a1/" title="线性代数 A (I) 课程笔记">
+                        <span class="hidden-mobile">线性代数 A (I) 课程笔记</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
