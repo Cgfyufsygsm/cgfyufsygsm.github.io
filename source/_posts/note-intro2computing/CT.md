@@ -1,5 +1,5 @@
 ---
-title: 计算概论 A 课程笔记——范畴论与 Monad 部分
+title: 计算概论 A 课程笔记：范畴论与 Monad 部分
 date: 2023-10-22 20:10:43
 tags:
   - Haskell
