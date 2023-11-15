@@ -5,7 +5,7 @@ tags:
   - 高等数学
   - 笔记
 categories: [笔记, 本科课程]
-hide: false
+password: 20041031
 ---
 
 ## Notes
@@ -181,7 +181,7 @@ $$
 
    所以，对于 $1031$ 如法炮制，令 $y_n = 1031^{3^{-n}}$，根据上面的理论，$f(y_1) = f(y_2) = \cdots$，而且 $\displaystyle \lim_{n \to \infty}f(y_n) = \lim_{x \to 1}f(x) = f(1) = 1$，所以 $f(1031) = 1$。
 
-1. $n=1$ 略。对于 $n\ge 2$，构造 $g(x) = f(x) - \displaystyle f\left( x + \frac{1}{n} \right) $ 是显然的，然后我们有 $\displaystyle \sum_{k=1}^n g\left( \frac{k - 1}{n} \right) =0$。于是 $\exists$ 一个 $[1, n - 1]$ 间的整数 $m$ 使得 $\displaystyle g\left( \frac{m-1}{n} \right)g\left( \frac{m}{n} \right) \le 0$（证明的话可以考虑反证），由介值定理知 $\exists \xi \in \displaystyle \left[ \frac{m-1}{n},\frac{m}{n} \right]$ 满足 $g(\xi) = 0$。
+1. $n=1$ 略。对于 $n\ge 2$，构造 $g(x) = f(x) - \displaystyle f\left( x + \frac{1}{n} \right)$ 是显然的，然后我们有 $\displaystyle \sum_{k=1}^n g\left( \frac{k - 1}{n} \right) =0$。于是 $\exists$ 一个 $[1, n - 1]$ 间的整数 $m$ 使得 $\displaystyle g\left( \frac{m-1}{n} \right)g\left( \frac{m}{n} \right) \le 0$（证明的话可以考虑反证），由介值定理知 $\exists \xi \in \displaystyle \left[ \frac{m-1}{n},\frac{m}{n} \right]$ 满足 $g(\xi) = 0$。
 
 1. 这个叫做压缩映射，前面三个小问都是为了推出第四问做铺垫的。分别考虑吧。
    (1) 证明：考虑对于一个特定值 $x_0$，我们有 $0\le|f(x) - f(x_0)|\le k|x-x_0|\le |x-x_0|$，令 $x\to x_0$，夹逼得到 $|f(x)-f(x_0)|\to 0$，这与 $\displaystyle \lim_{x \to x_0}f(x) = f(x_0)$ 等价，所以其连续。
