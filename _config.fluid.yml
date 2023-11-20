@@ -900,6 +900,12 @@ links:
       link: "https://studyingfather.com/",
       avatar: "https://q1.qlogo.cn/g?b=qq&nk=594422141&s=5"
     }
+    - {
+      title: "RichardF",
+      intro: "PolyU 高中的朋友",
+      link: "https://richardf123.github.io/",
+      avatar: "https://q1.qlogo.cn/g?b=qq&nk=313023381&s=5"
+    }
 
   # 当成员头像加载失败时，替换为指定图片
   # When the member avatar fails to load, replace the specified image

@@ -31,3 +31,5 @@ categories: [笔记, 本科课程]
 - [第一部分](/note-linear-algebra-a1/6/)：矩阵乘法/转置以及特殊矩阵
 - [第二部分](/note-linear-algebra-a1/7/)：矩阵乘积的秩与行列式
 - [第三部分](/note-linear-algebra-a1/8/)：矩阵的逆
+- [第四部分](/note-linear-algebra-a1/9/)：矩阵的分块
+- [习题课](/note-linear-algebra-a1/10/)：矩阵的逆和分块部分。
