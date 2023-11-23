@@ -307,3 +307,279 @@ Curry-Howard Isomorphism 其实是对应的 **constructive logic**，而非 clas
 没看懂书上写的用 CH 同构处理 nonconstructive reasoning 的方法。咕着吧反正不重要。
 
 ## 自然数上的证明
+
+### 皮亚诺整数及简单运算
+
+皮亚诺整数的定义：
+
+```agda
+data ℕ : Set where
+  zero : ℕ
+  suc : ℕ → ℕ
+```
+
+比如说，$3$ 的表示就是 `suc (suc (suc zero))`，注意括号在这里是必须的，鉴于 function application 的优先级是最高的（类比 Haskell）。
+
+接下来是加法的定义：
+
+```agda
+_+_ : ℕ → ℕ → ℕ
+zero  + n = n
+suc m + n = suc (m + n)
+```
+
+这仍然是一个很常见的 pattern matching 的例子。
+
+下面是一些基本定理以及其证明：
+
+```agda
+0+ : ∀ (x : ℕ) → 0 + x ≡ x
+0+ x = refl
+
++0 : ∀ (x : ℕ) → x + 0 ≡ x
++0 zero = refl
++0 (suc x) rewrite +0 x = refl
+```
+
+`0+` 是显然的，因为**根据加法的定义**，`0 + x` 是可以直接展开为 `x` 的，所以用一个 `refl` 即完成证明。但是 `+0` 则是不显然的——你没有办法直接**根据加法的定义**将其直接展开，所以不能直接用 `refl` 证明。
+
+在这里，使用 hole 可以看出我们证明的目标是 `suc (x + 0) ≡ suc x`，倘若我们能说明 `x + 0` 和 `x` 相等，是不是就 OK 了呢？所以使用 `rewrite` 来“归纳”，目标就变为了证明 `suc x ≡ suc x`，自然用 `refl` 即可。
+
+值得注意的是，在自然数相关证明里面，按照 `0` 和 `suc n` 来进行分类讨论往往是非常有效的。这种用递归来刻画归纳的想法也是非常有用的。
+
+接下来证明结合律。这是用 hole 来开发证明的一个很好的例子。`C-c C-l`  可以生成 holes，然后把光标放在 hole 里面按下 `C-c C-,` 可以调出当前要证明的 goal 以及相应的 context。当完成了证明之后，按下 `C-c C-space` 即可。
+
+```agda
++assoc : ∀ (x y z : ℕ) → x + (y + z) ≡ (x + y) + z
++assoc zero y z = refl
++assoc (suc x) y z rewrite +assoc x y z = refl
+```
+
+具体过程就略过了。
+
+再接下来证明交换律。一样是类似的思路，先考虑分类：
+
+```agda
++comm : ∀ (x y : ℕ) → x + y ≡ y + x
++comm zero y = ?
++comm (suc x) y = ?
+```
+
+在第一个 hole 里面 `C-c C-,`，知道目标为证明 `y ≡ y + zero`，不难发现使用 `+0 y` rewrite 一下即可。在第二个 hole 里面，目标为 `suc (x + y) ≡ y + suc x`，用 `+comm x y` rewrite 之，变成 `suc (y + x) ≡ y + suc x`。
+
+```agda
++comm : ∀ (x y : ℕ) → x + y ≡ y + x
++comm zero y rewrite +0 y = refl
++comm (suc x) y rewrite +comm x y = {!   0!}
+```
+
+现在怎么办呢，发现此时我们需要一个引理。
+
+```agda
++suc : ∀ (x y : ℕ) → x + (suc y) ≡ suc(x + y)
++suc zero y = refl
++suc (suc x) y rewrite +suc x y = refl
+```
+
+再 rewrite 之即可。
+
+```agda
++comm : ∀ (x y : ℕ) → x + y ≡ y + x
++comm zero y rewrite +0 y = refl
++comm (suc x) y rewrite +comm x y | +suc y x = refl
+```
+
+值得一提的是，`+suc y x` 和 `+comm x y` 的位置是可以替换的，rewrite **只会 rewrite 一次**。
+
+接下来是乘法的定义以及一系列相关证明：
+
+```agda
+_*_ : ℕ → ℕ → ℕ
+zero  * n = zero
+suc m * n = n + (m * n)
+
+*distribr : ∀ (x y z : ℕ) → (x + y) * z ≡ x * z + y * z
+*distribr zero y z = refl
+*distribr (suc x) y z rewrite *distribr x y z = +assoc z (x * z) (y * z) 
+
+*0 : (x : ℕ) → x * zero ≡ zero
+*0 zero = refl
+*0 (suc n) rewrite *0 n = refl
+
+*suc : (x y : ℕ) → x * suc y ≡ x + x * y
+*suc zero y = refl
+*suc (suc n) m rewrite *suc n m | +assoc m n (n * m) | +assoc n m (n * m) | +comm n m = refl
+
+*-comm : (x y : ℕ) → x * y ≡ y * x
+*-comm 0 m rewrite *0 m = refl
+*-comm (suc n) m rewrite *suc m n | *-comm n m = refl
+
+*-assoc : (x y z : ℕ) → (x * y) * z ≡ x * (y * z)
+*-assoc 0 y z = refl
+*-assoc (suc x) y z rewrite *distribr y (x * y) z | *-assoc x y z = refl
+```
+
+最后四个证明是我自己写的，写的方式是不唯一的。
+
+### 不等关系
+
+```agda
+_<_ : ℕ → ℕ → 𝔹
+0 < 0 = ff
+0 < (suc y) = tt
+(suc x) < (suc y) = x < y
+(suc x) < 0 = ff
+
+_=ℕ_ : ℕ → ℕ → 𝔹
+0 =ℕ 0 = tt
+suc x =ℕ suc y = x =ℕ y
+_ =ℕ _ = ff
+
+_≤_ : ℕ → ℕ → 𝔹
+x ≤ y = (x < y) || x =ℕ y
+
+_>_ : ℕ → ℕ → 𝔹
+a > b = b < a
+
+_≥_ : ℕ → ℕ → 𝔹
+a ≥ b = b ≤ a
+```
+
+然后是一些定理：
+
+```agda
+<-0 : ∀ (x : ℕ) → x < 0 ≡ ff
+<-0 0 = refl
+<-0 (suc y) = refl
+
+<-trans : ∀ {x y z : ℕ} → x < y ≡ tt → y < z ≡ tt → x < z ≡ tt
+<-trans {x} {0} p1 p2 rewrite <-0 x = 𝔹-contra p1
+<-trans {0} {suc y} {0} p1 () 
+<-trans {0} {suc y} {suc z} p1 p2 = refl
+<-trans {suc x} {suc y} {0} p1 () 
+<-trans {suc x} {suc y} {suc z} p1 p2 = <-trans {x} {y} {z} p1 p2
+```
+
+无非是考虑疯狂分类讨论。
+
+最后是一些相互递归的证明：
+
+```agda
+even~odd : ∀ (x : ℕ) → is-even x ≡ ~ is-odd x
+odd~even : ∀ (x : ℕ) → is-odd x ≡ ~ is-even x
+even~odd zero = refl
+even~odd (suc x) = odd~even x
+odd~even zero = refl
+odd~even (suc x) = even~odd x
+```
+
+想法很类似于学习 Haskell 时候的，这里就略过吧。
+
+## List
+
+### 基本定义
+
+列表的定义：
+
+```agda
+data 𝕃 {ℓ} (A : Set ℓ) : Set ℓ where
+  [] : 𝕃 A
+  _::_ : (x : A) (xs : 𝕃 A) → 𝕃 A
+```
+
+just a typical type constructor。`::` 读作 cons，接下来类似 Haskell 地，一些代码：
+
+```agda
+is-empty : ∀{ℓ}{A : Set ℓ} → 𝕃 A → 𝔹
+is-empty [] = tt
+is-empty (_ :: _) = ff
+
+tail : ∀ {ℓ} {A : Set ℓ} → 𝕃 A → 𝕃 A
+tail [] = []
+tail (x :: xs) = xs
+
+head : ∀{ℓ}{A : Set ℓ} → (l : 𝕃 A) → .(is-empty l ≡ ff) → A
+head [] ()
+head (x :: xs) _ = x
+
+head2 : ∀{ℓ}{A : Set ℓ} → (l : 𝕃 A) → maybe A
+head2 [] = nothing
+head2 (a :: _) = just a
+```
+
+注意到 `head2` 用到了 maybe monad。这里跟 Haskell 的思想也是很像的：**按照列表是否为空分类 pattern matching**。
+
+然后是喜闻乐见的
+
+```agda
+_++_ : ∀ {ℓ} {A : Set ℓ} → 𝕃 A → 𝕃 A → 𝕃 A
+[]        ++ ys = ys
+(x :: xs) ++ ys = x :: (xs ++ ys)
+
+concat : ∀{ℓ}{A : Set ℓ} → 𝕃 (𝕃 A) → 𝕃 A
+concat [] = []
+concat (l :: ls) = l ++ concat ls
+
+repeat : ∀{ℓ}{A : Set ℓ} → ℕ → A → 𝕃 A
+repeat 0 a = []
+repeat (suc n) a = a :: (repeat n a)
+
+map : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} → (A → B) → 𝕃 A → 𝕃 B
+map f []        = []
+map f (x :: xs) = f x :: map f xs
+
+foldr : ∀{ℓ ℓ'}{A : Set ℓ}{B : Set ℓ'} → (A → B → B) → B → 𝕃 A → B
+foldr f b [] = b
+foldr f b (a :: as) = f a (foldr f b as)
+
+length : ∀{ℓ}{A : Set ℓ} → 𝕃 A → ℕ
+length [] = 0
+length (x :: xs) = suc (length xs)
+
+filter : ∀{ℓ}{A : Set ℓ} → (A → 𝔹) → 𝕃 A → 𝕃 A
+filter p [] = []
+filter p (x :: xs) = let r = filter p xs in 
+                     if p x then x :: r else r
+```
+
+完全跟 Haskell 里面的就差不多是一个东西，略。
+
+和 list 有关的证明也是利用 pattern matching。
+
+### Length of Filtered Lists, and the with Construct
+
+此处看一个典型例子，以此引入 `with` 记号：
+
+```agda
+length-filter : ∀{ℓ}{A : Set ℓ}(p : A → 𝔹)(l : 𝕃 A) → 
+                length (filter p l) ≤ length l ≡ tt
+length-filter p [] = refl
+length-filter p (x :: l) with p x
+length-filter p (x :: l) | tt = length-filter p l
+length-filter p (x :: l) | ff = 
+  ≤-trans{length (filter p l)} (length-filter p l) (≤-suc (length l))
+```
+
+具体看一下怎么说吧。对于 `[]` 的情况，`refl` 是自然的。如果我们引入 hole：
+
+```agda
+length-filter p [] = refl
+length-filter p (x :: l) = {!   0!}
+```
+
+他会返回目标：
+
+```agda
+length (if p x then x :: filter p l else filter p l) ≤
+      suc (length l)
+      ≡ tt
+```
+
+这个目标显然是不太优美的。发现如果 `p x` 为 `tt`，那么需要证明的就变成 `length (filter p l) ≤ length l ≡ tt`，发现这不就是 `length-filter p l` 吗，所以用类似归纳的想法就可以了。
+
+现在难搞的是对于 `p x` 为 `ff` 的状态：要证明 `length (filter p l) ≤ suc (length l) ≡ tt`。不过如果我们知道 `length (filter p l) ≤ length l ≡ tt` 以及 `length l ≤ suc (length l)`，则利用小于等于号的传递性即得证。
+
+`with` 记号其实类似于 Haskell 中的 case of，语法见上，应该是较为自然的。
+
+### Filter 的幂等性以及 keep 记号
+

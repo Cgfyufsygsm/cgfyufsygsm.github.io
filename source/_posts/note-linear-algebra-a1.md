@@ -33,3 +33,4 @@ categories: [笔记, 本科课程]
 - [第三部分](/note-linear-algebra-a1/8/)：矩阵的逆
 - [第四部分](/note-linear-algebra-a1/9/)：矩阵的分块
 - [习题课](/note-linear-algebra-a1/10/)：矩阵的逆和分块部分。
+- [第五部分](/note-linear-algebra-a1/11/)：正交矩阵与欧氏空间
