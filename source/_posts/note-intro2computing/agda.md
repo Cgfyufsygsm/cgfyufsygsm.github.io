@@ -583,3 +583,69 @@ length (if p x then x :: filter p l else filter p l) ≤
 
 ### Filter 的幂等性以及 keep 记号
 
+考虑证明如下的东西：
+
+```agda
+filter-idem : ∀{ℓ}{A : Set ℓ}(p : A → 𝔹)(l : 𝕃 A) →
+              (filter p (filter p l)) ≡ (filter p l)
+```
+
+即，filter 过后再 filter 一遍得到的结果跟只 filter 一遍是一样的。
+
+显然，从 `[]` 出发是较为合适的，然后考虑 `x :: l` 的情况，目标变成了
+
+```agda
+filter p (if p x then x :: filter p l else filter p l) ≡
+      if p x then x :: filter p l else filter p l
+```
+
+可以说是相当丑陋。类似上面的，用 `with` 分类讨论一下，发现当 `p x` 为 `tt` 时，目标变为
+
+```agda
+if p x then x :: filter p (filter p l) else
+      filter p (filter p l)
+      ≡ x :: filter p l
+```
+
+这里 Agda 就自动帮我们进行了一次展开：等号左边变成了 `filter p (if tt then x :: filter p l else filter p l)`，即 `filter p (x :: filter p l)`，再根据 `filter` 的定义展开：`if p x then x :: filter p (filter p l) else filter p (filter p l)`，又蹦出来了一个 `if_then_else`。这是因为 **with 只会将表达式实例化一次**。所以我们这下得引入一个新记号 `keep`（书上是这么叫的，标准库里面似乎是 `inspect`），定义如下：
+
+```agda
+-- this is called the inspect idiom, in the Agda stdlib
+keep : ∀{ℓ}{A : Set ℓ} → (x : A) → Σ A (λ y → x ≡ y)
+keep x = ( x , refl )
+```
+
+直接看代码：
+
+```agda
+filter-idem : ∀{ℓ}{A : Set ℓ}(p : A → 𝔹)(l : 𝕃 A) →
+              (filter p (filter p l)) ≡ (filter p l)
+filter-idem p [] = refl
+filter-idem p (x :: l) with keep (p x)
+filter-idem p (x :: l) | tt , p' = ?
+filter-idem p (x :: l) | ff , p' = ?
+```
+
+如果我们检查第一个 hole 的 context，会发现 `p'` 有类型 `p' : p x ≡ tt`。注意 Agda 是不会自动实例化 `p x ≡ tt` 的，需要我们去 rewrite。显然，我们需要 rewrite 两个 `p'`。此时对于 `tt` 的情况：
+
+```agda
+filter-idem p (x :: l) | tt , p' rewrite p' | p' = {!   0!}
+```
+
+目标为 `x :: filter p (filter p l) ≡ x :: filter p l`。那么显然归纳一下就弄完了。`ff` 是类似的，完整代码如下：
+
+```agda
+filter-idem : ∀{ℓ}{A : Set ℓ}(p : A → 𝔹)(l : 𝕃 A) →
+              (filter p (filter p l)) ≡ (filter p l)
+filter-idem p [] = refl
+filter-idem p (x :: l) with keep (p x)
+filter-idem p (x :: l) | tt , p' rewrite p' | p' | filter-idem p l = refl
+filter-idem p (x :: l) | ff , p' rewrite p' = filter-idem p l
+```
+
+值得一提的是，rewrite 记号是**从左往右重写，一个表达式只重写一次**的。
+
+所以如果调换一下 rewrite 后面几个东西的顺序的话，是有可能失败的。
+
+## Internal Verification
+
