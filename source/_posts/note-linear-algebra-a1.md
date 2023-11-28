@@ -34,3 +34,8 @@ categories: [笔记, 本科课程]
 - [第四部分](/note-linear-algebra-a1/9/)：矩阵的分块
 - [习题课](/note-linear-algebra-a1/10/)：矩阵的逆和分块部分。
 - [第五部分](/note-linear-algebra-a1/11/)：正交矩阵与欧氏空间
+- [习题课](/note-linear-algebra-a1/12)
+
+## 矩阵的相抵与相似
+
+- [第一部分](/note-linear-algebra-a1/13)：线性映射

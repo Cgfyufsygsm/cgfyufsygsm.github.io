@@ -9,45 +9,6 @@ categories: [笔记, 本科课程]
 
 救救期中。。
 
-## 双曲函数
-
-定义：
-
-$$
-\sinh x = \frac{e^x-e^{-x}}{2}\\
-\cosh x = \frac{e^{x}+e^{-x}}{2}\\
-\tanh x = \frac{e^{x}-e^{-x}}{e^{x}+e^{-x}}
-$$
-
-- $\sinh x$ 为奇函数，单调增，值域 $\mathbb{R}$。
-- $\cosh x$ 为偶函数，先减后增，值域 $[1,+\infty)$。
-- $\tanh x$ 为奇函数，单调增，值域 $(-1,1)$。
-
-有一些神奇的恒等式：
-
-- $\cosh^{2}x-\sinh^{2}x=1$
-- $\sinh'x = \cosh x$
-- $\cosh'x = \sinh x$
-
-两角和与差的公式和三角函数的略有不同。
-
-- $\sinh(x\pm y) = \sinh x\cosh y \pm \cosh x \sinh y$
-- $\cosh(x\pm y) = \cosh x \cosh y \pm \sinh x \sinh y$，注意此处的区别。
-- $\tanh(x\pm y) = \displaystyle \frac{\tanh x \pm  \tanh y}{1\pm \tanh x \tanh y}$
-- $\sinh 2x = 2\sinh x \cosh x$
-- $\cosh 2x = \sinh^2x + \cosh^2x= 2\cosh^2x - 1 = 1 + 2\sinh ^2x$
-
-主要应用是可以拿来换元：
-
-- $\operatorname{arsinh}x = \ln\left( x+\sqrt{x^{2}+1} \right)$
-- $\operatorname{arcosh}x = \ln\left( x+\sqrt{x^{2}-1} \right)$
-
-拿来处理形如 $\sqrt{x^{2}+a^{2}}$ 的东西，可以令 $x = \sinh t$ 或 $\cosh t$。比如说：
-
-$$
-\int \frac{\mathrm{d}x}{\sqrt{x^{2}+1}}=\int \frac{\cosh t \mathrm{d}t}{\cosh t} = t + C = \operatorname{arsinh} x + C
-$$
-
 ## 三角函数的一些公式
 
 $\tan^{2}x+1=\sec^{2}x$ 是很重要的关于 $\tan x$ 的处理，很多时候和 $\mathrm{d}\tan x = \sec^{2} x \mathrm{d}x$ 一起处理问题。

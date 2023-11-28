@@ -58,7 +58,7 @@ def twenty_twenty_three():
 
 > 用这个课程给的 `ok` 文件可以很方便的自测作业的正确性，具体使用方法可以看课程说明。
 
-## Lecture 2
+## Lecture 2: Functions
 
 `add (2, 3)`，`add` 为 operator，2 和 3 为 operand。
 
@@ -138,5 +138,59 @@ def f():
 
 f()
 print(x)
+```
+
+## Lecture3: Control
+
+- 没有显示返回值的函数视作返回 `None`。Python 解释器不会打印 `None`。
+- `python3 -m doctest example.py` 可以检验函数是否满足 docstring 的需求。
+
+- An environment is a sequence of frames。对于 `square(square(4))`，其有 3 个 frames。注意到我们查找 name 对应的含义的时候是递归向上查找的。
+
+  A name evaluates to the value bound to that name in the earliest frame of the current environment in which that name is found.
+
+关于 statements：A statement is executed by the interpreter to perform an action
+
+```python
+<header>:
+    <statement>
+    ...
+<separating header>:
+    <statement>
+    ...
+...
+```
+
+比如说 def statement。
+
+while 和 if 的语法也都很简单，直接举个例子吧：
+
+```python
+def hailstone(n):
+    """Print the hailstone sequence starting at n and return its
+    length.
+
+    >>> a = hailstone(10)
+    10
+    5
+    16
+    8
+    4
+    2
+    1
+    >>> a
+    7
+    """
+    "*** YOUR CODE HERE ***"
+    len = 1
+    print(n)
+    while n != 1:
+        if n % 2 == 0:
+            n = n // 2
+        else:
+            n = 3 * n + 1
+        len = len + 1
+        print(n)
+    return len
 ```
 
