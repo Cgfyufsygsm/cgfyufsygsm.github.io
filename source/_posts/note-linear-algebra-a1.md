@@ -39,3 +39,4 @@ categories: [笔记, 本科课程]
 ## 矩阵的相抵与相似
 
 - [第一部分](/note-linear-algebra-a1/13)：线性映射
+- [第二部分](/note-linear-algebra-a1/14)：等价关系、矩阵的相抵与广义逆

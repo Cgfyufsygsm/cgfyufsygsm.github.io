@@ -871,6 +871,12 @@ links:
   # Member item of page
   items:
     - {
+      title: "swl",
+      intro: "和小loli一起吹萨克斯🎷🎶🎶~",
+      link: "https://saxwithloli.site/",
+      avatar: "https://q1.qlogo.cn/g?b=qq&nk=1134403048&s=5"
+    }
+    - {
       title: "白鲟",
       intro: "THU 雷",
       link: "https://psephurusgladius.github.io/",
