@@ -1,4 +1,5 @@
 https://blog.imyangty.com/note-ml2024fall/
+https://blog.imyangty.com/note-ml2024fall/lec4/
 https://blog.imyangty.com/notes-cssyb-final/
 https://blog.imyangty.com/note-integral/
 https://blog.imyangty.com/note-UCB-CS61A/
@@ -7,4 +8,3 @@ https://blog.imyangty.com/note-advmathA1-review2/
 https://blog.imyangty.com/note-simple-math-tricks/
 https://blog.imyangty.com/note-mit-missing-semester/
 https://blog.imyangty.com/note-intro2computing/agda/
-https://blog.imyangty.com/note-advmathA1-midterm-review/
