@@ -1,4 +1,3 @@
-https://blog.imyangty.com/note-ml2024fall/lec5/
 https://blog.imyangty.com/note-ml2024fall/
 https://blog.imyangty.com/note-bomblab/
 https://blog.imyangty.com/notes-cssyb-final/
@@ -8,3 +7,4 @@ https://blog.imyangty.com/note-linear-algebra-a1/
 https://blog.imyangty.com/note-advmathA1-review2/
 https://blog.imyangty.com/note-simple-math-tricks/
 https://blog.imyangty.com/note-mit-missing-semester/
+https://blog.imyangty.com/note-intro2computing/agda/
