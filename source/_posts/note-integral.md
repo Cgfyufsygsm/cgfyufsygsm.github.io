@@ -62,7 +62,7 @@ $$
 - $\displaystyle \int\sqrt{a^2+x^2}\mathrm{d}x$
 - $\displaystyle \int\sqrt{x^{2}-a^{2}}\mathrm{d}x$
 
-对于第一个，我们发现可以使用拆项的方式，其即为 $\displaystyle \int \frac{\mathrm{d}x}{a^{2}-x^{2}}=\frac{1}{2a}\ln\left\vert \frac{1-x}{1+x} \right\vert +C$。
+对于第一个，我们发现可以使用拆项的方式，其即为 $\displaystyle \int \frac{\mathrm{d}x}{a^{2}-x^{2}}=\frac{1}{2a}\ln\left\vert \frac{a-x}{a+x} \right\vert +C$。
 
 对于第二个，发现是 $\arctan$ 的形式，凑微分便有 $\displaystyle \int \frac{\mathrm{d}x}{a^{2}+x^{2}}=\frac{1}{a}\arctan \frac{x}{a}+C$。
 

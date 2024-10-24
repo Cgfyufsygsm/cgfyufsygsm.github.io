@@ -317,6 +317,8 @@ iconfont: //at.alicdn.com/t/font_1736178_lbnruvf0jn.css
 # Header
 #---------------------------
 
+custom_head: '<!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZS41KYKYZ"></script><script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag("js", new Date());  gtag("config", "G-8ZS41KYKYZ:");</script>'
+
 # 导航栏的相关配置
 # Navigation bar
 navbar:
@@ -424,7 +426,9 @@ footer:
     <i class="iconfont icon-love"></i>
     <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
     <br>
-    <p>Copyright© 2020-2023 <a href="/">YangTY''s Blog</a></p>
+    <p>Copyright© 2020-2024 <a href="/">YangTY''s Blog</a></p>
+    <br>
+    <a href="https://clustrmaps.com/site/1c1rp"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=K0MO4d8JdrSjeQTYqe1d2JXGwDGExBIbgHOhU_V8eGE&cl=ffffff" /></a>
   '
 
   # 展示网站的 PV、UV 统计数
@@ -877,16 +881,10 @@ links:
       avatar: "https://q1.qlogo.cn/g?b=qq&nk=1134403048&s=5"
     }
     - {
-      title: "白鲟",
-      intro: "THU 雷",
-      link: "https://psephurusgladius.github.io/",
-      avatar: "https://q1.qlogo.cn/g?b=qq&nk=753742841&s=5"
-    }
-    - {
       title: "Gin_",
       intro: "超强的室友",
-      link: "https://disembo.gitee.io/",
-      avatar: "https://disembo.gitee.io/img/avatar.png"
+      link: "https://disembo.github.io/",
+      avatar: "https://disembo.github.io/img/avatar.png"
     }
     - {
       title: "moongazer",
@@ -911,6 +909,18 @@ links:
       intro: "PolyU 高中的朋友",
       link: "https://richardf123.github.io/",
       avatar: "https://q1.qlogo.cn/g?b=qq&nk=313023381&s=5"
+    }
+    - {
+      title: "Arthals' ink",
+      intro: "所见高山远木，阔云流风；所幸岁月盈余，了无拘束。",
+      link: "https://arthals.ink/",
+      avatar: "https://cdn.arthals.ink/Arthals.png"
+    }
+    - {
+      title: "StellarY's Notes",
+      intro: "Darkest night, I'll confront you here.",
+      link: "https://socialzxy.github.io/",
+      avatar: "https://s2.loli.net/2023/11/24/rtCEFG1igyYAlm4.png"
     }
 
   # 当成员头像加载失败时，替换为指定图片

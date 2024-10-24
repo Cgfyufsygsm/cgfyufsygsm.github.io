@@ -104,37 +104,11 @@ theme: fluid
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
+- type: git
   repository: git@github.com:Cgfyufsygsm/cgfyufsygsm.github.io.git
   branch: main
-
-syzoj_renderer:
-  cache_file: cache.json       # File to store cache, related to Hexo's base directory.
-  highlighter: hexo        # Code highlighter, 'pygments' or 'hexo', the later uses highlight.js.
-  options:                     # syzoj-renderer's options, see https://github.com/syzoj/syzoj-renderer.
-    highlight:
-      expandTab: null          # expandTab > 0 to enable expand tab, which replaces one tab to that namy spaces.
-      wrapper:                 # Strings that'll be added to highlighted code's beginning and ending.
-        - <pre><code>
-        - </code></pre>
-      pygments:                # Pygments's options, see https://github.com/Menci/pygments-promise.
-        lexer: language
-        format: html
-        options:
-          nowrap: true,
-          classprefix: pl-
-    markdownItMergeCells: false # Enable markdown-it-merge-cells or not, which'll merge adjacent cells with same
-                               # content in Markdown tables.
-    markdownIt:                # markdown-it's options, see https://github.com/markdown-it/markdown-it.
-      html: true
-      breaks: false
-      linkify: true
-      typographer: false
-    markdownItMath:            # markdown-it-math-loose's options, see https://github.com/Menci/markdown-it-math-loose.
-      inlineOpen: $
-      inlineClose: $
-      blockOpen: $$
-      blockClose: $$
+- type: cjh_bing_url_submitter
+- type: cjh_baidu_url_submitter
 
 search:
   enable: true
@@ -146,3 +120,22 @@ search:
 
 encrypt: # hexo-blog-encrypt
   enable: true
+
+hexo_submit_urls_to_search_engine:
+  submit_condition: count #链接被提交的条件，可选值：count | period 现仅支持count
+  count: 10 # 提交最新的10个链接
+  period: 900 # 提交修改时间在 900 秒内的链接
+  google: 0 # 是否向Google提交，可选值：1 | 0（0：否；1：是）
+  bing: 0 # 是否向bing提交，可选值：1 | 0（0：否；1：是）s
+  baidu: 0 # 是否向baidu提交，可选值：1 | 0（0：否；1：是）
+  txt_path: submit_urls.txt ## 文本文档名， 需要推送的链接会保存在此文本文档里
+  baidu_host: https://blog.imyangty.com/ ## 在百度站长平台中注册的域名
+  baidu_token: Z0Nak5gp4x7kNEPf ## 请注意这是您的秘钥， 所以请不要把它直接发布在公众仓库里!
+  bing_host: https://blog.imyangty.com/ ## 在bing站长平台中注册的域名
+  bing_token: e78f04defd5f4a329dedd21a968e473c ## 请注意这是您的秘钥， 所以请不要把它直接发布在公众仓库里!
+  google_host: https://cjh0613.github.io ## 在google站长平台中注册的域名
+  google_key_file: Project.json #存放google key的json文件，放于网站根目录（与hexo _config.yml文件位置相同），请不要把json文件内容直接发布在公众仓库里!
+  google_proxy: http://127.0.0.1:8080 # 向谷歌提交网址所使用的系统 http 代理，填 0 不使用
+  replace: 0  # 是否替换链接中的部分字符串，可选值：1 | 0（0：否；1：是）
+  find_what: http://cjh0613.github.io/blog
+  replace_with: https://cjh0613.com
