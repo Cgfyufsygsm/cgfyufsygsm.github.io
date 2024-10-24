@@ -35,9 +35,9 @@
     
     <tags>
       
-      <tag>ICS</tag>
-      
       <tag>本科课程</tag>
+      
+      <tag>ICS</tag>
       
     </tags>
     
@@ -50,7 +50,7 @@
     <link href="/note-ml2024fall/"/>
     <url>/note-ml2024fall/</url>
     
-    <content type="html"><![CDATA[<p>本学期有幸选修了<a href="https://muhanzhang.github.io/">张牧涵</a>老师开设的机器学习课程。张老师的课程讲述非常精彩且有特点，全程板书且穿插了不少 insights。</p><p><s>本来头两讲是在 iPad 上进行笔记记录的，第三节课发现直接用 Markdown 可以跟得上，遂将笔记整理于此。</s></p><p>~~笔记初步分 lecture 整理，以后可能会以知识模块进行重构。~~到目前为止已重构完成。</p><p>目录：</p><ul><li><a href="/note-ml2024fall/linear-regression/">01-线性回归</a></li><li><a href="/note-ml2024fall/logistic-regression/">02-逻辑回归</a></li><li><a href="/note-ml2024fall/b-v-decomposition/">03-偏差方差分解</a></li><li><a href="/note-ml2024fall/svm/">04-支持向量机</a></li><li><a href="/note-representer-theorem/">05-表示定理</a></li></ul><p>课程大纲：</p><table><thead><tr><th>1</th><th>线性回归（Linear Regression）</th><th>3</th><th>经验风险最小化, 矩阵求导，线性回归闭式解，岭回归和Lasso，最小二乘几何解释</th><th>ERM, Matrix Derivatives, Closed-form solution to Linear Regression, Ridge Regression and Lasso, Geometric view of Least Squares</th></tr></thead><tbody><tr><td>2</td><td>逻辑回归（Logistic Regression）</td><td>6</td><td>最大似然原则，交叉熵损失，线性可分，逻辑回归凸函数的证明，平方损失函数分类的缺点，Softmax Regression，线性回归的最大似然解释，岭回归的最大后验解释</td><td>MLE, Cross Entropy, Linear Separable, Proof of the convexity of Logistic Regression, Drawbacks of squared loss for classification, Softmax Regression, MLE of Linear Regression, MAP of Linear Regression</td></tr><tr><td>3</td><td>偏差-方差分解（Bias-Variance Decomposition）</td><td>3</td><td>偏差方差分解，模型选择，奥卡姆剃刀原理</td><td>Bias-Variance Decomposition, Model Selection, Occam’s Razer</td></tr><tr><td>4</td><td>支持向量机与对偶理论（Support Vector Machine and Dual Theory）</td><td>9</td><td>约束优化问题，拉格朗日乘子法，KKT条件，支持向量机主形式，对偶形式，对偶问题的SMO算法，核方法，松弛变量</td><td>Constrained optimization, Lagrange Method, KKT conditions, Primal and Dual forms of SVM, SMO, Kernel methods, Slack variables</td></tr><tr><td>5</td><td>表示定理（Representer’s Theorem）</td><td>3</td><td>再生核希尔伯特空间，表示定理及证明，利用表示定理解释岭回归</td><td>RKHS, Representer’s Theorem, Revisiting Ridge Regression</td></tr><tr><td>6</td><td>学习理论（Learning Theory）</td><td>3</td><td>PAC理论，成长函数，VC维，VC泛化界</td><td>PAC Learning Theory, Growth function, VC-dimension, VC Generalization Bound</td></tr><tr><td>7</td><td>树模型和集成学习（Tree Models and Ensemble Learning）</td><td>6</td><td>信息熵，信息增益，增益率，基尼系数，决策树，回归树，连续特征，Bagging, 随机森林，Boosting, AdaBoost, GBDT</td><td>Entropy, Information gain, Information gain ratio, Gini-index, Decision Tree, Bagging, Random Forest, Boosting, AdaBoost, GBDT</td></tr><tr><td>8</td><td>高斯过程（Gaussian Process）</td><td>3</td><td>多元高斯分布，随机过程，高斯过程回归，贝叶斯优化</td><td>Multivariate Gaussian Distribution, Random Process, Gaussian Process Regression, Bayesian Optimization</td></tr><tr><td>9</td><td>图模型基础（Graphical Models Basics）</td><td>3</td><td>贝叶斯网络，条件独立性，D-separation，无向图模型</td><td>Bayesian networks, Conditional independence, D-separation, Unconditional graphical models</td></tr><tr><td>10</td><td>无监督学习（Unsupervised Learning）</td><td>9</td><td>主成分分析，混合高斯模型，EM算法，变分自编码器，扩散模型</td><td>PCA, Mixture of Gaussians, Expectation-Maximization, VAE, Diffusion Models</td></tr></tbody></table>]]></content>
+    <content type="html"><![CDATA[<p>本学期有幸选修了<a href="https://muhanzhang.github.io/">张牧涵</a>老师开设的机器学习课程。张老师的课程讲述非常精彩且有特点，全程板书且穿插了不少 insights。</p><p><s>本来头两讲是在 iPad 上进行笔记记录的，第三节课发现直接用 Markdown 可以跟得上，遂将笔记整理于此。</s></p><p><s>笔记初步分 lecture 整理，以后可能会以知识模块进行重构。</s> 到目前为止已重构完成。</p><p>目录：</p><ul><li><a href="/note-ml2024fall/linear-regression/">01-线性回归</a></li><li><a href="/note-ml2024fall/logistic-regression/">02-逻辑回归</a></li><li><a href="/note-ml2024fall/b-v-decomposition/">03-偏差方差分解</a></li><li><a href="/note-ml2024fall/svm/">04-支持向量机</a></li><li><a href="/note-representer-theorem/">05-表示定理</a></li></ul><p>课程大纲：</p><table><thead><tr><th>1</th><th>线性回归（Linear Regression）</th><th>3</th><th>经验风险最小化, 矩阵求导，线性回归闭式解，岭回归和Lasso，最小二乘几何解释</th><th>ERM, Matrix Derivatives, Closed-form solution to Linear Regression, Ridge Regression and Lasso, Geometric view of Least Squares</th></tr></thead><tbody><tr><td>2</td><td>逻辑回归（Logistic Regression）</td><td>6</td><td>最大似然原则，交叉熵损失，线性可分，逻辑回归凸函数的证明，平方损失函数分类的缺点，Softmax Regression，线性回归的最大似然解释，岭回归的最大后验解释</td><td>MLE, Cross Entropy, Linear Separable, Proof of the convexity of Logistic Regression, Drawbacks of squared loss for classification, Softmax Regression, MLE of Linear Regression, MAP of Linear Regression</td></tr><tr><td>3</td><td>偏差-方差分解（Bias-Variance Decomposition）</td><td>3</td><td>偏差方差分解，模型选择，奥卡姆剃刀原理</td><td>Bias-Variance Decomposition, Model Selection, Occam’s Razer</td></tr><tr><td>4</td><td>支持向量机与对偶理论（Support Vector Machine and Dual Theory）</td><td>9</td><td>约束优化问题，拉格朗日乘子法，KKT条件，支持向量机主形式，对偶形式，对偶问题的SMO算法，核方法，松弛变量</td><td>Constrained optimization, Lagrange Method, KKT conditions, Primal and Dual forms of SVM, SMO, Kernel methods, Slack variables</td></tr><tr><td>5</td><td>表示定理（Representer’s Theorem）</td><td>3</td><td>再生核希尔伯特空间，表示定理及证明，利用表示定理解释岭回归</td><td>RKHS, Representer’s Theorem, Revisiting Ridge Regression</td></tr><tr><td>6</td><td>学习理论（Learning Theory）</td><td>3</td><td>PAC理论，成长函数，VC维，VC泛化界</td><td>PAC Learning Theory, Growth function, VC-dimension, VC Generalization Bound</td></tr><tr><td>7</td><td>树模型和集成学习（Tree Models and Ensemble Learning）</td><td>6</td><td>信息熵，信息增益，增益率，基尼系数，决策树，回归树，连续特征，Bagging, 随机森林，Boosting, AdaBoost, GBDT</td><td>Entropy, Information gain, Information gain ratio, Gini-index, Decision Tree, Bagging, Random Forest, Boosting, AdaBoost, GBDT</td></tr><tr><td>8</td><td>高斯过程（Gaussian Process）</td><td>3</td><td>多元高斯分布，随机过程，高斯过程回归，贝叶斯优化</td><td>Multivariate Gaussian Distribution, Random Process, Gaussian Process Regression, Bayesian Optimization</td></tr><tr><td>9</td><td>图模型基础（Graphical Models Basics）</td><td>3</td><td>贝叶斯网络，条件独立性，D-separation，无向图模型</td><td>Bayesian networks, Conditional independence, D-separation, Unconditional graphical models</td></tr><tr><td>10</td><td>无监督学习（Unsupervised Learning）</td><td>9</td><td>主成分分析，混合高斯模型，EM算法，变分自编码器，扩散模型</td><td>PCA, Mixture of Gaussians, Expectation-Maximization, VAE, Diffusion Models</td></tr></tbody></table>]]></content>
     
     
     
@@ -193,9 +193,9 @@
       
       <tag>笔记</tag>
       
-      <tag>Agda</tag>
-      
       <tag>函数式编程</tag>
+      
+      <tag>Agda</tag>
       
     </tags>
     
@@ -311,9 +311,9 @@
       
       <tag>笔记</tag>
       
-      <tag>函数式编程</tag>
-      
       <tag>Haskell</tag>
+      
+      <tag>函数式编程</tag>
       
     </tags>
     
