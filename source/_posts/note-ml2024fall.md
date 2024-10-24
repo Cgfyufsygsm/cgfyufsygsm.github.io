@@ -18,7 +18,7 @@ tags:
 - [02-逻辑回归](/note-ml2024fall/logistic-regression/)
 - [03-偏差方差分解](/note-ml2024fall/b-v-decomposition/)
 - [04-支持向量机](/note-ml2024fall/svm/)
-- [05-表示定理](/note-representer-theorem/)
+- [05-表示定理](/note-ml2024fall/representer-theorem/)
 
 
 课程大纲：
