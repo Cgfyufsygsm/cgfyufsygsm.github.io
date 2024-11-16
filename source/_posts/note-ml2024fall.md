@@ -6,11 +6,11 @@ tags:
   - 机器学习
 ---
 
-本学期有幸选修了[张牧涵](https://muhanzhang.github.io/)老师开设的机器学习课程。张老师的课程讲述非常精彩且有特点，全程板书且穿插了不少 insights。
+本笔记为北京大学 2024 年秋季学期《机器学习》（04632036）的课程笔记。该课程由[张牧涵](https://muhanzhang.github.io/)老师开设。张老师的课程讲述非常精彩且有特点，全程板书且穿插了不少 insights。
 
 ~~本来头两讲是在 iPad 上进行笔记记录的，第三节课发现直接用 Markdown 可以跟得上，遂将笔记整理于此。~~
 
-~~笔记初步分 lecture 整理，以后可能会以知识模块进行重构。~~ 到目前为止已重构完成。
+笔记按知识模块形式呈现如下。
 
 目录：
 
@@ -19,6 +19,9 @@ tags:
 - [03-偏差方差分解](/note-ml2024fall/b-v-decomposition/)
 - [04-支持向量机](/note-ml2024fall/svm/)
 - [05-表示定理](/note-ml2024fall/representer-theorem/)
+- [06-学习理论](/note-ml2024fall/learning-theory/) 极其不完善，待修复。
+- [07-高斯过程](/note-ml2024fall/gaussian-process/)
+- [08-树模型与集成学习](/note-ml2024fall/tree-models-and-ensemble-learning/) 已更新完树模型。
 
 
 课程大纲：
