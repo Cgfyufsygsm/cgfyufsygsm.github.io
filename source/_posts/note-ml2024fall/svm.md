@@ -161,12 +161,13 @@ $$
 > 求偏导有
 >
 > $$
-> \begin{cases} -(x_i - x_0) + \lambda w = 0\\ x^Tx_0 + b = 0 \end{cases}
+> \begin{cases} -(x_i - x_0) + \lambda w = 0\\ w^Tx_0 + b = 0 \end{cases}
 > $$
 >
 > 类似地，上式左乘 $w^T$ 可以解得 $\displaystyle \lambda = \frac{w^T x_i + b}{\left\| w \right\|^2}$
 >
 > 回代，$\left\| x_i - x_0 \right\| = |\lambda| \left\| w \right\| = \displaystyle \frac{|w^T x_i + b|}{\left\| w \right\|}$，与前面得到的结果一致。
+文字 或者 `markdown` 均可
 
 事实上我们会更多关注 $\gamma_i$，因其带有方向信息。$\lambda_i>0$ 代表点 $x_i$ 在 $w^Tx+b>0$ 区域内，反之亦然。
 

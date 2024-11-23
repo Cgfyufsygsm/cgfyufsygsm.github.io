@@ -4,6 +4,8 @@ date: 2024-09-09 20:09:12
 tags:
   - 本科课程
   - 机器学习
+  - 笔记
+categories: [笔记, 本科课程]
 ---
 
 本笔记为北京大学 2024 年秋季学期《机器学习》（04632036）的课程笔记。该课程由[张牧涵](https://muhanzhang.github.io/)老师开设。张老师的课程讲述非常精彩且有特点，全程板书且穿插了不少 insights。
@@ -21,13 +23,14 @@ tags:
 - [05-表示定理](/note-ml2024fall/representer-theorem/)
 - [06-学习理论](/note-ml2024fall/learning-theory/) 极其不完善，待修复。
 - [07-高斯过程](/note-ml2024fall/gaussian-process/)
-- [08-树模型与集成学习](/note-ml2024fall/tree-models-and-ensemble-learning/) 已更新完树模型。
+- [08-树模型](/note-ml2024fall/tree-models/)
+- [09-集成学习](/note-ml2024fall/ensemble-learning/)
 
 
 课程大纲：
-
-| 1    | 线性回归（Linear Regression）                                | 3    | 经验风险最小化, 矩阵求导，线性回归闭式解，岭回归和Lasso，最小二乘几何解释 | ERM, Matrix Derivatives, Closed-form solution to Linear Regression, Ridge Regression and Lasso, Geometric view of Least Squares |
+| id | topic | 课时 | 具体内容 | English |
 | ---- | ------------------------------------------------------------ | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1    | 线性回归（Linear Regression）                                | 3    | 经验风险最小化, 矩阵求导，线性回归闭式解，岭回归和Lasso，最小二乘几何解释 | ERM, Matrix Derivatives, Closed-form solution to Linear Regression, Ridge Regression and Lasso, Geometric view of Least Squares |
 | 2    | 逻辑回归（Logistic Regression）                              | 6    | 最大似然原则，交叉熵损失，线性可分，逻辑回归凸函数的证明，平方损失函数分类的缺点，Softmax Regression，线性回归的最大似然解释，岭回归的最大后验解释 | MLE, Cross Entropy, Linear Separable, Proof of the convexity of Logistic Regression, Drawbacks of squared loss for classification, Softmax Regression, MLE of Linear Regression, MAP of Linear Regression |
 | 3    | 偏差-方差分解（Bias-Variance Decomposition）                 | 3    | 偏差方差分解，模型选择，奥卡姆剃刀原理                       | Bias-Variance Decomposition, Model Selection, Occam’s Razer  |
 | 4    | 支持向量机与对偶理论（Support Vector Machine and Dual Theory） | 9    | 约束优化问题，拉格朗日乘子法，KKT条件，支持向量机主形式，对偶形式，对偶问题的SMO算法，核方法，松弛变量 | Constrained optimization, Lagrange Method, KKT conditions, Primal and Dual forms of SVM, SMO, Kernel methods, Slack variables |
