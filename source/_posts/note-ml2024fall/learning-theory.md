@@ -86,7 +86,7 @@ $$
 
 再令 $\exp(-2n \varepsilon^{2}) = \delta$，则 $\varepsilon = \displaystyle \sqrt{\frac{1}{2n}\log \frac{1}{\delta}}$，更贴近了！但这个界并没有多大的意义，因为在推导的时候我们的前提是固定了模型 $h$，但是训练之前我们也并不知道会训练出一个什么样的 $h$。**not a practical bound**。训练造成的最严重的问题就是 $1(h(x_i) \neq  y_i)$ **不独立了**，于是 Hoeffding 不等式就用不了了。
 
-> 疑问：对于固定的 $h$，相当于是 $\forall h$，但是训练得到的 $h$ 难道是 $h$ 吗，为什么就不成立了？
+> 疑问：对于固定的 $h$，相当于是 $\forall h$，但是训练得到的 $h$ 难道不是 $h$ 吗，为什么就不成立了？
 > 
 > 因为这个界是没见过训练数据就得到的 $h$，训练过程后 $h$ 是已经见过这个 sampled 训练数据的了，自然就不能套用上面的界了。
 
@@ -130,7 +130,7 @@ $$
 
 再举例，$\mathcal{X}=\mathbb{R}$，$\mathcal{H} = \{h:h(x) = \operatorname{sgn}(x-a)\}$，则 $m_{\mathcal{H}}(n) = n+1<2^n~(n>1)$。
 
-再考虑 $\mathcal{H} = \displaystyle \left\{ h: h(x) = \begin{cases} +1, & a\le x\le b \\ -1, &\text{otherwise}  \end{cases} \right\} $，显然 $\displaystyle m_{\mathcal{H}}(n) = \binom{n+1}{2}+1<2^n~(n>2)$。
+再考虑 $\mathcal{H} = \displaystyle \left\{ h: h(x) = \begin{cases} +1, & a\le x\le b \\ -1, &\text{otherwise}  \end{cases} \right\}$，显然 $\displaystyle m_{\mathcal{H}}(n) = \binom{n+1}{2}+1<2^n~(n>2)$。
 
 ## VC 维
 
