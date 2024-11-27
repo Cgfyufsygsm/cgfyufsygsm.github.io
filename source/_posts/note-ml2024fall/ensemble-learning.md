@@ -134,7 +134,7 @@ AdaBoost 就是一种特殊的加性模型，其使用的损失函数为**指数
 我们现在需要优化
 
 $$
-\min_{\alpha_t, f_t} \sum_{i \in [n]} \exp(-y_i(g_{t-1}(x) + \alpha_tf_t(x)))
+\min_{\alpha_t, f_t} \sum_{i \in [n]} \exp(-y_i(g_{t-1}(x_i) + \alpha_tf_t(x_i)))
 $$
 
 定义 $\overline{W_i}^{(t)}:= \exp(-y_ig_{t-1}(x_i))$，事实上这个东西就是我们刚才的那个权重：
