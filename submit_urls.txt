@@ -1,10 +1,10 @@
+https://blog.imyangty.com/note-ml2024fall/
+https://blog.imyangty.com/note-ml2024fall/unsupervised-learning/
 https://blog.imyangty.com/testblog/
 https://blog.imyangty.com/note-intro2computing/CT/
 https://blog.imyangty.com/note-intro2computing/agda/
-https://blog.imyangty.com/note-ml2024fall/
 https://blog.imyangty.com/note-ml2024fall/linear-regression/
 https://blog.imyangty.com/note-ml2024fall/tree-models/
 https://blog.imyangty.com/note-ml2024fall/svm/
 https://blog.imyangty.com/note-ml2024fall/representer-theorem/
 https://blog.imyangty.com/note-ml2024fall/logistic-regression/
-https://blog.imyangty.com/note-ml2024fall/learning-theory/
