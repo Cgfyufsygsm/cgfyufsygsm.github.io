@@ -1,3 +1,4 @@
+https://blog.imyangty.com/note-ics-final-review/
 https://blog.imyangty.com/note-ml2024fall/
 https://blog.imyangty.com/note-ml2024fall/unsupervised-learning/
 https://blog.imyangty.com/testblog/
@@ -7,4 +8,3 @@ https://blog.imyangty.com/note-ml2024fall/linear-regression/
 https://blog.imyangty.com/note-ml2024fall/tree-models/
 https://blog.imyangty.com/note-ml2024fall/svm/
 https://blog.imyangty.com/note-ml2024fall/representer-theorem/
-https://blog.imyangty.com/note-ml2024fall/logistic-regression/
