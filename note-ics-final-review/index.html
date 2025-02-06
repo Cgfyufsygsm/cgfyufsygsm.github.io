@@ -29,7 +29,7 @@
 <meta property="og:description" content="Chap. 7 Linking 关于编译器驱动程序：  cpp [other args] main.c &#x2F;tmp&#x2F;main.i 是预处理器，main.i 是 ASCII 中间文件。 cc1 &#x2F;tmp.main.i -Og [other args] -o &#x2F;tmp&#x2F;main.s 是编译器，main.s 是 ASCII 汇编代码。 as [other args] -o &#x2F;tmp&#x2F;main.o &#x2F;tm">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-12-22T13:31:19.000Z">
-<meta property="article:modified_time" content="2024-12-28T16:38:33.700Z">
+<meta property="article:modified_time" content="2024-12-29T14:51:56.684Z">
 <meta property="article:author" content="YangTY">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="ICS">
@@ -273,7 +273,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k words
+          3.2k words
         
       </span>
     
@@ -326,7 +326,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on December 29, 2024 12:38 AM
+                    Last updated on December 29, 2024 10:51 PM
                   
                 
               </p>
@@ -434,13 +434,15 @@
 <p><strong>进程</strong>可以通过 signal 函数修改收到信号的行为，注意只管当前进程不管父进程。</p>
 <p>一个 handler 在运行的时候可能接收到信号，那么就会转到另一个 handler。</p>
 <ul>
-<li>在 handler 中<strong>只调用异步信号安全的函数</strong>。<code>printf</code>，<code>malloc</code>，<code>exit</code> 都不行。**唯一安全输出方法是用 <code>write</code>。</li>
 <li>在 handler 里面<strong>保存并恢复 <code>errno</code></strong></li>
 <li>如果要访问共享全局数据结构，<strong>暂时阻塞所有信号</strong></li>
 <li>用 <code>volatile</code> 声明全局变量（不会被缓存到寄存器中）</li>
 <li>用 <code>sig_atomic_t</code> 声明</li>
 <li>不要利用 handler 做给信号计数之类的工作。一来要视为来了一车。<code>while (waitpid)</code></li>
 </ul>
+<hr />
+<p><strong>异步信号安全</strong>：<strong>要么可重入（不引用线程间的共享数据），要么不能被信号处理程序中断</strong></p>
+<p>在 handler 中唯一安全的输出方法是用 <code>write</code>。</p>
 <hr />
 <p>显式等待信号（shell 的父进程等待子进程结束 SIGCHLD）</p>
 <p>基本思路是：</p>
@@ -453,6 +455,49 @@
 <p>非本地跳转。</p>
 <p><code>setjmp(env)</code> 在 <code>env</code> 保存当前调用环境（包括 PC，%rsp 和通用目的寄存器），<strong>返回值不能被赋值给变量但是可以用在 <code>switch</code> 或条件语句的测试</strong>。<code>longjmp</code> 从 <code>env</code> 中恢复调用环境，然后触发一个从最近一次初始化 <code>env</code> 的 <code>setjmp</code> 的返回。</p>
 <p>前者被调用一次返回多次，后者不返回。</p>
+<h2 id="chap-9-vm"><a class="markdownIt-Anchor" href="#chap-9-vm"></a> Chap. 9 VM</h2>
+<p>Core i7：四级页表。有 TLB（注意 TLB 是可以直接搞到页面基地址的）</p>
+<p>PTE 里的一些位：</p>
+<ul>
+<li>
+<p>第一级 PTE 独有的：第七位 PS，表明页面大小是 4KB 还是 4MB。</p>
+</li>
+<li>
+<blockquote>
+<p>zzy 的小班课 PPT 进行了勘误，这个应该是第三级的，代表是大页还是小页</p>
+</blockquote>
+</li>
+<li>
+<p>第四级 PTE 独有的：第六位 D，dirty bit。<strong>大题对 PTE 修改之后是需要更新 dirty bit 的</strong></p>
+</li>
+<li>
+<p>其他：U/S 是用户/内核，R/W 是可读/只读，XD 是禁止执行。</p>
+</li>
+<li>
+<p>不使用最低的 12 位，所以物理页表和物理内存页都要 4KB 对齐。</p>
+</li>
+</ul>
+<p>注意到 CI + CO = 12 = VPO，所以可以<strong>并行</strong>翻译 VPN 和在 cache 中查询，然后用 PPN 和 CT 来对比。</p>
+<hr />
+<p>缺页的时候可能发生的事情：</p>
+<ul>
+<li>访问不存在的页面：<strong>段错误</strong></li>
+<li>写一个只读的页面（权限问题）：<strong>保护异常</strong></li>
+<li>正常缺页</li>
+</ul>
+<hr />
+<p>COW 的时候可能发生的事情：<strong>保护故障</strong>，尝试写私有区域的某个页面，这个时候触发 COW，然后重新执行写操作。</p>
+<p>映射到匿名文件？.bss</p>
+<p>应用级内存映射：<code>void* mmap(void *start, size_t length, int prot, int flags, int fd, off_t offset)</code></p>
+<p><code>start</code> 通常是 NULL，<code>prot</code> 代表这段内存区域的权限位，<code>flags</code> 可以是 <code>MAP_ANON</code>（匿名文件），<code>MAP_PRIVATE</code>（私有，COW），<code>MAP_SHARED</code> 共享对象。</p>
+<p><code>munmap(void *start, size_t length)</code> 可以对 <code>mmap</code> 出来的东西进行释放。</p>
+<hr />
+<p><code>malloc</code> 返回的块地址在 32 位下是 8 的倍数，在 64 位下是 16 的倍数。</p>
+<p>外部碎片：没分配的小碎块</p>
+<p>内部碎片：有效载荷&lt;块大小</p>
+<p><strong>吞吐率：next fit &gt; first fit</strong></p>
+<p><strong>util: first fit &gt; next fit</strong></p>
+<p>显式链表：按照地址维护比 LIFO 利用率会高</p>
 <h2 id="chap-10-sysio"><a class="markdownIt-Anchor" href="#chap-10-sysio"></a> Chap. 10 SysIO</h2>
 <p>Unix 万物皆文件，输入输出等价于对文件的读写。</p>
 <p>每次打开文件都有唯一的非负 fd 与其对应。</p>
