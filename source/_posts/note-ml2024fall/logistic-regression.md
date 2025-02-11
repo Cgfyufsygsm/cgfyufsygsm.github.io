@@ -4,7 +4,7 @@ date: 2024-09-18 23:09:12
 tags:
   - 本科课程
   - 机器学习
-hide: true
+categories: [笔记, 本科课程, 机器学习]
 ---
 
 > 本文主要涉及逻辑回归（Logistic Regression）及相关拓展。

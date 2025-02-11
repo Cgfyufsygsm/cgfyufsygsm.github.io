@@ -4,7 +4,7 @@ date: 2024-10-09 15:12:20
 tags:
   - 本科课程
   - 机器学习
-hide: true
+categories: [笔记, 本科课程, 机器学习]
 ---
 
 > 本文主要涉及支持向量机（Support Vector Machine）以及对偶理论。

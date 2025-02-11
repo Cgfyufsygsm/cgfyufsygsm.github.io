@@ -4,6 +4,7 @@ date: 2021-05-09 13:35:19
 tags: 站务
 categories: 站务
 mathjax: true
+sticky: 1000
 ---
 
 ## testing

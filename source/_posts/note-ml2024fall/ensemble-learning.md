@@ -4,7 +4,7 @@ date: 2024-11-22 15:21:32
 tags:
   - 本科课程
   - 机器学习
-hide: true
+categories: [笔记, 本科课程, 机器学习]
 ---
 
 > [一键回城](/note-ml2024fall/)。

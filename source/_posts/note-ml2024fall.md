@@ -5,14 +5,15 @@ tags:
   - 本科课程
   - 机器学习
   - 笔记
-categories: [笔记, 本科课程]
+categories: [笔记, 本科课程, 机器学习]
+sticky: 100
 ---
 
 本笔记为北京大学 2024 年秋季学期《机器学习》（04632036）的课程笔记。该课程由[张牧涵](https://muhanzhang.github.io/)老师开设。张老师的课程讲述非常精彩且有特点，全程板书且穿插了不少 insights。
 
 ~~本来头两讲是在 iPad 上进行笔记记录的，第三节课发现直接用 Markdown 可以跟得上，遂将笔记整理于此。~~
 
-笔记按知识模块形式呈现如下。
+笔记按知识模块形式呈现如下，其中无监督学习部分由于篇幅过大拆成了两篇。**已于 2025 年 2 月 9 日更新完毕**。
 
 目录：
 
@@ -21,10 +22,12 @@ categories: [笔记, 本科课程]
 - [03-偏差方差分解](/note-ml2024fall/b-v-decomposition/)
 - [04-支持向量机](/note-ml2024fall/svm/)
 - [05-表示定理](/note-ml2024fall/representer-theorem/)
-- [06-学习理论](/note-ml2024fall/learning-theory/) 极其不完善，待修复。
+- [06-学习理论](/note-ml2024fall/learning-theory/)
 - [07-高斯过程](/note-ml2024fall/gaussian-process/)
 - [08-树模型](/note-ml2024fall/tree-models/)
 - [09-集成学习](/note-ml2024fall/ensemble-learning/)
+- [10-无监督学习](/note-ml2024fall/unsupervised-learning/)
+- [11-生成式模型](/note-ml2024fall/generative-model/)
 
 
 课程大纲：

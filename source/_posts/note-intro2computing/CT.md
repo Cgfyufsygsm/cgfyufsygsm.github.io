@@ -5,7 +5,7 @@ tags:
   - Haskell
   - 函数式编程
   - 笔记
-categories: [笔记, 本科课程]
+categories: [笔记, 本科课程, 计算概论]
 ---
 
 ## Preface

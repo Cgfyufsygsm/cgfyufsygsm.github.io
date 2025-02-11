@@ -7,3 +7,4 @@ node_modules/
 public/
 .deploy*/
 .vscode
+_config.fluid.yml
