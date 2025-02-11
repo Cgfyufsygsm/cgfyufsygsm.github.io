@@ -1,5 +1,5 @@
-https://blog.imyangty.com/note-ml2024fall/
 https://blog.imyangty.com/note-ml2024fall/generative-model/
+https://blog.imyangty.com/note-ml2024fall/
 https://blog.imyangty.com/note-ml2024fall/unsupervised-learning/
 https://blog.imyangty.com/note-ics-final-review/
 https://blog.imyangty.com/testblog/
