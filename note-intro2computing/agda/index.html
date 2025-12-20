@@ -1,0 +1,1188 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/avatar.jpg">
+  <link rel="icon" href="/assets/avatar.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YangTY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="是写给自己看的备忘录，如果有写的不清楚的东西见谅（ 真的很感谢助教大人，他们帮到了我很多。  Intro to Calculational Programming   Specification 可以理解为“目的”一类的东西。  describes what task an algorithm is to perform, expresses the programmers’ intent, sh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算概论 A 课程笔记：Agda">
+<meta property="og:url" content="https://blog.imyangty.com/note-intro2computing/agda/index.html">
+<meta property="og:site_name" content="YangTY&#39;s Blog">
+<meta property="og:description" content="是写给自己看的备忘录，如果有写的不清楚的东西见谅（ 真的很感谢助教大人，他们帮到了我很多。  Intro to Calculational Programming   Specification 可以理解为“目的”一类的东西。  describes what task an algorithm is to perform, expresses the programmers’ intent, sh">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-15T09:00:01.000Z">
+<meta property="article:modified_time" content="2025-12-20T13:30:10.209Z">
+<meta property="article:author" content="YangTY">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="函数式编程">
+<meta property="article:tag" content="Agda">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+    <!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZS41KYKYZ"></script><script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag("js", new Date());  gtag("config", "G-8ZS41KYKYZ:");</script>
+  
+  <title>计算概论 A 课程笔记：Agda - YangTY&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.imyangty.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<!-- hexo injector head_end start --><style id="banner-theme-css">
+#banner {
+  background-image: url("/assets/banner-light.jpg") !important;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/banner-dark.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+#banner .mask {
+  z-index: 1;
+}
+html[data-user-color-scheme="dark"] #banner::after {
+  opacity: 1;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 1;
+  }
+}
+@media (prefers-color-scheme: light) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 0;
+  }
+}
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YangTY&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://yangty-pic.oss-cn-beijing.aliyuncs.com/blog_banner.JPG') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="计算概论 A 课程笔记：Agda"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        YangTY
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-15 17:00" pubdate>
+          November 15, 2023 5:00 PM
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">计算概论 A 课程笔记：Agda</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on December 20, 2025 9:30 PM
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>是写给自己看的备忘录，如果有写的不清楚的东西见谅（</p>
+<p>真的很感谢助教大人，他们帮到了我很多。</p>
+<h2 id="intro-to-calculational-programming"><a class="markdownIt-Anchor" href="#intro-to-calculational-programming"></a> Intro to Calculational Programming</h2>
+<ul>
+<li>
+<p>Specification</p>
+<p>可以理解为“目的”一类的东西。</p>
+<ul>
+<li>describes <strong>what</strong> task an algorithm is to perform,</li>
+<li>expresses the programmers’ intent,</li>
+<li>should be as clear as possible.</li>
+</ul>
+</li>
+<li>
+<p>Implementation</p>
+<p>字面意思，实现。</p>
+<ul>
+<li>describes <strong>how</strong> task is to perform,</li>
+<li>expresses an algorithm (an execution),</li>
+<li>should be effciently done within the time and space available.</li>
+</ul>
+</li>
+</ul>
+<p>The link is that the implementation should be <strong>proved</strong> to satisfy the specification.</p>
+<p>Specification 可以用 predicates（谓词）表达，亦可以用 functions 表达。</p>
+<p>主要将目光聚焦于 functional specification, since</p>
+<ul>
+<li>It’s <strong>executable</strong></li>
+<li>It’s powerful to express intended mappings directly by functions or through their <em>composition</em></li>
+<li>It’s suitable for <strong>reasoning</strong>（推理）, when functions used are <em>well-structured</em> with good algebraic properties（性质）</li>
+</ul>
+<hr />
+<p>注意到，对于最大子段和问题，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> 的贪心做法和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 的朴素做法是有很大的区别的。</p>
+<p>如果对于 more general case 我们能够有通用的 calculation 从朴素做法得到一个高效率做法，这就是 program calculation 做的事情。不过好像 It’s still under research. Whatever.</p>
+<p>不是很重要，重要的是 Agda 好他妈难啊。</p>
+<blockquote>
+<p>Program testing can be used to show the presence of bugs, but never to show their absence!</p>
+<p>Edsger Dijkstra</p>
+</blockquote>
+<p>现在的核心思想是，we can verify software correctness by writing mathematical proofs about it.</p>
+<p>Agda 是一种函数式语言 which is implemented in Haskell。他除了要求 pure functional 外还要求 always terminate.</p>
+<ul>
+<li><strong>Types: Propositions</strong>：命题是通过类型的方式书写的。</li>
+<li><strong>Terms (functional programs): Proofs</strong>：写出来的这段程序就是证明。</li>
+</ul>
+<h2 id="agda-and-booleans"><a class="markdownIt-Anchor" href="#agda-and-booleans"></a> Agda and Booleans</h2>
+<p>基本操作：</p>
+<ul>
+<li>Load/加载文件：<code>C-c C-l</code>，其中 <code>C-a</code> 表示 <code>Ctrl+A</code>；</li>
+<li>Compile/编译：<code>C-x C-c</code>；</li>
+<li>Compute/Normalize/计算：<code>C-c C-n</code>。</li>
+<li>Type inference/类型推断：<code>C-c C-d</code></li>
+</ul>
+<p>下面来看 <code>bool</code> 标准库。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs agda">module bool where<br><br>open import level<br><br>--------------------------------------------------------<br>-- datatypes<br>--------------------------------------------------------<br><br>data 𝔹 : Set where<br>  tt : 𝔹<br>  ff : 𝔹<br></code></pre></td></tr></table></figure>
+<p><code>module</code>：每个 Agda 文件都要包含一个模块声明，而且和文件名必须一样。</p>
+<p>注释的规则与 Haskell 几乎是一样的。</p>
+<p><code>𝔹</code> 是一个 type constructor，里面包含了两个 data constructor：一个 <code>tt</code> 一个 <code>ff</code>。</p>
+<p>同时，<code>𝔹</code> 的类型是 <code>Set</code>。Agda 用了一个很巧妙的方法来避免罗素悖论：给 <code>Set</code> 赋予层级，其中 <code>Set</code> 就是 <code>Set 0</code> 的简写。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs agda">~_ : 𝔹 → 𝔹<br>~ tt = ff <br>~ ff = tt<br><br>_&amp;&amp;_ : 𝔹 → 𝔹 → 𝔹<br>tt &amp;&amp; b = b<br>ff &amp;&amp; b = ff<br><br>_||_ : 𝔹 → 𝔹 → 𝔹<br>tt || b = tt<br>ff || b = b<br></code></pre></td></tr></table></figure>
+<p>函数的声明和 Haskell 的感觉很像，<code>~</code> 后面加下划线表示接收参数。Pattern matching 的思路和 Haskell 的也是几乎一模一样的。但是<strong>注意一定要加空格</strong>，写成 <code>~tt</code> 是会 parse error 的，Agda 会把 <code>~tt</code> 整体当成一个标识符。</p>
+<p>二元运算符被定义为 curried function 也是和 Haskell 类似，此处略过。</p>
+<p>注意 Agda 对缩进同样敏感。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs agda">if_then_else_ : ∀ &#123;ℓ&#125; &#123;A : Set ℓ&#125; <br>                  → 𝔹 → A → A → A<br>if tt then y else z = y<br>if ff then y else z = z<br></code></pre></td></tr></table></figure>
+<p>调用的时候还可以写 <code>if_then_else_ x y z</code> 的。此处可以按下 <code>C-c C-n</code>，然后输入 <code>if tt then tt else ff</code>，Agda 会给你返回 <code>tt</code>。<code>∀</code> 通过 <code>\all</code> 输入，<code>ℓ</code> 通过 <code>\ell</code> 输入。</p>
+<h2 id="intro-to-constructive-proof"><a class="markdownIt-Anchor" href="#intro-to-constructive-proof"></a> Intro to Constructive Proof</h2>
+<h3 id="初探-equality-type-证明"><a class="markdownIt-Anchor" href="#初探-equality-type-证明"></a> 初探 equality type 证明</h3>
+<p>教材上的 introduction，我觉得相当令人豁然开朗。</p>
+<blockquote>
+<p>Admittedly, we’d have to be having a pretty bad coding day to define <code>~ ff</code> to be <code>ff</code>, but it could happen. And certainly if we were writing some more complicated code, we know very well that we could make mistakes and accidentally introduce bugs into the code without meaning to. If we wrote the previous definition, evaluating <code>~ ~ tt</code> would give us <code>ff</code>, instead of the expected <code>tt</code>. So it would be nice to record and check the fact that <code>~ ~ tt</code> is supposed to be <code>tt</code>. We could write some test code and remember to run it from time to time to check that we get the expected answer. But we can use this test case as a very rudimentary form of theorem, and use Agda’s theorem-proving capabilities to confirm that the theorem holds (i. e., the test succeeds).</p>
+</blockquote>
+<p>以我们要证明 <code>~ ~ tt</code> 与 <code>tt</code> 相等为例，在 Agda 中，通过 <strong>equality type</strong> 实现：<code>~ ~ tt ≡ tt</code>。这样的“等式”被称作 <strong>propositional equality</strong>。（<code>≡</code> 通过 <code>\equiv</code> 或 <code>\==</code> 打出来）Agda 是把形如这样的 formula 当作类型来判断的。逻辑命题可以被视作类型是类型论中非常重要的思想，即 <strong>Curry-Howard isomorphism</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs agda">~~tt : ~ ~ tt ≡ tt<br>~~tt = refl<br><br>~~ff : ~ ~ ff ≡ ff<br>~~ff = refl<br><br>~~-elim : ∀ (b : 𝔹) → ~ ~ b ≡ b<br>~~-elim tt = ~~tt<br>~~-elim ff = ~~ff<br></code></pre></td></tr></table></figure>
+<p>Agda 可以将 <code>~ ~ tt</code> 按照 <code>~_</code>  的定义展开，然后我们相当于要证明 <code>tt ≡ tt</code>，这可以通过 <strong>reflexivity</strong> 实现。其中 equality 的定义如下：<code>_≡_</code> 是一个 type constructor, which has only one data constructor: refl。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">data _≡_ &#123;ℓ&#125; &#123;A : Set ℓ&#125; (x : A) : A → Set ℓ where<br>  refl : x ≡ x<br></code></pre></td></tr></table></figure>
+<p>对于 <code>~~-elim</code>，就是更一般化的情形，我们可以将其视作接收一个 <code>𝔹</code> 类型的值并返回一个证明。全称量词其实没有什么屁用，写着好看而已，去掉不会影响任何事情。</p>
+<blockquote>
+<p>我们再去理解整件事情的话，对于一个 type，其可以表示一个 proposition，如果这个 type 有良定义的 value 存在，说明有证明。就比如说 <code>~~tt</code>，它的 type 就是 <code>~ ~ tt ≡ tt</code>，而我们通过定义把 LHS 展开变成 <code>tt ≡ tt</code>，所以是可以用 <code>refl</code> 这个 data constructor 构造一个良定义的 value，其即得到了证明。只要其能通过 Agda 的类型检查，则你写的这个证明就是没有问题的。</p>
+<p>Agda 还要求程序一定要能 terminate，这是避免类似于循环论证的情况出现。如果写出 <code>a = a</code> 这样的东西，那肯定是不合逻辑的。</p>
+<p>而，命题的合取可以用 pair 表示：<code>(p1, p2)</code> 是个 type，其有良定义的 value 存在当且仅当 <code>p1</code> 和 <code>p2</code> 都为真。</p>
+<p>命题的析取通过类似 Haskell 中 or 的感觉实现，比如 <code>data Maybe a = Nothing | Just a</code> 的感觉，只要一个良定义，整个就可以良定义。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><msub><mi>p</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">p_1\implies p_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7194400000000001em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 可以通过“函数”实现。比如说 <code>p1 -&gt; p2</code>。</p>
+</blockquote>
+<h3 id="implicit-argument-以及含假设的定理证明"><a class="markdownIt-Anchor" href="#implicit-argument-以及含假设的定理证明"></a> Implicit Argument 以及含假设的定理证明</h3>
+<p>用花括号括起来的参数叫做 <strong>implicit argument</strong>，比如说下面这个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">&amp;&amp;-idem : ∀ &#123;b&#125; → b &amp;&amp; b ≡ b<br>&amp;&amp;-idem&#123;tt&#125; = refl<br>&amp;&amp;-idem&#123;ff&#125; = refl<br></code></pre></td></tr></table></figure>
+<p>我们采用 pattern matching 的方式去写。但是为何我们不能这么写呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">&amp;&amp;-idem : ∀ &#123;b&#125; → b &amp;&amp; b ≡ b<br>&amp;&amp;-idem = refl<br></code></pre></td></tr></table></figure>
+<p>实际上是因为，对于一个抽象的 <code>b</code>，我们没法直接按照定义去展开 <code>b &amp;&amp; b</code>。</p>
+<p>隐式参数的好处在于可以使程序更为简洁，比如说我们可以这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">sb : tt &amp;&amp; tt ≡ tt<br>sb = &amp;&amp;-idem<br></code></pre></td></tr></table></figure>
+<p>Agda 会自动推断传进 <code>&amp;&amp;-idem</code> 的参数，这使得代码更为简洁。</p>
+<p>再看下一个例子。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">||≡ff₁ : ∀ &#123;b1&#125;&#123;b2&#125; → b1 || b2 ≡ ff → b1 ≡ ff<br>||≡ff₁ &#123;ff&#125; p = refl<br>||≡ff₁ &#123;tt&#125; ()<br></code></pre></td></tr></table></figure>
+<p>注意到我们的隐式参数是两个 <code>𝔹</code>，然后接收一个证明 whose type is <code>b1 || b2 ≡ ff</code>，返回一个证明 whose type is <code>b1 ≡ ff</code>。这其实就是所谓的带有假设的定理证明。至于我们的分类讨论，其实也就是在做 pattern matching。注意一下第三行的 <code>()</code> 记号：<code>absurd pattern</code>，这是在说明这个假设不可能成立。</p>
+<p>我们还可以这么写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">||≡ff₁ : ∀ &#123;b1 b2&#125; → b1 || b2 ≡ ff → b1 ≡ ff<br>||≡ff₁ &#123;ff&#125; p = refl<br>||≡ff₁ &#123;tt&#125; p = p<br></code></pre></td></tr></table></figure>
+<p>这是因为 <code>tt || b2 ≡ ff</code> 可以用 <code>_||_</code> 的定义展开成 <code>tt ≡ ff</code>，和最后要证明的东西的 type 对应得上（即 <code>tt ≡ ff</code>），但是如果浅浅修改一下就不可以了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">||≡ff₂ : ∀ &#123;b1 b2&#125; → b1 || b2 ≡ ff → ff ≡ b1<br>||≡ff₂ &#123;ff&#125; p = refl<br>||≡ff₂ &#123;tt&#125; p = p<br></code></pre></td></tr></table></figure>
+<p>如果这么写的话，Agda 会报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">Error:<br>tt != ff of <span class="hljs-built_in">type</span> 𝔹<br>when checking that the expression p has <span class="hljs-built_in">type</span> ff ≡ tt<br></code></pre></td></tr></table></figure>
+<p>为什么？因为 <code>p</code> 的 type 经过展开后是 <code>tt ≡ ff</code>，和我们需要的 <code>ff ≡ tt</code> 是不一样的，这就很错。所以说<strong>似乎用 absurd pattern 会更好一些</strong>。</p>
+<h3 id="matching-on-equality-proofs-以及-rewrite"><a class="markdownIt-Anchor" href="#matching-on-equality-proofs-以及-rewrite"></a> Matching on Equality Proofs 以及 rewrite</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs agda">||-cong₁ : ∀ &#123;b1 b1&#x27; b2&#125; → b1 ≡ b1&#x27; → b1 || b2 ≡ b1&#x27; || b2<br>||-cong₁ refl = refl<br><br>||-cong₂ : ∀ &#123;b1 b2 b2&#x27;&#125; → b2 ≡ b2&#x27; → b1 || b2 ≡ b1 || b2&#x27;<br>||-cong₂ p rewrite p = refl<br></code></pre></td></tr></table></figure>
+<p>看第一个，关键点在于第一个参数是 <code>refl</code> 的话，那么之后 Agda 就知道了可以做同义替换，目标变成 <code>b1 || b2 ≡ b1 || b2</code>，自然可以用 <code>refl</code> 证明。</p>
+<p>dot pattern 什么的内容略过了，Agda 2.6 更新后无所谓了已经。</p>
+<p>接下来是一个很重要的东西：<code>rewrite</code>。</p>
+<p>看第二个定理，如果我们这样写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">||-cong₂ : ∀ &#123;b1 b2 b2&#x27;&#125; → b2 ≡ b2&#x27; → b1 || b2 ≡ b1 || b2&#x27;<br>||-cong₂ = ?<br></code></pre></td></tr></table></figure>
+<p>再按下 <code>C-c C-l</code>，他会引入一个 hole：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">||-cong₂ : ∀ &#123;b1 b2 b2&#x27;&#125; → b2 ≡ b2&#x27; → b1 || b2 ≡ b1 || b2&#x27;<br>||-cong₂ p = &#123;!   0!&#125;<br></code></pre></td></tr></table></figure>
+<p><em>把鼠标光标放在 goal 内</em>，按下 <code>C-c C-,</code>，他会把 context 和 goal 列出来：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs agda">Goal and Context<br><br>(b3 || b4) ≡ (b3 || b2&#x27;)<br><br>p : b4 ≡ b2&#x27;<br>b2&#x27; : 𝔹   (not in scope)<br>b4 : 𝔹   (not in scope)<br>b3 : 𝔹   (not in scope)<br></code></pre></td></tr></table></figure>
+<p>现在目标变成了证明 <code>(b3 || b4) ≡ (b3 || b2')</code>（这里变量换了个名字是因为没有把 implicit argument 写出来所以 Agda 随便取了一个），如果你引入 <code>rewrite p</code> 记号，这意味着你<strong>可以用 <code>p</code> 的内容去 rewrite goal 中的内容</strong>，在这里就是把 <code>b2'</code> 替换成 <code>b4</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">||-cong₂ : ∀ &#123;b1 b2 b2&#x27;&#125; → b2 ≡ b2&#x27; → b1 || b2 ≡ b1 || b2&#x27;<br>||-cong₂ p rewrite p = &#123;!   0!&#125;<br></code></pre></td></tr></table></figure>
+<p>列出 goal，发现就变成了 <code>(b3 || lhs) ≡ (b3 || lhs)</code>，这可以用 refl 证明，所以最后看出来就是一开始的那个东西。</p>
+<p>rewrite 记号确实不太好理解。等到看自然数相关证明的时候会理解的更深刻些，可以拿来做归纳证明。</p>
+<h3 id="curry-howard-and-constructivity"><a class="markdownIt-Anchor" href="#curry-howard-and-constructivity"></a> Curry-Howard and Constructivity</h3>
+<p>Curry-Howard Isomorphism 其实是对应的 <strong>constructive logic</strong>，而非 classical logic。</p>
+<p>构造逻辑大概说的就是，如果我们证明 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∨</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \lor B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span> 是真，那么我们一定是确切地知道 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span> 哪个为真。再比如说如果我们要证明存在一个满足某种性质的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span>，那么一定要说明 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span> 具体是谁。</p>
+<p>而 nonconstructive reasoning 的基本要素是<strong>排中律</strong>：即对于任意命题 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span>，一定有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>∨</mo><mi mathvariant="normal">¬</mi><mi>P</mi></mrow><annotation encoding="application/x-tex">P\lor\neg P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∨</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">¬</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span> 为真。比如说证明存在无理数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo separator="true">,</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a,b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span></span></span></span> 使得 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mi>b</mi></msup></mrow><annotation encoding="application/x-tex">a^b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span></span></span></span> 为有理数：</p>
+<blockquote>
+<p>nonconstructive proof：</p>
+<p>假设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><msqrt><mn>2</mn></msqrt><msqrt><mn>2</mn></msqrt></msup></mrow><annotation encoding="application/x-tex">\sqrt{2}^{\sqrt2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.4318914999999999em;vertical-align:-0.13278em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">2</span></span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.2991115em;"><span style="top:-3.3601199999999998em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.912845em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight" style="padding-left:0.833em;">2</span></span><span style="top:-2.872845em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.12715500000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span> 为无理数，则令 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msup><msqrt><mn>2</mn></msqrt><msqrt><mn>2</mn></msqrt></msup><mo separator="true">,</mo><mi>b</mi><mo>=</mo><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">a=\sqrt2^{\sqrt2},b=\sqrt2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.4935515em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.2991115em;"><span style="top:-3.3601199999999998em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.912845em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight" style="padding-left:0.833em;">2</span></span><span style="top:-2.872845em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.12715500000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.13278em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span></span></span></span>，有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mi>b</mi></msup><mo>=</mo><msup><msqrt><mn>2</mn></msqrt><mn>2</mn></msup><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">a^b = \sqrt2^2=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.244008em;vertical-align:-0.13278em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.111228em;"><span style="top:-3.36012em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 为有理数。</p>
+<p>假设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><msqrt><mn>2</mn></msqrt><msqrt><mn>2</mn></msqrt></msup></mrow><annotation encoding="application/x-tex">\sqrt2^{\sqrt2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.4318914999999999em;vertical-align:-0.13278em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.2991115em;"><span style="top:-3.3601199999999998em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.912845em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight" style="padding-left:0.833em;">2</span></span><span style="top:-2.872845em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.12715500000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span> 为有理数，则令 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msqrt><mn>2</mn></msqrt><mo separator="true">,</mo><mi>b</mi><mo>=</mo><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">a=\sqrt2,b=\sqrt2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.10166em;vertical-align:-0.19444em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.13278em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span></span></span></span>。</p>
+<p>证毕。</p>
+</blockquote>
+<p>这就是一个应用排中律的典型例子。这里我们并不知道 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><msqrt><mn>2</mn></msqrt><msqrt><mn>2</mn></msqrt></msup></mrow><annotation encoding="application/x-tex">\sqrt2^{\sqrt2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.4318914999999999em;vertical-align:-0.13278em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.2991115em;"><span style="top:-3.3601199999999998em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord sqrt mtight"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.912845em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mtight" style="padding-left:0.833em;">2</span></span><span style="top:-2.872845em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail mtight" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.12715500000000002em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span> 到底是不是无理数。</p>
+<blockquote>
+<p>constructive proof：</p>
+<p>取 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msqrt><mn>2</mn></msqrt><mo separator="true">,</mo><mi>b</mi><mo>=</mo><msub><mo><mi>log</mi><mo>⁡</mo></mo><mn>2</mn></msub><mn>9</mn></mrow><annotation encoding="application/x-tex">a=\sqrt2,b=\log_29</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.10166em;vertical-align:-0.19444em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.93858em;vertical-align:-0.24414em;"></span><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span></span></span></span>，则 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mi>b</mi></msup><mo>=</mo><msup><msqrt><mn>2</mn></msqrt><mrow><mn>2</mn><msub><mo><mi>log</mi><mo>⁡</mo></mo><mn>2</mn></msub><mn>3</mn></mrow></msup><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">a^b=  \sqrt2^{2\log_23} = 3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.2790080000000001em;vertical-align:-0.13278em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.90722em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;">2</span></span><span style="top:-2.86722em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.13278em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.146228em;"><span style="top:-3.36012em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mspace mtight" style="margin-right:0.19516666666666668em;"></span><span class="mop mtight"><span class="mop mtight"><span class="mtight">l</span><span class="mtight">o</span><span class="mtight" style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.19444571428571428em;"><span style="top:-2.2341314285714287em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.26586857142857145em;"><span></span></span></span></span></span></span><span class="mspace mtight" style="margin-right:0.19516666666666668em;"></span><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span>，证毕。</p>
+</blockquote>
+<p>不过值得一提的是，不是所有定理都可以用构造逻辑完成证明的，比如说著名的停机问题，以及证明“<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo>+</mo><mi>e</mi></mrow><annotation encoding="application/x-tex">\pi + e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">e</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">\pi e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord mathnormal">e</span></span></span></span> 至少有一个是无理数”。</p>
+<p>没看懂书上写的用 CH 同构处理 nonconstructive reasoning 的方法。咕着吧反正不重要。</p>
+<h2 id="自然数上的证明"><a class="markdownIt-Anchor" href="#自然数上的证明"></a> 自然数上的证明</h2>
+<h3 id="皮亚诺整数及简单运算"><a class="markdownIt-Anchor" href="#皮亚诺整数及简单运算"></a> 皮亚诺整数及简单运算</h3>
+<p>皮亚诺整数的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">data ℕ : Set where<br>  zero : ℕ<br>  suc : ℕ → ℕ<br></code></pre></td></tr></table></figure>
+<p>比如说，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> 的表示就是 <code>suc (suc (suc zero))</code>，注意括号在这里是必须的，鉴于 function application 的优先级是最高的（类比 Haskell）。</p>
+<p>接下来是加法的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">_+_ : ℕ → ℕ → ℕ<br>zero  + n = n<br>suc m + n = suc (m + n)<br></code></pre></td></tr></table></figure>
+<p>这仍然是一个很常见的 pattern matching 的例子。</p>
+<p>下面是一些基本定理以及其证明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs agda">0+ : ∀ (x : ℕ) → 0 + x ≡ x<br>0+ x = refl<br><br>+0 : ∀ (x : ℕ) → x + 0 ≡ x<br>+0 zero = refl<br>+0 (suc x) rewrite +0 x = refl<br></code></pre></td></tr></table></figure>
+<p><code>0+</code> 是显然的，因为<strong>根据加法的定义</strong>，<code>0 + x</code> 是可以直接展开为 <code>x</code> 的，所以用一个 <code>refl</code> 即完成证明。但是 <code>+0</code> 则是不显然的——你没有办法直接<strong>根据加法的定义</strong>将其直接展开，所以不能直接用 <code>refl</code> 证明。</p>
+<p>在这里，使用 hole 可以看出我们证明的目标是 <code>suc (x + 0) ≡ suc x</code>，倘若我们能说明 <code>x + 0</code> 和 <code>x</code> 相等，是不是就 OK 了呢？所以使用 <code>rewrite</code> 来“归纳”，目标就变为了证明 <code>suc x ≡ suc x</code>，自然用 <code>refl</code> 即可。</p>
+<p>值得注意的是，在自然数相关证明里面，按照 <code>0</code> 和 <code>suc n</code> 来进行分类讨论往往是非常有效的。这种用递归来刻画归纳的想法也是非常有用的。</p>
+<p>接下来证明结合律。这是用 hole 来开发证明的一个很好的例子。<code>C-c C-l</code>  可以生成 holes，然后把光标放在 hole 里面按下 <code>C-c C-,</code> 可以调出当前要证明的 goal 以及相应的 context。当完成了证明之后，按下 <code>C-c C-space</code> 即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">+assoc : ∀ (x y z : ℕ) → x + (y + z) ≡ (x + y) + z<br>+assoc zero y z = refl<br>+assoc (suc x) y z rewrite +assoc x y z = refl<br></code></pre></td></tr></table></figure>
+<p>具体过程就略过了。</p>
+<p>再接下来证明交换律。一样是类似的思路，先考虑分类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">+comm : ∀ (x y : ℕ) → x + y ≡ y + x<br>+comm zero y = ?<br>+comm (suc x) y = ?<br></code></pre></td></tr></table></figure>
+<p>在第一个 hole 里面 <code>C-c C-,</code>，知道目标为证明 <code>y ≡ y + zero</code>，不难发现使用 <code>+0 y</code> rewrite 一下即可。在第二个 hole 里面，目标为 <code>suc (x + y) ≡ y + suc x</code>，用 <code>+comm x y</code> rewrite 之，变成 <code>suc (y + x) ≡ y + suc x</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">+comm : ∀ (x y : ℕ) → x + y ≡ y + x<br>+comm zero y rewrite +0 y = refl<br>+comm (suc x) y rewrite +comm x y = &#123;!   0!&#125;<br></code></pre></td></tr></table></figure>
+<p>现在怎么办呢，发现此时我们需要一个引理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">+suc : ∀ (x y : ℕ) → x + (suc y) ≡ suc(x + y)<br>+suc zero y = refl<br>+suc (suc x) y rewrite +suc x y = refl<br></code></pre></td></tr></table></figure>
+<p>再 rewrite 之即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">+comm : ∀ (x y : ℕ) → x + y ≡ y + x<br>+comm zero y rewrite +0 y = refl<br>+comm (suc x) y rewrite +comm x y | +suc y x = refl<br></code></pre></td></tr></table></figure>
+<p>值得一提的是，<code>+suc y x</code> 和 <code>+comm x y</code> 的位置是可以替换的，rewrite <strong>只会 rewrite 一次</strong>。</p>
+<p>接下来是乘法的定义以及一系列相关证明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs agda">_*_ : ℕ → ℕ → ℕ<br>zero  * n = zero<br>suc m * n = n + (m * n)<br><br>*distribr : ∀ (x y z : ℕ) → (x + y) * z ≡ x * z + y * z<br>*distribr zero y z = refl<br>*distribr (suc x) y z rewrite *distribr x y z = +assoc z (x * z) (y * z) <br><br>*0 : (x : ℕ) → x * zero ≡ zero<br>*0 zero = refl<br>*0 (suc n) rewrite *0 n = refl<br><br>*suc : (x y : ℕ) → x * suc y ≡ x + x * y<br>*suc zero y = refl<br>*suc (suc n) m rewrite *suc n m | +assoc m n (n * m) | +assoc n m (n * m) | +comm n m = refl<br><br>*-comm : (x y : ℕ) → x * y ≡ y * x<br>*-comm 0 m rewrite *0 m = refl<br>*-comm (suc n) m rewrite *suc m n | *-comm n m = refl<br><br>*-assoc : (x y z : ℕ) → (x * y) * z ≡ x * (y * z)<br>*-assoc 0 y z = refl<br>*-assoc (suc x) y z rewrite *distribr y (x * y) z | *-assoc x y z = refl<br></code></pre></td></tr></table></figure>
+<p>最后四个证明是我自己写的，写的方式是不唯一的。</p>
+<h3 id="不等关系"><a class="markdownIt-Anchor" href="#不等关系"></a> 不等关系</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs agda">_&lt;_ : ℕ → ℕ → 𝔹<br>0 &lt; 0 = ff<br>0 &lt; (suc y) = tt<br>(suc x) &lt; (suc y) = x &lt; y<br>(suc x) &lt; 0 = ff<br><br>_=ℕ_ : ℕ → ℕ → 𝔹<br>0 =ℕ 0 = tt<br>suc x =ℕ suc y = x =ℕ y<br>_ =ℕ _ = ff<br><br>_≤_ : ℕ → ℕ → 𝔹<br>x ≤ y = (x &lt; y) || x =ℕ y<br><br>_&gt;_ : ℕ → ℕ → 𝔹<br>a &gt; b = b &lt; a<br><br>_≥_ : ℕ → ℕ → 𝔹<br>a ≥ b = b ≤ a<br></code></pre></td></tr></table></figure>
+<p>然后是一些定理：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs agda">&lt;-0 : ∀ (x : ℕ) → x &lt; 0 ≡ ff<br>&lt;-0 0 = refl<br>&lt;-0 (suc y) = refl<br><br>&lt;-trans : ∀ &#123;x y z : ℕ&#125; → x &lt; y ≡ tt → y &lt; z ≡ tt → x &lt; z ≡ tt<br>&lt;-trans &#123;x&#125; &#123;0&#125; p1 p2 rewrite &lt;-0 x = 𝔹-contra p1<br>&lt;-trans &#123;0&#125; &#123;suc y&#125; &#123;0&#125; p1 () <br>&lt;-trans &#123;0&#125; &#123;suc y&#125; &#123;suc z&#125; p1 p2 = refl<br>&lt;-trans &#123;suc x&#125; &#123;suc y&#125; &#123;0&#125; p1 () <br>&lt;-trans &#123;suc x&#125; &#123;suc y&#125; &#123;suc z&#125; p1 p2 = &lt;-trans &#123;x&#125; &#123;y&#125; &#123;z&#125; p1 p2<br></code></pre></td></tr></table></figure>
+<p>无非是考虑疯狂分类讨论。</p>
+<p>最后是一些相互递归的证明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs agda">even~odd : ∀ (x : ℕ) → is-even x ≡ ~ is-odd x<br>odd~even : ∀ (x : ℕ) → is-odd x ≡ ~ is-even x<br>even~odd zero = refl<br>even~odd (suc x) = odd~even x<br>odd~even zero = refl<br>odd~even (suc x) = even~odd x<br></code></pre></td></tr></table></figure>
+<p>想法很类似于学习 Haskell 时候的，这里就略过吧。</p>
+<h2 id="list"><a class="markdownIt-Anchor" href="#list"></a> List</h2>
+<h3 id="基本定义"><a class="markdownIt-Anchor" href="#基本定义"></a> 基本定义</h3>
+<p>列表的定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">data 𝕃 &#123;ℓ&#125; (A : Set ℓ) : Set ℓ where<br>  [] : 𝕃 A<br>  _::_ : (x : A) (xs : 𝕃 A) → 𝕃 A<br></code></pre></td></tr></table></figure>
+<p>just a typical type constructor。<code>::</code> 读作 cons，接下来类似 Haskell 地，一些代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs agda">is-empty : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → 𝕃 A → 𝔹<br>is-empty [] = tt<br>is-empty (_ :: _) = ff<br><br>tail : ∀ &#123;ℓ&#125; &#123;A : Set ℓ&#125; → 𝕃 A → 𝕃 A<br>tail [] = []<br>tail (x :: xs) = xs<br><br>head : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → (l : 𝕃 A) → .(is-empty l ≡ ff) → A<br>head [] ()<br>head (x :: xs) _ = x<br><br>head2 : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → (l : 𝕃 A) → maybe A<br>head2 [] = nothing<br>head2 (a :: _) = just a<br></code></pre></td></tr></table></figure>
+<p>注意到 <code>head2</code> 用到了 maybe monad。这里跟 Haskell 的思想也是很像的：<strong>按照列表是否为空分类 pattern matching</strong>。</p>
+<p>然后是喜闻乐见的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs agda">_++_ : ∀ &#123;ℓ&#125; &#123;A : Set ℓ&#125; → 𝕃 A → 𝕃 A → 𝕃 A<br>[]        ++ ys = ys<br>(x :: xs) ++ ys = x :: (xs ++ ys)<br><br>concat : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → 𝕃 (𝕃 A) → 𝕃 A<br>concat [] = []<br>concat (l :: ls) = l ++ concat ls<br><br>repeat : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → ℕ → A → 𝕃 A<br>repeat 0 a = []<br>repeat (suc n) a = a :: (repeat n a)<br><br>map : ∀ &#123;ℓ ℓ&#x27;&#125; &#123;A : Set ℓ&#125; &#123;B : Set ℓ&#x27;&#125; → (A → B) → 𝕃 A → 𝕃 B<br>map f []        = []<br>map f (x :: xs) = f x :: map f xs<br><br>foldr : ∀&#123;ℓ ℓ&#x27;&#125;&#123;A : Set ℓ&#125;&#123;B : Set ℓ&#x27;&#125; → (A → B → B) → B → 𝕃 A → B<br>foldr f b [] = b<br>foldr f b (a :: as) = f a (foldr f b as)<br><br>length : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → 𝕃 A → ℕ<br>length [] = 0<br>length (x :: xs) = suc (length xs)<br><br>filter : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → (A → 𝔹) → 𝕃 A → 𝕃 A<br>filter p [] = []<br>filter p (x :: xs) = let r = filter p xs in <br>                     if p x then x :: r else r<br></code></pre></td></tr></table></figure>
+<p>完全跟 Haskell 里面的就差不多是一个东西，略。</p>
+<p>和 list 有关的证明也是利用 pattern matching。</p>
+<h3 id="length-of-filtered-lists-and-the-with-construct"><a class="markdownIt-Anchor" href="#length-of-filtered-lists-and-the-with-construct"></a> Length of Filtered Lists, and the with Construct</h3>
+<p>此处看一个典型例子，以此引入 <code>with</code> 记号：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs agda">length-filter : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125;(p : A → 𝔹)(l : 𝕃 A) → <br>                length (filter p l) ≤ length l ≡ tt<br>length-filter p [] = refl<br>length-filter p (x :: l) with p x<br>length-filter p (x :: l) | tt = length-filter p l<br>length-filter p (x :: l) | ff = <br>  ≤-trans&#123;length (filter p l)&#125; (length-filter p l) (≤-suc (length l))<br></code></pre></td></tr></table></figure>
+<p>具体看一下怎么说吧。对于 <code>[]</code> 的情况，<code>refl</code> 是自然的。如果我们引入 hole：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">length-filter p [] = refl<br>length-filter p (x :: l) = &#123;!   0!&#125;<br></code></pre></td></tr></table></figure>
+<p>他会返回目标：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">length (if p x then x :: filter p l else filter p l) ≤<br>      suc (length l)<br>      ≡ tt<br></code></pre></td></tr></table></figure>
+<p>这个目标显然是不太优美的。发现如果 <code>p x</code> 为 <code>tt</code>，那么需要证明的就变成 <code>length (filter p l) ≤ length l ≡ tt</code>，发现这不就是 <code>length-filter p l</code> 吗，所以用类似归纳的想法就可以了。</p>
+<p>现在难搞的是对于 <code>p x</code> 为 <code>ff</code> 的状态：要证明 <code>length (filter p l) ≤ suc (length l) ≡ tt</code>。不过如果我们知道 <code>length (filter p l) ≤ length l ≡ tt</code> 以及 <code>length l ≤ suc (length l)</code>，则利用小于等于号的传递性即得证。</p>
+<p><code>with</code> 记号其实类似于 Haskell 中的 case of，语法见上，应该是较为自然的。</p>
+<h3 id="filter-的幂等性以及-keep-记号"><a class="markdownIt-Anchor" href="#filter-的幂等性以及-keep-记号"></a> Filter 的幂等性以及 keep 记号</h3>
+<p>考虑证明如下的东西：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">filter-idem : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125;(p : A → 𝔹)(l : 𝕃 A) →<br>              (filter p (filter p l)) ≡ (filter p l)<br></code></pre></td></tr></table></figure>
+<p>即，filter 过后再 filter 一遍得到的结果跟只 filter 一遍是一样的。</p>
+<p>显然，从 <code>[]</code> 出发是较为合适的，然后考虑 <code>x :: l</code> 的情况，目标变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs agda">filter p (if p x then x :: filter p l else filter p l) ≡<br>      if p x then x :: filter p l else filter p l<br></code></pre></td></tr></table></figure>
+<p>可以说是相当丑陋。类似上面的，用 <code>with</code> 分类讨论一下，发现当 <code>p x</code> 为 <code>tt</code> 时，目标变为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">if p x then x :: filter p (filter p l) else<br>      filter p (filter p l)<br>      ≡ x :: filter p l<br></code></pre></td></tr></table></figure>
+<p>这里 Agda 就自动帮我们进行了一次展开：等号左边变成了 <code>filter p (if tt then x :: filter p l else filter p l)</code>，即 <code>filter p (x :: filter p l)</code>，再根据 <code>filter</code> 的定义展开：<code>if p x then x :: filter p (filter p l) else filter p (filter p l)</code>，又蹦出来了一个 <code>if_then_else</code>。这是因为 <strong>with 只会将表达式实例化一次</strong>。所以我们这下得引入一个新记号 <code>keep</code>（书上是这么叫的，标准库里面似乎是 <code>inspect</code>），定义如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs agda">-- this is called the inspect idiom, in the Agda stdlib<br>keep : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125; → (x : A) → Σ A (λ y → x ≡ y)<br>keep x = ( x , refl )<br></code></pre></td></tr></table></figure>
+<p>直接看代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs agda">filter-idem : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125;(p : A → 𝔹)(l : 𝕃 A) →<br>              (filter p (filter p l)) ≡ (filter p l)<br>filter-idem p [] = refl<br>filter-idem p (x :: l) with keep (p x)<br>filter-idem p (x :: l) | tt , p&#x27; = ?<br>filter-idem p (x :: l) | ff , p&#x27; = ?<br></code></pre></td></tr></table></figure>
+<p>如果我们检查第一个 hole 的 context，会发现 <code>p'</code> 有类型 <code>p' : p x ≡ tt</code>。注意 Agda 是不会自动实例化 <code>p x ≡ tt</code> 的，需要我们去 rewrite。显然，我们需要 rewrite 两个 <code>p'</code>。此时对于 <code>tt</code> 的情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs agda">filter-idem p (x :: l) | tt , p&#x27; rewrite p&#x27; | p&#x27; = &#123;!   0!&#125;<br></code></pre></td></tr></table></figure>
+<p>目标为 <code>x :: filter p (filter p l) ≡ x :: filter p l</code>。那么显然归纳一下就弄完了。<code>ff</code> 是类似的，完整代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs agda">filter-idem : ∀&#123;ℓ&#125;&#123;A : Set ℓ&#125;(p : A → 𝔹)(l : 𝕃 A) →<br>              (filter p (filter p l)) ≡ (filter p l)<br>filter-idem p [] = refl<br>filter-idem p (x :: l) with keep (p x)<br>filter-idem p (x :: l) | tt , p&#x27; rewrite p&#x27; | p&#x27; | filter-idem p l = refl<br>filter-idem p (x :: l) | ff , p&#x27; rewrite p&#x27; = filter-idem p l<br></code></pre></td></tr></table></figure>
+<p>值得一提的是，rewrite 记号是<strong>从左往右重写，一个表达式只重写一次</strong>的。</p>
+<p>所以如果调换一下 rewrite 后面几个东西的顺序的话，是有可能失败的。</p>
+<h2 id="internal-verification"><a class="markdownIt-Anchor" href="#internal-verification"></a> Internal Verification</h2>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AC%94%E8%AE%B0/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" class="category-chain-item">本科课程</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AC%94%E8%AE%B0/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/%E8%AE%A1%E7%AE%97%E6%A6%82%E8%AE%BA/" class="category-chain-item">计算概论</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/" class="print-no-link">#笔记</a>
+      
+        <a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="print-no-link">#函数式编程</a>
+      
+        <a href="/tags/Agda/" class="print-no-link">#Agda</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>计算概论 A 课程笔记：Agda</div>
+      <div>https://blog.imyangty.com/note-intro2computing/agda/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>YangTY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>November 15, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/note-simple-math-tricks/" title="数学基础辅差">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数学基础辅差</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/note-linear-algebra-a1/" title="线性代数 A (I) 课程笔记">
+                        <span class="hidden-mobile">线性代数 A (I) 课程笔记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"Cgfyufsygsm/cgfyufsygsm.github.io","repo-id":"MDEwOlJlcG9zaXRvcnkzOTIyMDA0MzQ=","category":"Announcements","category-id":"DIC_kwDOF2CA8s4CZEyl","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"top","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <p>Copyright© 2020-2026 <a href="/">YangTY's Blog</a></p> <br> <a target="_blank" rel="noopener" href="https://clustrmaps.com/site/1c1rp"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=K0MO4d8JdrSjeQTYqe1d2JXGwDGExBIbgHOhU_V8eGE&cl=ffffff" srcset="/img/loading.gif" lazyload /></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Views: 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Visitors: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

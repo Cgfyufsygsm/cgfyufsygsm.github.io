@@ -1,0 +1,996 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/avatar.jpg">
+  <link rel="icon" href="/assets/avatar.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YangTY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言 国庆的时候断断续续用 IDA 强拆了前六个炸弹便没再管了。本着为自己负责的原则，在这里把所有炸弹好好再拆一遍。 先用 objdump 把可执行文件反汇编到 bomb.asm 中。 打开 bomb.c 看看： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bomblab 手记">
+<meta property="og:url" content="https://blog.imyangty.com/note-bomblab/index.html">
+<meta property="og:site_name" content="YangTY&#39;s Blog">
+<meta property="og:description" content="前言 国庆的时候断断续续用 IDA 强拆了前六个炸弹便没再管了。本着为自己负责的原则，在这里把所有炸弹好好再拆一遍。 先用 objdump 把可执行文件反汇编到 bomb.asm 中。 打开 bomb.c 看看： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-10-13T09:57:08.000Z">
+<meta property="article:modified_time" content="2025-12-20T13:30:10.207Z">
+<meta property="article:author" content="YangTY">
+<meta property="article:tag" content="ICS">
+<meta property="article:tag" content="本科课程">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+    <!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZS41KYKYZ"></script><script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag("js", new Date());  gtag("config", "G-8ZS41KYKYZ:");</script>
+  
+  <title>Bomblab 手记 - YangTY&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.imyangty.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<!-- hexo injector head_end start --><style id="banner-theme-css">
+#banner {
+  background-image: url("/assets/banner-light.jpg") !important;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/banner-dark.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+#banner .mask {
+  z-index: 1;
+}
+html[data-user-color-scheme="dark"] #banner::after {
+  opacity: 1;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 1;
+  }
+}
+@media (prefers-color-scheme: light) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 0;
+  }
+}
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YangTY&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://yangty-pic.oss-cn-beijing.aliyuncs.com/blog_banner.JPG') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Bomblab 手记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        YangTY
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-13 17:57" pubdate>
+          October 13, 2024 5:57 PM
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          71 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Bomblab 手记</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on December 20, 2025 9:30 PM
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>国庆的时候断断续续用 IDA 强拆了前六个炸弹便没再管了。本着为自己负责的原则，在这里把所有炸弹好好再拆一遍。</p>
+<p>先用 <code>objdump</code> 把可执行文件反汇编到 <code>bomb.asm</code> 中。</p>
+<p>打开 <code>bomb.c</code> 看看：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/***************************************************************************</span><br><span class="hljs-comment"> * Dr. Evil&#x27;s Insidious Bomb, Version 1.0</span><br><span class="hljs-comment"> * Copyright 2011, Dr. Evil Incorporated. All rights reserved.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * LICENSE:</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * Dr. Evil Incorporated (the PERPETRATOR) hereby grants you (the</span><br><span class="hljs-comment"> * VICTIM) explicit permission to use this bomb (the BOMB).  This is a</span><br><span class="hljs-comment"> * time limited license, which expires on the death of the VICTIM.</span><br><span class="hljs-comment"> * The PERPETRATOR takes no responsibility for damage, frustration,</span><br><span class="hljs-comment"> * insanity, bug-eyes, carpal-tunnel syndrome, loss of sleep, or other</span><br><span class="hljs-comment"> * harm to the VICTIM.  Unless the PERPETRATOR wants to take credit,</span><br><span class="hljs-comment"> * that is.  The VICTIM may not distribute this bomb source code to</span><br><span class="hljs-comment"> * any enemies of the PERPETRATOR.  No VICTIM may debug,</span><br><span class="hljs-comment"> * reverse-engineer, run &quot;strings&quot; on, decompile, decrypt, or use any</span><br><span class="hljs-comment"> * other technique to gain knowledge of and defuse the BOMB.  BOMB</span><br><span class="hljs-comment"> * proof clothing may not be worn when handling this program.  The</span><br><span class="hljs-comment"> * PERPETRATOR will not apologize for the PERPETRATOR&#x27;s poor sense of</span><br><span class="hljs-comment"> * humor.  This license is null and void where the BOMB is prohibited</span><br><span class="hljs-comment"> * by law.</span><br><span class="hljs-comment"> ***************************************************************************/</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;support.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;phases.h&quot;</span></span><br><br><span class="hljs-comment">/* </span><br><span class="hljs-comment"> * Note to self: Remember to erase this file so my victims will have no</span><br><span class="hljs-comment"> * idea what is going on, and so they will all blow up in a</span><br><span class="hljs-comment"> * spectaculary fiendish explosion. -- Dr. Evil </span><br><span class="hljs-comment"> */</span><br><br>FILE *infile;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>    <span class="hljs-type">char</span> *input;<br><br>    <span class="hljs-comment">/* Note to self: remember to port this bomb to Windows and put a </span><br><span class="hljs-comment">     * fantastic GUI on it. */</span><br><br>    <span class="hljs-comment">/* When run with no arguments, the bomb reads its input lines </span><br><span class="hljs-comment">     * from standard input. */</span><br>    <span class="hljs-keyword">if</span> (argc == <span class="hljs-number">1</span>) &#123;  <br>		infile = <span class="hljs-built_in">stdin</span>;<br>    &#125; <br><br>    <span class="hljs-comment">/* When run with one argument &lt;file&gt;, the bomb reads from &lt;file&gt; </span><br><span class="hljs-comment">     * until EOF, and then switches to standard input. Thus, as you </span><br><span class="hljs-comment">     * defuse each phase, you can add its defusing string to &lt;file&gt; and</span><br><span class="hljs-comment">     * avoid having to retype it. */</span><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (argc == <span class="hljs-number">2</span>) &#123;<br>		<span class="hljs-keyword">if</span> (!(infile = fopen(argv[<span class="hljs-number">1</span>], <span class="hljs-string">&quot;r&quot;</span>))) &#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s: Error: Couldn&#x27;t open %s\n&quot;</span>, argv[<span class="hljs-number">0</span>], argv[<span class="hljs-number">1</span>]);<br>			<span class="hljs-built_in">exit</span>(<span class="hljs-number">8</span>);<br>		&#125;<br>    &#125;<br><br>    <span class="hljs-comment">/* You can&#x27;t call the bomb with more than 1 command line argument. */</span><br>    <span class="hljs-keyword">else</span> &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Usage: %s [&lt;input_file&gt;]\n&quot;</span>, argv[<span class="hljs-number">0</span>]);<br>		<span class="hljs-built_in">exit</span>(<span class="hljs-number">8</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/* Do all sorts of secret stuff that makes the bomb harder to defuse. */</span><br>    <span class="hljs-type">int</span> *fp = initialize_bomb();<br><br>    <span class="hljs-keyword">if</span> (*fp != SECRETTOKEN)&#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Don&#x27;t try to make the bomb run on your local machine!(*/w＼*)&quot;</span>);<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Welcome to Mr.Gin&#x27;s little bomb. You have 6 phases with\n&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;which to blow yourself up. Have a nice day! Mua ha ha ha!\n&quot;</span>);<br><br>    <span class="hljs-comment">/* Hmm...  Six phases must be more secure than one phase! */</span><br>    input = read_line();             <span class="hljs-comment">/* Get input                   */</span><br>    phase_1(input);                  <span class="hljs-comment">/* Run the phase               */</span><br>    phase_defused(fp);                 <span class="hljs-comment">/* Drat!  They figured it out!</span><br><span class="hljs-comment">									  * Let me know how they did it. */</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Phase 1 defused. How about the next one?\n&quot;</span>);<br><br>    <span class="hljs-comment">/* The second phase is harder.  No one will ever figure out</span><br><span class="hljs-comment">     * how to defuse this... */</span><br>    input = read_line();<br>    phase_2(input);<br>    phase_defused(fp);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;That&#x27;s number 2. Keep going!\n&quot;</span>);<br><br>    <span class="hljs-comment">/* I guess this is too easy so far.  Some more complex code will</span><br><span class="hljs-comment">     * confuse people. */</span><br>    input = read_line();<br>    phase_3(input);<br>    phase_defused(fp);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Halfway there! Good job!\n&quot;</span>);<br><br>    <span class="hljs-comment">/* Oh yeah?  Well, how good is your math?  Try on this saucy problem! */</span><br>    input = read_line();<br>    phase_4(input);<br>    phase_defused(fp);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;So you got that one. Try this one.\n&quot;</span>);<br>    <br>    <span class="hljs-comment">/* Round and &#x27;round in memory we go, where we stop, the bomb blows! */</span><br>    input = read_line();<br>    phase_5(input);<br>    phase_defused(fp);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Good work! On to the next...\n&quot;</span>);<br><br>    <span class="hljs-comment">/* This phase will never be used, since no one will get past the</span><br><span class="hljs-comment">     * earlier ones.  But just in case, make this one extra hard. */</span><br>    input = read_line();<br>    phase_6(input);<br>    phase_defused(fp);<br><br>    <span class="hljs-comment">/* Wow, they got it!  But isn&#x27;t something... missing?  Perhaps</span><br><span class="hljs-comment">     * something they overlooked?  Mua ha ha ha ha! */</span><br>    <br>    <span class="hljs-built_in">free</span>(fp);<br>    fp = <span class="hljs-literal">NULL</span>;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>便知道每个 phase 都需要我们找到一个正确的字符串。</p>
+<h2 id="gdb-备忘录"><a class="markdownIt-Anchor" href="#gdb-备忘录"></a> GDB 备忘录</h2>
+<ul>
+<li>
+<p>断点的设置与删除：</p>
+<ul>
+<li>设置断点：<code>b</code> 指令。比如 <code>b function_name</code>。如果要跳到相对函数的某指令，就 <code>b *function_name+n</code> 即可；</li>
+<li>删除断点：<code>delete breakpoint_number</code> 可以删除单个断点。</li>
+</ul>
+</li>
+<li>
+<p>打印寄存器的值：<code>p</code> 指令，后面跟寄存器。比如 <code>p $rdi</code>；</p>
+</li>
+<li>
+<p>打印内存的值：<code>x /nfu</code>，x 意为 examine，n 为要显示的内存单元数目，f 为显示方式，u 为一个地址单元的长度。</p>
+<blockquote>
+<p>x 按十六进制格式显示变量。<br />
+d 按十进制格式显示变量。<br />
+u 按十进制格式显示无符号整型。<br />
+o 按八进制格式显示变量。<br />
+t 按二进制格式显示变量。<br />
+a 按十六进制格式显示变量。<br />
+i 指令地址格式<br />
+c 按字符格式显示变量。<br />
+f 按浮点数格式显示变量。<br />
+s 按字符串显示变量。</p>
+<p>b 表示单字节， h 表示双字节， w 表示四字节， g 表示八字节</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="phase-1"><a class="markdownIt-Anchor" href="#phase-1"></a> Phase 1</h2>
+<p>先在 <code>bomb.asm</code> 里面找到 phase 1：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs assembly">00000000000027b8 &lt;phase_1&gt;:<br>    27b8:	f3 0f 1e fa          	endbr64<br>    27bc:	48 83 ec 08          	sub    $0x8,%rsp<br>    27c0:	48 8d 35 39 2a 00 00 	lea    0x2a39(%rip),%rsi        # 5200 &lt;_IO_stdin_used+0x200&gt;<br>    27c7:	e8 65 05 00 00       	call   2d31 &lt;strings_not_equal&gt;<br>    27cc:	85 c0                	test   %eax,%eax<br>    27ce:	75 05                	jne    27d5 &lt;phase_1+0x1d&gt;<br>    27d0:	48 83 c4 08          	add    $0x8,%rsp<br>    27d4:	c3                   	ret<br>    27d5:	e8 6c 08 00 00       	call   3046 &lt;explode_bomb&gt;<br>    27da:	eb f4                	jmp    27d0 &lt;phase_1+0x18&gt;<br></code></pre></td></tr></table></figure>
+<p>发现似乎很简单。显然我们的输入是在 <code>%rdi</code> 的，<code>27c0</code> 又将 <code>%rip+0x2a39</code> 赋给了 <code>%rsi</code>，这俩自然是 <code>strings_not_equal</code> 的参数。根据其逻辑可以发现如果不相等的话就会 <code>call explode_bomb</code>。所以我们自然希望获取到那一段内存里面的值。</p>
+<p>打开 gdb，<code>gdb bomb</code>，为了保险起见先给 <code>explode_bomb</code> 打断点，然后给 <code>phase_1</code> 打断点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">Reading symbols from bomb...<br>(gdb) b explode_bomb<br>Breakpoint 1 at 0x3046<br>(gdb) b phase_1<br>Breakpoint 2 at 0x27b8<br></code></pre></td></tr></table></figure>
+<p>然后输出 r 就可以运行程序了，先随便输入一个字符串。程序会在第一个断点停下来，也即 <code>phase_1</code> 处。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) r<br>Starting program: /home/ubuntu/bomb162/bomb <br>[Thread debugging using libthread_db enabled]<br>Using host libthread_db library <span class="hljs-string">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.<br>Welcome to Mr.Gin<span class="hljs-string">&#x27;s little bomb. You have 6 phases with</span><br><span class="hljs-string">which to blow yourself up. Have a nice day! Mua ha ha ha!</span><br><span class="hljs-string">abcdefg</span><br><span class="hljs-string"></span><br><span class="hljs-string">Breakpoint 2, 0x00005555555567b8 in phase_1 ()</span><br><span class="hljs-string">(gdb) </span><br></code></pre></td></tr></table></figure>
+<p>输入 <code>disas</code> 可以让 gdb 显示对应部分的汇编代码。按 <code>ni</code> 可以跳到下一步指令。我们一直 <code>ni</code> 到 <code>lea</code> 完成为止。然后用 <code>x/s $rsi</code> 即可检查对应部分的内存并以字符串输出了。所以 phase_1 的答案就是那个字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs assembly">Breakpoint 2, 0x00005555555567b8 in phase_1 ()<br>(gdb) disas<br>Dump of assembler code for function phase_1:<br>=&gt; 0x00005555555567b8 &lt;+0&gt;:     endbr64<br>   0x00005555555567bc &lt;+4&gt;:     sub    $0x8,%rsp<br>   0x00005555555567c0 &lt;+8&gt;:     lea    0x2a39(%rip),%rsi        # 0x555555559200<br>   0x00005555555567c7 &lt;+15&gt;:    call   0x555555556d31 &lt;strings_not_equal&gt;<br>   0x00005555555567cc &lt;+20&gt;:    test   %eax,%eax<br>   0x00005555555567ce &lt;+22&gt;:    jne    0x5555555567d5 &lt;phase_1+29&gt;<br>   0x00005555555567d0 &lt;+24&gt;:    add    $0x8,%rsp<br>   0x00005555555567d4 &lt;+28&gt;:    ret<br>   0x00005555555567d5 &lt;+29&gt;:    call   0x555555557046 &lt;explode_bomb&gt;<br>   0x00005555555567da &lt;+34&gt;:    jmp    0x5555555567d0 &lt;phase_1+24&gt;<br>End of assembler dump.<br>(gdb) ni<br>0x00005555555567bc in phase_1 ()<br>(gdb) ni<br>0x00005555555567c0 in phase_1 ()<br>(gdb) ni<br>0x00005555555567c7 in phase_1 ()<br>(gdb) x/s $rsi<br>0x555555559200: &quot;Love is a program that science and logic can never explain.&quot;<br></code></pre></td></tr></table></figure>
+<p>按 <code>r</code> 重新运行程序然后输入这个字符串即可。按 <code>c</code> 可以从断点处继续往下运行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs assembly">(gdb) r<br>The program being debugged has been started already.<br>Start it from the beginning? (y or n) y<br>Starting program: /home/ubuntu/bomb162/bomb <br>[Thread debugging using libthread_db enabled]<br>Using host libthread_db library &quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;.<br>Welcome to Mr.Gin&#x27;s little bomb. You have 6 phases with<br>which to blow yourself up. Have a nice day! Mua ha ha ha!<br>Love is a program that science and logic can never explain.<br><br>Breakpoint 2, 0x00005555555567b8 in phase_1 ()<br>(gdb) b phase_2<br>Breakpoint 3 at 0x5555555567dc<br>(gdb) c<br>Continuing.<br>Phase 1 defused. How about the next one?<br></code></pre></td></tr></table></figure>
+<h2 id="phase-2"><a class="markdownIt-Anchor" href="#phase-2"></a> Phase 2</h2>
+<p>进入 phase 2，先看看汇编代码。真的还长了很多，下面分段给出注释。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">00000000000027dc &lt;phase_2&gt;:<br>    27dc:	f3 0f 1e fa          	endbr64<br>    27e0:	53                   	push   %rbx # 把 %rbx 存入栈中<br>    27e1:	48 83 ec 20          	sub    $0x20,%rsp # 在栈上开 20 个字节的空间<br>    27e5:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax # 金丝雀值<br>    27ec:	00 00 <br>    27ee:	48 89 44 24 18       	mov    %rax,0x18(%rsp) # 金丝雀值<br>    27f3:	31 c0                	xor    %eax,%eax # 清空 rax 寄存器<br>    27f5:	48 89 e6             	mov    %rsp,%rsi # 将当前栈指针作为传给 read_six_numbers 的第二个参数<br>    27f8:	e8 cf 08 00 00       	call   30cc &lt;read_six_numbers&gt;<br></code></pre></td></tr></table></figure>
+<p>我们再跳到 <code>read_six_numbers</code> 看看是个啥情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs assembly">00000000000030cc &lt;read_six_numbers&gt;:<br>    30cc:	f3 0f 1e fa          	endbr64<br>    30d0:	48 83 ec 08          	sub    $0x8,%rsp<br>    30d4:	48 89 f2             	mov    %rsi,%rdx<br>    30d7:	48 8d 4e 04          	lea    0x4(%rsi),%rcx<br>    30db:	48 8d 46 14          	lea    0x14(%rsi),%rax<br>    30df:	50                   	push   %rax<br>    30e0:	48 8d 46 10          	lea    0x10(%rsi),%rax<br>    30e4:	50                   	push   %rax<br>    30e5:	4c 8d 4e 0c          	lea    0xc(%rsi),%r9<br>    30e9:	4c 8d 46 08          	lea    0x8(%rsi),%r8<br>    30ed:	48 8d 35 78 25 00 00 	lea    0x2578(%rip),%rsi        # 566c &lt;array.0+0x30c&gt;<br>    30f4:	b8 00 00 00 00       	mov    $0x0,%eax<br>    30f9:	e8 62 f2 ff ff       	call   2360 &lt;__isoc99_sscanf@plt&gt;<br>    30fe:	48 83 c4 10          	add    $0x10,%rsp<br>    3102:	83 f8 05             	cmp    $0x5,%eax<br>    3105:	7e 05                	jle    310c &lt;read_six_numbers+0x40&gt;<br>    3107:	48 83 c4 08          	add    $0x8,%rsp<br>    310b:	c3                   	ret<br>    310c:	e8 35 ff ff ff       	call   3046 &lt;explode_bomb&gt;<br></code></pre></td></tr></table></figure>
+<p>注意到 <code>30f9</code> 处调用了 <code>sscanf</code> 函数，那么想必前几行就是在准备 <code>sscanf</code> 的参数了。<code>sscanf</code> 的第一个参数为要 scan 的字符串地址，存在 <code>%rdi</code> 中，第二个参数为匹配的模式串，存在 <code>%rsi</code> 中。这个函数要读六个数字，那么后面的几个参数就应当为读到的数字的地址。下面给出相应注释：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs assembly">00000000000030cc &lt;read_six_numbers&gt;:<br>    30cc:	f3 0f 1e fa          	endbr64<br>    30d0:	48 83 ec 08          	sub    $0x8,%rsp # 开栈<br>    30d4:	48 89 f2             	mov    %rsi,%rdx # rdx 是第三个参数，放的是第一个数字<br>                                                     # 而这正是 %rsi 指向的地址<br>    30d7:	48 8d 4e 04          	lea    0x4(%rsi),%rcx # 第二个数字，%rsi+4<br>    30db:	48 8d 46 14          	lea    0x14(%rsi),%rax # 第六个数字，参数不够了<br>    30df:	50                   	push   %rax            # 扔栈里<br>    30e0:	48 8d 46 10          	lea    0x10(%rsi),%rax # 第五个数字，同理<br>    30e4:	50                   	push   %rax<br>    30e5:	4c 8d 4e 0c          	lea    0xc(%rsi),%r9   # 第四个数字<br>    30e9:	4c 8d 46 08          	lea    0x8(%rsi),%r8   # 第三个数字<br>    30ed:	48 8d 35 78 25 00 00 	lea    0x2578(%rip),%rsi        # 566c &lt;array.0+0x30c&gt;<br>                                                            # 把模式串取出来，在 gdb 里面将其打印，可知为<br>                                                            # &quot;%d %d %d %d %d %d&quot;<br>    30f4:	b8 00 00 00 00       	mov    $0x0,%eax       # 清空 eax<br>    30f9:	e8 62 f2 ff ff       	call   2360 &lt;__isoc99_sscanf@plt&gt; # 调用 sscanf 进行读取<br>    30fe:	48 83 c4 10          	add    $0x10,%rsp      # 把刚push用掉的空间还回去（16个字节）<br>    3102:	83 f8 05             	cmp    $0x5,%eax       # 比较 sscanf 的返回值与 5 的值<br>    3105:	7e 05                	jle    310c &lt;read_six_numbers+0x40&gt; # 如果小于等于 5，炸弹爆炸<br>    3107:	48 83 c4 08          	add    $0x8,%rsp       # 还回去一开始的 8 个字节<br>    310b:	c3                   	ret<br>    310c:	e8 35 ff ff ff       	call   3046 &lt;explode_bomb&gt;<br></code></pre></td></tr></table></figure>
+<p>这样便已看明白 <code>read_six_numbers</code> 的行为，是读 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 个数字，索性称为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mn>0</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>a</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">a_0,\cdots,a_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 吧。他们存放在栈里。看看接下来要做什么。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs assembly"><br>27fd:	83 3c 24 00          	cmpl   $0x0,(%rsp)<br>2801:	75 07                	jne    280a &lt;phase_2+0x2e&gt; # 如果 a[0] != 0，爆炸<br>2803:	83 7c 24 04 01       	cmpl   $0x1,0x4(%rsp)      # 比较 a[1] 与 1<br>2808:	74 05                	je     280f &lt;phase_2+0x33&gt; # a[1] 不为 1 就爆炸<br>280a:	e8 37 08 00 00       	call   3046 &lt;explode_bomb&gt;<br>280f:	bb 02 00 00 00       	mov    $0x2,%ebx           # 令 ebx=2，可以看出来 ebx 是循环指标变量<br>2814:	eb 03                	jmp    2819 &lt;phase_2+0x3d&gt;<br>2816:	83 c3 01             	add    $0x1,%ebx<br>2819:	83 fb 05             	cmp    $0x5,%ebx<br>281c:	7f 20                	jg     283e &lt;phase_2+0x62&gt; # 这里是 for(int i=2;i&lt;=5;++i)<br>281e:	48 63 d3             	movslq %ebx,%rdx           # 将 ebx 符号扩展传送到 rdx<br>2821:	8d 4b fe             	lea    -0x2(%rbx),%ecx     # 令 ecx = rbx-2，即 i - 2<br>2824:	48 63 c9             	movslq %ecx,%rcx<br>2827:	8d 43 ff             	lea    -0x1(%rbx),%eax     # 令 eax = i - 1<br>282a:	48 98                	cltq<br>282c:	8b 04 84             	mov    (%rsp,%rax,4),%eax  # 取出 a[i - 1]<br>282f:	03 04 8c             	add    (%rsp,%rcx,4),%eax  # 得到 a[i - 1] + a[i - 2]<br>2832:	39 04 94             	cmp    %eax,(%rsp,%rdx,4)  # 将 a[i] 与 a[i - 1] + a[i - 2] 比较<br>2835:	74 df                	je     2816 &lt;phase_2+0x3a&gt; # 必须相等，不等就炸<br>2837:	e8 0a 08 00 00       	call   3046 &lt;explode_bomb&gt;<br>283c:	eb d8                	jmp    2816 &lt;phase_2+0x3a&gt; # 循环结束<br>283e:	48 8b 44 24 18       	mov    0x18(%rsp),%rax     # 取到存在栈里面的金丝雀值<br>2843:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>284a:	00 00 <br>284c:	75 06                	jne    2854 &lt;phase_2+0x78&gt; # 如果金丝雀值被攻击，调用__stack_chk_fail<br>284e:	48 83 c4 20          	add    $0x20,%rsp<br>2852:	5b                   	pop    %rbx                # 取回一开始压进栈里的 rbx<br>2853:	c3                   	ret<br>2854:	e8 57 fa ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>所以这六个数字显然为 <code>0 1 1 2 3 5</code>，是为斐波那契数列。</p>
+<h2 id="phase-3"><a class="markdownIt-Anchor" href="#phase-3"></a> Phase 3</h2>
+<p>顺带一提的是，观察 <code>main</code> 函数我们知道，可以将已经破开的字符串放进一个文件里面，就不用每次都输入了。到了文件里面没有的才会从 <code>stdin</code> 里面读入。</p>
+<p>所以我们不妨令 <code>main</code> 的参数为文件名，在 <code>gdb</code> 中 <code>set args data.in</code> 即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">Reading symbols from bomb...<br>(gdb) <span class="hljs-built_in">set</span> args data.in<br>(gdb) b explode_bomb<br>Breakpoint 1 at 0x3046<br>(gdb) b phase_3<br>Breakpoint 2 at 0x2859<br>(gdb) r<br>Starting program: /home/ubuntu/bomb162/bomb data.in<br>[Thread debugging using libthread_db enabled]<br>Using host libthread_db library <span class="hljs-string">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.<br>Welcome to Mr.Gin<span class="hljs-string">&#x27;s little bomb. You have 6 phases with</span><br><span class="hljs-string">which to blow yourself up. Have a nice day! Mua ha ha ha!</span><br><span class="hljs-string">Phase 1 defused. How about the next one?</span><br><span class="hljs-string">That&#x27;</span>s number 2. Keep going!<br></code></pre></td></tr></table></figure>
+<p>此时我们就可以继续着眼于第三个 phase 了。</p>
+<p>phase 3 更长，我们先看前几行，浅浅注释一波：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002859 &lt;phase_3&gt;:<br>    2859:	f3 0f 1e fa          	endbr64<br>    285d:	48 83 ec 18          	sub    $0x18,%rsp<br>    2861:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2868:	00 00 <br>    286a:	48 89 44 24 08       	mov    %rax,0x8(%rsp)        # 金丝雀值<br>    286f:	31 c0                	xor    %eax,%eax             # 清空 eax<br>    2871:	48 8d 4c 24 04       	lea    0x4(%rsp),%rcx        # 令 rcx=%rsp+4<br>    2876:	48 89 e2             	mov    %rsp,%rdx             # 令 rdx=%rsp<br>    2879:	48 8d 35 f8 2d 00 00 	lea    0x2df8(%rip),%rsi        # 5678 &lt;array.0+0x318&gt;<br>    2880:	e8 db fa ff ff       	call   2360 &lt;__isoc99_sscanf@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>看到调用 <code>sscanf</code> 便知又是要从字符串里面读些什么。先看看 <code>%rsi</code> 是什么情况。可以通过 <code>*phase_3+39</code> 打断点到相应的指令位置，然后输出 <code>%rsi</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) disas<br>Dump of assembler code <span class="hljs-keyword">for</span> <span class="hljs-keyword">function</span> phase_3:<br>=&gt; 0x0000555555556859 &lt;+0&gt;:     endbr64<br>   0x000055555555685d &lt;+4&gt;:     sub    <span class="hljs-variable">$0x18</span>,%rsp<br>   0x0000555555556861 &lt;+8&gt;:     mov    %fs:0x28,%rax<br>   0x000055555555686a &lt;+17&gt;:    mov    %rax,0x8(%rsp)<br>   0x000055555555686f &lt;+22&gt;:    xor    %eax,%eax<br>   0x0000555555556871 &lt;+24&gt;:    lea    0x4(%rsp),%rcx<br>   0x0000555555556876 &lt;+29&gt;:    mov    %rsp,%rdx<br>   0x0000555555556879 &lt;+32&gt;:    lea    0x2df8(%rip),%rsi        <span class="hljs-comment"># 0x555555559678</span><br>   0x0000555555556880 &lt;+39&gt;:    call   0x555555556360 &lt;__isoc99_sscanf@plt&gt;<br>(gdb) b *phase_3+39<br>Breakpoint 3 at 0x555555556880<br>(gdb) c<br>Continuing.<br><br>Breakpoint 3, 0x0000555555556880 <span class="hljs-keyword">in</span> phase_3 ()<br>(gdb) x/s <span class="hljs-variable">$rsi</span><br>0x555555559678: <span class="hljs-string">&quot;%d %d&quot;</span><br></code></pre></td></tr></table></figure>
+<p>这下我们知道，phase 3 是需要我们输入两个整数，存放在 <code>%rsp</code> 和 <code>%rsp+4</code> 处，暂且分别叫做 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> 吧。看看后面要做什么：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2880:	e8 db fa ff ff       	call   2360 &lt;__isoc99_sscanf@plt&gt;<br>2885:	83 f8 01             	cmp    $0x1,%eax<br>2888:	7e 1e                	jle    28a8 &lt;phase_3+0x4f&gt;     # 判断有没有成功读，没就爆炸<br>288a:	83 3c 24 07          	cmpl   $0x7,(%rsp)<br>288e:	0f 87 8d 00 00 00    	ja     2921 &lt;phase_3+0xc8&gt;     # 若 x&gt;7，也爆炸<br>2894:	8b 04 24             	mov    (%rsp),%eax             # 把 x 提取到 eax 中<br>2897:	48 8d 15 a2 2a 00 00 	lea    0x2aa2(%rip),%rdx        # 5340 &lt;_IO_stdin_used+0x340&gt;<br><br>289e:	48 63 04 82          	movslq (%rdx,%rax,4),%rax<br>28a2:	48 01 d0             	add    %rdx,%rax<br>28a5:	3e ff e0             	notrack jmp *%rax<br></code></pre></td></tr></table></figure>
+<p>到了比较麻烦的地方了。这里是取了个 <code>%rdx</code>，然后要跳到 <code>%rdx * 2 + 4 * x</code> 的地方。</p>
+<p>这个东西有点像 <code>switch</code> 语句，但我们如果不真带入个啥也没法分析了。不妨我们就让输入的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，然后看看跳到了哪。</p>
+<p>发现跳到了这个地方：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">28af:	8b 44 24 04          	mov    0x4(%rsp),%eax<br>28b3:	05 82 02 00 00       	add    $0x282,%eax<br>28b8:	3d b0 06 00 00       	cmp    $0x6b0,%eax<br>28bd:	75 71                	jne    2930 &lt;phase_3+0xd7&gt;<br>28bf:	48 8b 44 24 08       	mov    0x8(%rsp),%rax<br>28c4:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>28cb:	00 00 <br>28cd:	75 68                	jne    2937 &lt;phase_3+0xde&gt;<br>28cf:	48 83 c4 18          	add    $0x18,%rsp<br>28d3:	c3                   	ret<br></code></pre></td></tr></table></figure>
+<p>第一行相当于把 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> 取出来了。然后加上了 <code>0x282</code> 后与 <code>0x6b0</code> 比较，如果不等于的话就跳去 <code>2930</code>，即爆炸。否则好像就可以了。</p>
+<p>所以有一个答案为 <code>0 1070</code>。剩下的分支都是类似的，但都会跳到与 <code>0x6b0</code> 的比较。</p>
+<p>事实上用 IDA 的反编译代码也如此：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 __fastcall <span class="hljs-title function_">phase_3</span><span class="hljs-params">(__int64 a1)</span><br>&#123;<br>  <span class="hljs-type">int</span> v1; <span class="hljs-comment">// eax</span><br>  <span class="hljs-type">int</span> v3; <span class="hljs-comment">// [rsp+0h] [rbp-18h] BYREF</span><br>  <span class="hljs-type">int</span> v4; <span class="hljs-comment">// [rsp+4h] [rbp-14h] BYREF</span><br>  <span class="hljs-type">unsigned</span> __int64 v5; <span class="hljs-comment">// [rsp+8h] [rbp-10h]</span><br><br>  v5 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-type">int</span>)__isoc99_sscanf(a1, <span class="hljs-string">&quot;%d %d&quot;</span>, &amp;v3, &amp;v4) &lt;= <span class="hljs-number">1</span> )<br>    explode_bomb();<br>  <span class="hljs-keyword">switch</span> ( v3 )<br>  &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>      v1 = v4 + <span class="hljs-number">642</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>      v1 = v4 + <span class="hljs-number">443</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>      v1 = v4 + <span class="hljs-number">584</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>      v1 = v4 + <span class="hljs-number">316</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>      v1 = v4 + <span class="hljs-number">188</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:<br>      v1 = v4 + <span class="hljs-number">270</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">6</span>:<br>      v1 = v4 + <span class="hljs-number">856</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">7</span>:<br>      v1 = v4 + <span class="hljs-number">760</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>:<br>      explode_bomb();<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( v1 != <span class="hljs-number">1712</span> )<br>    explode_bomb();<br>  <span class="hljs-keyword">return</span> v5 - __readfsqword(<span class="hljs-number">0x28</span>u);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="phase-4"><a class="markdownIt-Anchor" href="#phase-4"></a> Phase 4</h2>
+<p>看看开头吧：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002977 &lt;phase_4&gt;:<br>    2977:	f3 0f 1e fa          	endbr64<br>    297b:	55                   	push   %rbp<br>    297c:	53                   	push   %rbx<br>    297d:	48 83 ec 18          	sub    $0x18,%rsp<br>    2981:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2988:	00 00 <br>    298a:	48 89 44 24 08       	mov    %rax,0x8(%rsp)<br>    298f:	31 c0                	xor    %eax,%eax<br>    2991:	48 8d 4c 24 04       	lea    0x4(%rsp),%rcx<br>    2996:	48 89 e2             	mov    %rsp,%rdx<br>    2999:	48 8d 35 d8 2c 00 00 	lea    0x2cd8(%rip),%rsi        # 5678 &lt;array.0+0x318&gt;<br>    29a0:	e8 bb f9 ff ff       	call   2360 &lt;__isoc99_sscanf@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>照例把 <code>sscanf</code> 的模式串找出来，仍为 <code>%d %d</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs assembly">29a5:	83 f8 02             	cmp    $0x2,%eax             # 照例<br>29a8:	75 06                	jne    29b0 &lt;phase_4+0x39&gt;<br>29aa:	83 3c 24 05          	cmpl   $0x5,(%rsp)           # x 与 5 比较<br>29ae:	74 05                	je     29b5 &lt;phase_4+0x3e&gt;   # 说明 x=5<br>29b0:	e8 91 06 00 00       	call   3046 &lt;explode_bomb&gt;<br>29b5:	bd 00 00 00 00       	mov    $0x0,%ebp             # ebp,ebx 置零<br>29ba:	bb 00 00 00 00       	mov    $0x0,%ebx<br><br>29bf:	eb 0c                	jmp    29cd &lt;phase_4+0x56&gt;<br>29c1:	89 df                	mov    %ebx,%edi<br>29c3:	e8 74 ff ff ff       	call   293c &lt;func4&gt;          # 计算 func4(ebx)<br>29c8:	01 c5                	add    %eax,%ebp             # ebp += func4(ebx)<br>29ca:	83 c3 01             	add    $0x1,%ebx             # ebx += 1<br>29cd:	39 1c 24             	cmp    %ebx,(%rsp)           # 若 x &gt; ebx<br>29d0:	7f ef                	jg     29c1 &lt;phase_4+0x4a&gt;   # 就跳到 29c1<br><br>29d2:	39 6c 24 04          	cmp    %ebp,0x4(%rsp)        # ebp != y 就爆炸<br>29d6:	75 17                	jne    29ef &lt;phase_4+0x78&gt;<br>29d8:	48 8b 44 24 08       	mov    0x8(%rsp),%rax<br>29dd:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>29e4:	00 00 <br>29e6:	75 0e                	jne    29f6 &lt;phase_4+0x7f&gt;<br>29e8:	48 83 c4 18          	add    $0x18,%rsp<br>29ec:	5b                   	pop    %rbx<br>29ed:	5d                   	pop    %rbp<br>29ee:	c3                   	ret<br>29ef:	e8 52 06 00 00       	call   3046 &lt;explode_bomb&gt;<br>29f4:	eb e2                	jmp    29d8 &lt;phase_4+0x61&gt;<br>29f6:	e8 b5 f8 ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>所以这就相当于：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> val = <span class="hljs-number">0</span>, i = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; x; ++i) &#123;<br>    val += func4(i)<br>&#125;<br><br><span class="hljs-keyword">if</span> (val != y) explode_bomb<br></code></pre></td></tr></table></figure>
+<p>其实我们都不必关心 <code>func4</code> 里面是个什么东西，只需要执行到 <code>29d2</code> 的时候找到 <code>ebp</code> 的值就可以了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) p <span class="hljs-variable">$ebp</span><br><span class="hljs-variable">$1</span> = 20<br></code></pre></td></tr></table></figure>
+<p>所以这题答案为 <code>5 20</code>，搞定！（怎么感觉比 phase 3 还简单）</p>
+<h2 id="phase-5"><a class="markdownIt-Anchor" href="#phase-5"></a> Phase 5</h2>
+<p>看看是个啥情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs assembly">00000000000029fb &lt;phase_5&gt;:<br>    29fb:	f3 0f 1e fa          	endbr64<br>    29ff:	53                   	push   %rbx<br>    2a00:	48 83 ec 10          	sub    $0x10,%rsp<br>    2a04:	48 89 fb             	mov    %rdi,%rbx<br>    2a07:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2a0e:	00 00 <br>    2a10:	48 89 44 24 08       	mov    %rax,0x8(%rsp)<br>    2a15:	31 c0                	xor    %eax,%eax<br>    2a17:	e8 fd 02 00 00       	call   2d19 &lt;string_length&gt;<br>    2a1c:	83 f8 06             	cmp    $0x6,%eax<br>    2a1f:	75 07                	jne    2a28 &lt;phase_5+0x2d&gt;<br>    2a21:	b8 00 00 00 00       	mov    $0x0,%eax<br>    2a26:	eb 23                	jmp    2a4b &lt;phase_5+0x50&gt;<br>    2a28:	e8 19 06 00 00       	call   3046 &lt;explode_bomb&gt;<br></code></pre></td></tr></table></figure>
+<p>看到这里就知道我们需要的是一个长度为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 的字符串，且继续往下看，发现又是一个循环。发现又去寻了东西来，发现是 <code>maduiersnfotvbylSo you think you can stop the bomb with ctrl-c, d</code>。令这个数组为 <code>T[]</code> 吧</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2a21:	b8 00 00 00 00       	mov    $0x0,%eax               # i = 0<br>2a26:	eb 23                	jmp    2a4b &lt;phase_5+0x50&gt;<br>2a28:	e8 19 06 00 00       	call   3046 &lt;explode_bomb&gt;<br>2a2d:	eb f2                	jmp    2a21 &lt;phase_5+0x26&gt;<br><br>2a2f:	48 63 c8             	movslq %eax,%rcx               # rcx = i<br>2a32:	0f b6 14 0b          	movzbl (%rbx,%rcx,1),%edx      # edx = S[i]<br>2a36:	83 e2 0f             	and    $0xf,%edx               # edx &amp;= 0xF<br>2a39:	48 8d 35 20 29 00 00 	lea    0x2920(%rip),%rsi        # 5360 &lt;array.0&gt; 令这个数组叫 T[] 吧<br>2a40:	0f b6 14 16          	movzbl (%rsi,%rdx,1),%edx      # edx = T[edx]<br>2a44:	88 54 0c 01          	mov    %dl,0x1(%rsp,%rcx,1)    # 将其移到 rsp+i+1 的位置里面<br>2a48:	83 c0 01             	add    $0x1,%eax               # eax += 1<br>2a4b:	83 f8 05             	cmp    $0x5,%eax               # i &lt;= 5<br>2a4e:	7e df                	jle    2a2f &lt;phase_5+0x34&gt;<br></code></pre></td></tr></table></figure>
+<p>所以，这一部分是令 <code>A[i] = T[S[i] &amp; 0xF]</code>，相当于做了些变换处理。我们继续看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2a50:	c6 44 24 07 00       	movb   $0x0,0x7(%rsp)          # 将 rsp+7 的位置置零。可以理解为是 A[6] = 0<br> 2a55:	48 8d 7c 24 01       	lea    0x1(%rsp),%rdi          # 将 A[0] 的地址扔给 %rdi<br> 2a5a:	48 8d 35 43 27 00 00 	lea    0x2743(%rip),%rsi        # 51a4 &lt;_IO_stdin_used+0x1a4&gt; 取一个串<br> 2a61:	e8 cb 02 00 00       	call   2d31 &lt;strings_not_equal&gt; # 比较是否相等<br> 2a66:	85 c0                	test   %eax,%eax<br> 2a68:	75 16                	jne    2a80 &lt;phase_5+0x85&gt;<br> 2a6a:	48 8b 44 24 08       	mov    0x8(%rsp),%rax<br> 2a6f:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br> 2a76:	00 00 <br> 2a78:	75 0d                	jne    2a87 &lt;phase_5+0x8c&gt;<br> 2a7a:	48 83 c4 10          	add    $0x10,%rsp<br> 2a7e:	5b                   	pop    %rbx<br> 2a7f:	c3                   	ret<br> 2a80:	e8 c1 05 00 00       	call   3046 &lt;explode_bomb&gt;<br> 2a85:	eb e3                	jmp    2a6a &lt;phase_5+0x6f&gt;<br> 2a87:	e8 24 f8 ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>把对应的串取出来，可以得到是 <code>bruins</code>。</p>
+<p>那么我们需要的就是构造对应的输入，这个是不难的，考虑到 writeup 中补充说了 phase_5 的答案为数字和字母，所以构造出答案 <code>M63487</code>。</p>
+<h2 id="phase-6"><a class="markdownIt-Anchor" href="#phase-6"></a> Phase 6</h2>
+<p>最难的一个来了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002a8c &lt;phase_6&gt;:<br>    2a8c:	f3 0f 1e fa          	endbr64<br>    2a90:	41 54                	push   %r12<br>    2a92:	55                   	push   %rbp<br>    2a93:	53                   	push   %rbx<br>    2a94:	48 83 ec 60          	sub    $0x60,%rsp<br>    2a98:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2a9f:	00 00 <br>    2aa1:	48 89 44 24 58       	mov    %rax,0x58(%rsp)<br>    2aa6:	31 c0                	xor    %eax,%eax<br>    2aa8:	48 89 e6             	mov    %rsp,%rsi<br>    2aab:	e8 1c 06 00 00       	call   30cc &lt;read_six_numbers&gt;<br>    2ab0:	bd 00 00 00 00       	mov    $0x0,%ebp<br>    2ab5:	eb 27                	jmp    2ade &lt;phase_6+0x52&gt;<br>    2ab7:	e8 8a 05 00 00       	call   3046 &lt;explode_bomb&gt;<br>    2abc:	eb 33                	jmp    2af1 &lt;phase_6+0x65&gt;<br>    2abe:	83 c3 01             	add    $0x1,%ebx<br>    2ac1:	83 fb 05             	cmp    $0x5,%ebx<br>    2ac4:	7f 15                	jg     2adb &lt;phase_6+0x4f&gt;<br>    2ac6:	48 63 c5             	movslq %ebp,%rax<br>    2ac9:	48 63 d3             	movslq %ebx,%rdx<br>    2acc:	8b 3c 94             	mov    (%rsp,%rdx,4),%edi<br>    2acf:	39 3c 84             	cmp    %edi,(%rsp,%rax,4)<br>    2ad2:	75 ea                	jne    2abe &lt;phase_6+0x32&gt;<br>    2ad4:	e8 6d 05 00 00       	call   3046 &lt;explode_bomb&gt;<br>    2ad9:	eb e3                	jmp    2abe &lt;phase_6+0x32&gt;<br>    2adb:	44 89 e5             	mov    %r12d,%ebp<br>    2ade:	83 fd 05             	cmp    $0x5,%ebp<br>    2ae1:	7f 17                	jg     2afa &lt;phase_6+0x6e&gt;<br>    2ae3:	48 63 c5             	movslq %ebp,%rax<br>    2ae6:	8b 04 84             	mov    (%rsp,%rax,4),%eax<br>    2ae9:	83 e8 01             	sub    $0x1,%eax<br>    2aec:	83 f8 05             	cmp    $0x5,%eax<br>    2aef:	77 c6                	ja     2ab7 &lt;phase_6+0x2b&gt;<br>    2af1:	44 8d 65 01          	lea    0x1(%rbp),%r12d<br>    2af5:	44 89 e3             	mov    %r12d,%ebx<br>    2af8:	eb c7                	jmp    2ac1 &lt;phase_6+0x35&gt;<br>    2afa:	be 00 00 00 00       	mov    $0x0,%esi<br>    2aff:	eb 17                	jmp    2b18 &lt;phase_6+0x8c&gt;<br>    2b01:	48 8b 52 08          	mov    0x8(%rdx),%rdx<br>    2b05:	83 c0 01             	add    $0x1,%eax<br>    2b08:	48 63 ce             	movslq %esi,%rcx<br>    2b0b:	39 04 8c             	cmp    %eax,(%rsp,%rcx,4)<br>    2b0e:	7f f1                	jg     2b01 &lt;phase_6+0x75&gt;<br>    2b10:	48 89 54 cc 20       	mov    %rdx,0x20(%rsp,%rcx,8)<br>    2b15:	83 c6 01             	add    $0x1,%esi<br>    2b18:	83 fe 05             	cmp    $0x5,%esi<br>    2b1b:	7f 0e                	jg     2b2b &lt;phase_6+0x9f&gt;<br>    2b1d:	b8 01 00 00 00       	mov    $0x1,%eax<br>    2b22:	48 8d 15 e7 65 00 00 	lea    0x65e7(%rip),%rdx        # 9110 &lt;node1&gt;<br>    2b29:	eb dd                	jmp    2b08 &lt;phase_6+0x7c&gt;<br>    2b2b:	48 8b 5c 24 20       	mov    0x20(%rsp),%rbx<br>    2b30:	48 89 d9             	mov    %rbx,%rcx<br>    2b33:	b8 01 00 00 00       	mov    $0x1,%eax<br>    2b38:	eb 12                	jmp    2b4c &lt;phase_6+0xc0&gt;<br>    2b3a:	48 63 d0             	movslq %eax,%rdx<br>    2b3d:	48 8b 54 d4 20       	mov    0x20(%rsp,%rdx,8),%rdx<br>    2b42:	48 89 51 08          	mov    %rdx,0x8(%rcx)<br>    2b46:	83 c0 01             	add    $0x1,%eax<br>    2b49:	48 89 d1             	mov    %rdx,%rcx<br>    2b4c:	83 f8 05             	cmp    $0x5,%eax<br>    2b4f:	7e e9                	jle    2b3a &lt;phase_6+0xae&gt;<br>    2b51:	48 c7 41 08 00 00 00 	movq   $0x0,0x8(%rcx)<br>    2b58:	00 <br>    2b59:	bd 00 00 00 00       	mov    $0x0,%ebp<br>    2b5e:	eb 07                	jmp    2b67 &lt;phase_6+0xdb&gt;<br>    2b60:	48 8b 5b 08          	mov    0x8(%rbx),%rbx<br>    2b64:	83 c5 01             	add    $0x1,%ebp<br>    2b67:	83 fd 04             	cmp    $0x4,%ebp<br>    2b6a:	7f 11                	jg     2b7d &lt;phase_6+0xf1&gt;<br>    2b6c:	48 8b 43 08          	mov    0x8(%rbx),%rax<br>    2b70:	8b 00                	mov    (%rax),%eax<br>    2b72:	39 03                	cmp    %eax,(%rbx)<br>    2b74:	7d ea                	jge    2b60 &lt;phase_6+0xd4&gt;<br>    2b76:	e8 cb 04 00 00       	call   3046 &lt;explode_bomb&gt;<br>    2b7b:	eb e3                	jmp    2b60 &lt;phase_6+0xd4&gt;<br>    2b7d:	48 8b 44 24 58       	mov    0x58(%rsp),%rax<br>    2b82:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>    2b89:	00 00 <br>    2b8b:	75 09                	jne    2b96 &lt;phase_6+0x10a&gt;<br>    2b8d:	48 83 c4 60          	add    $0x60,%rsp<br>    2b91:	5b                   	pop    %rbx<br>    2b92:	5d                   	pop    %rbp<br>    2b93:	41 5c                	pop    %r12<br>    2b95:	c3                   	ret<br>    2b96:	e8 15 f7 ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>先看前面吧，又是熟悉的读六个整数，要做些什么妖呢：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2a8c:	f3 0f 1e fa          	endbr64<br>2a90:	41 54                	push   %r12                         # caller-saved<br>2a92:	55                   	push   %rbp                         # <br>2a93:	53                   	push   %rbx <br>2a94:	48 83 ec 60          	sub    $0x60,%rsp<br>2a98:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>2a9f:	00 00 <br>2aa1:	48 89 44 24 58       	mov    %rax,0x58(%rsp)<br>2aa6:	31 c0                	xor    %eax,%eax<br>2aa8:	48 89 e6             	mov    %rsp,%rsi<br>2aab:	e8 1c 06 00 00       	call   30cc &lt;read_six_numbers&gt;<br><br>2ab0:	bd 00 00 00 00       	mov    $0x0,%ebp                    # 令 ebp=0，令其为 i 吧<br>2ab5:	eb 27                	jmp    2ade &lt;phase_6+0x52&gt;          # 开始循环<br>2ab7:	e8 8a 05 00 00       	call   3046 &lt;explode_bomb&gt;<br>2abc:	eb 33                	jmp    2af1 &lt;phase_6+0x65&gt;<br>2abe:	83 c3 01             	add    $0x1,%ebx                    # ++j<br>2ac1:	83 fb 05             	cmp    $0x5,%ebx                    # j<br>2ac4:	7f 15                	jg     2adb &lt;phase_6+0x4f&gt;          # j &gt; 5，则到 2adb<br>2ac6:	48 63 c5             	movslq %ebp,%rax                    # rax = i<br>2ac9:	48 63 d3             	movslq %ebx,%rdx                    # rdx = j<br>2acc:	8b 3c 94             	mov    (%rsp,%rdx,4),%edi           # edi = a[j]<br>2acf:	39 3c 84             	cmp    %edi,(%rsp,%rax,4)           # 比较 a[i] 与 a[j]<br>2ad2:	75 ea                	jne    2abe &lt;phase_6+0x32&gt;          # 若 a[i] != a[j]，往上跳到 2abe<br>2ad4:	e8 6d 05 00 00       	call   3046 &lt;explode_bomb&gt;          # 否则爆炸<br>2ad9:	eb e3                	jmp    2abe &lt;phase_6+0x32&gt;<br><br>2adb:	44 89 e5             	mov    %r12d,%ebp                  # i = i + 1<br>2ade:	83 fd 05             	cmp    $0x5,%ebp                   #<br>2ae1:	7f 17                	jg     2afa &lt;phase_6+0x6e&gt;         # 若 i &gt; 5，就调到后面去<br><br>2ae3:	48 63 c5             	movslq %ebp,%rax                   # rax=i<br>2ae6:	8b 04 84             	mov    (%rsp,%rax,4),%eax          # 取出 a[i]<br>2ae9:	83 e8 01             	sub    $0x1,%eax                   # a[i] - 1<br>2aec:	83 f8 05             	cmp    $0x5,%eax                   # a[i] - 1 与 5 比较<br>2aef:	77 c6                	ja     2ab7 &lt;phase_6+0x2b&gt;         # 若 a[i] - 1 &gt; 5，爆炸<br>2af1:	44 8d 65 01          	lea    0x1(%rbp),%r12d             # i + 1<br>2af5:	44 89 e3             	mov    %r12d,%ebx                  # ebx = i + 1<br>2af8:	eb c7                	jmp    2ac1 &lt;phase_6+0x35&gt;         # 跳到 2ac1<br></code></pre></td></tr></table></figure>
+<p>仔细分析之后发现是一个二重循环，内容如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> i, j;<br><br><span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">5</span>; ++i) &#123;<br>    <span class="hljs-keyword">if</span> (a[i] - <span class="hljs-number">1</span> &gt; <span class="hljs-number">5</span>)<br>        explode_bomb();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = i + <span class="hljs-number">1</span>; j &lt;= <span class="hljs-number">5</span>; ++j) &#123;<br>        <span class="hljs-keyword">if</span> (a[i] == a[j])<br>            explode_bomb();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这告诉我们，输入的必须是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 个互不相等的数字，而且还不能超过 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span>。</p>
+<p>循环结束后会跳到 <code>2afa</code>，我们先看前面几行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2afa:	be 00 00 00 00       	mov    $0x0,%esi               # 根据后面怀疑其为下标<br>2aff:	eb 17                	jmp    2b18 &lt;phase_6+0x8c&gt;<br>2b01:	48 8b 52 08          	mov    0x8(%rdx),%rdx<br>2b05:	83 c0 01             	add    $0x1,%eax<br>2b08:	48 63 ce             	movslq %esi,%rcx<br>2b0b:	39 04 8c             	cmp    %eax,(%rsp,%rcx,4)<br>2b0e:	7f f1                	jg     2b01 &lt;phase_6+0x75&gt;<br>2b10:	48 89 54 cc 20       	mov    %rdx,0x20(%rsp,%rcx,8)<br>2b15:	83 c6 01             	add    $0x1,%esi<br>2b18:	83 fe 05             	cmp    $0x5,%esi               # i &lt;= 5<br>2b1b:	7f 0e                	jg     2b2b &lt;phase_6+0x9f&gt;<br>2b1d:	b8 01 00 00 00       	mov    $0x1,%eax               # eax = 1<br>2b22:	48 8d 15 e7 65 00 00 	lea    0x65e7(%rip),%rdx        # 9110 &lt;node1&gt;<br>2b29:	eb dd                	jmp    2b08 &lt;phase_6+0x7c&gt;<br></code></pre></td></tr></table></figure>
+<p>现在比较逆天的是，出现了一个 <code>&lt;node1&gt;</code>，我们在这个地方打好断点后，看看那段内存是个什么情况：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/32 <span class="hljs-variable">$rdx</span><br>0x55555555d110 &lt;node1&gt;: 0x00000257      0x00000001      0x5555d120      0x00005555<br>0x55555555d120 &lt;node2&gt;: 0x000002db      0x00000002      0x5555d130      0x00005555<br>0x55555555d130 &lt;node3&gt;: 0x0000007a      0x00000003      0x5555d140      0x00005555<br>0x55555555d140 &lt;node4&gt;: 0x000001ba      0x00000004      0x5555d150      0x00005555<br>0x55555555d150 &lt;node5&gt;: 0x000003d9      0x00000005      0x5555c080      0x00005555<br>0x55555555d160 &lt;host_table&gt;:    0x555596c2      0x00005555      0x555596cb      0x00005555<br>0x55555555d170 &lt;host_table+16&gt;: 0x555596d5      0x00005555      0x555596dc      0x00005555<br>0x55555555d180 &lt;host_table+32&gt;: 0x555596e3      0x00005555      0x555596ea      0x00005555<br></code></pre></td></tr></table></figure>
+<p>发现这一段内存的形式有点像是一个链表。第一个字段存值，第二个字段存下标，第三和第四个字段一起成为指向下一个元素的指针。</p>
+<p>发现 node5 指向了 <code>0x000055555555c080</code>，检查一下那段内存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/4 0x000055555555c080<br>0x55555555c080 &lt;node6&gt;: 0x00000285      0x00000006      0x00000000      0x00000000<br></code></pre></td></tr></table></figure>
+<p>合理了。说明这个链表的初始状态是 node1-&gt;node2-&gt;node3-&gt;node4-&gt;node5-&gt;node6-&gt;NULL。输入的数字被限制在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span></span></span></span> 以内，想必也与此有关。</p>
+<p>然后我们再仔细看看他在做些什么：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2afa:	be 00 00 00 00       	mov    $0x0,%esi               # 根据后面怀疑其为下标<br>2aff:	eb 17                	jmp    2b18 &lt;phase_6+0x8c&gt;<br><br>2b01:	48 8b 52 08          	mov    0x8(%rdx),%rdx          # rdx += 8，即往后面跳一个节点<br>2b05:	83 c0 01             	add    $0x1,%eax               # eax += 1<br>2b08:	48 63 ce             	movslq %esi,%rcx               <br>2b0b:	39 04 8c             	cmp    %eax,(%rsp,%rcx,4)      # 比较 eax 与 a[i] 的值<br>2b0e:	7f f1                	jg     2b01 &lt;phase_6+0x75&gt;     # 直到 eax 大于等于 a[i] <br><br>2b10:	48 89 54 cc 20       	mov    %rdx,0x20(%rsp,%rcx,8)  # 将 rdx 的值赋到 rsp+20+8*i 的地方<br>2b15:	83 c6 01             	add    $0x1,%esi<br>2b18:	83 fe 05             	cmp    $0x5,%esi               # i &lt;= 5<br>2b1b:	7f 0e                	jg     2b2b &lt;phase_6+0x9f&gt;<br>2b1d:	b8 01 00 00 00       	mov    $0x1,%eax               # eax = 1<br>2b22:	48 8d 15 e7 65 00 00 	lea    0x65e7(%rip),%rdx        # 9110 &lt;node1&gt;<br>2b29:	eb dd                	jmp    2b08 &lt;phase_6+0x7c&gt;<br></code></pre></td></tr></table></figure>
+<p>我们大概可以明白，<code>rsp+20</code> 起应当是维护了一个指针数组 <code>node* nodes[6]</code>，伪代码可以写成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> i;<br><br><span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">5</span>; ++i) &#123;<br>    <span class="hljs-type">int</span> val = <span class="hljs-number">1</span>;<br>    node* p = &amp;node1;<br>    <span class="hljs-keyword">while</span> (val &lt; a[i]) &#123;<br>        p = p-&gt;next;<br>        ++val;<br>    &#125;<br>    nodes[i] = p;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>于是我们知道，<code>nodes[i]</code> 维护的便是指向 <code>node_&#123;a[i]&#125;</code> 的指针。回忆之前所说读入的数字应当个个不同，所以可以确定的是，这段代码是将链表中的节点按照给定的顺序重新取了出来，我们继续往下看，发现应该又是一个循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">2b2b:	48 8b 5c 24 20       	mov    0x20(%rsp),%rbx            # rbx = nodes[0]<br>2b30:	48 89 d9             	mov    %rbx,%rcx                  # rcx = rbx = nodes[0]<br>2b33:	b8 01 00 00 00       	mov    $0x1,%eax                  # i = 1<br>2b38:	eb 12                	jmp    2b4c &lt;phase_6+0xc0&gt;<br>2b3a:	48 63 d0             	movslq %eax,%rdx                <br>2b3d:	48 8b 54 d4 20       	mov    0x20(%rsp,%rdx,8),%rdx     # 取 rdx = nodes[i]<br>2b42:	48 89 51 08          	mov    %rdx,0x8(%rcx)             # 将 rcx 的下一个节点改成 nodes[i]<br>2b46:	83 c0 01             	add    $0x1,%eax                  # ++i<br>2b49:	48 89 d1             	mov    %rdx,%rcx                  # rcx = nodes[i]<br>2b4c:	83 f8 05             	cmp    $0x5,%eax<br>2b4f:	7e e9                	jle    2b3a &lt;phase_6+0xae&gt;        # i &lt;= 5<br><br>2b51:	48 c7 41 08 00 00 00 	movq   $0x0,0x8(%rcx)             # 循环结束，令最后一个节点的指针指向空<br>2b58:	00<br></code></pre></td></tr></table></figure>
+<p>这便是把那些节点的顺序进行了重新安排，安排成了我们输入指定的顺序。</p>
+<p>继续！马上胜利了！发现又有一个循环，拆解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># 此时 rbx 的值为 nodes[0]<br>2b59:	bd 00 00 00 00       	mov    $0x0,%ebp                  # i = 0<br>2b5e:	eb 07                	jmp    2b67 &lt;phase_6+0xdb&gt;<br>2b60:	48 8b 5b 08          	mov    0x8(%rbx),%rbx             # 跳到下一个节点<br>2b64:	83 c5 01             	add    $0x1,%ebp<br>2b67:	83 fd 04             	cmp    $0x4,%ebp<br>2b6a:	7f 11                	jg     2b7d &lt;phase_6+0xf1&gt;        # i &gt; 4 则跳到 2b7d，结束循环<br>2b6c:	48 8b 43 08          	mov    0x8(%rbx),%rax             <br>2b70:	8b 00                	mov    (%rax),%eax<br>2b72:	39 03                	cmp    %eax,(%rbx)                # 比较当前节点与下一节点的值<br>2b74:	7d ea                	jge    2b60 &lt;phase_6+0xd4&gt;        # 当前节点必须大于等于下一节点的值<br>2b76:	e8 cb 04 00 00       	call   3046 &lt;explode_bomb&gt;<br>2b7b:	eb e3                	jmp    2b60 &lt;phase_6+0xd4&gt;<br><br>2b7d:	48 8b 44 24 58       	mov    0x58(%rsp),%rax            # 这之后都是收尾操作了<br>2b82:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>2b89:	00 00 <br>2b8b:	75 09                	jne    2b96 &lt;phase_6+0x10a&gt;<br>2b8d:	48 83 c4 60          	add    $0x60,%rsp<br>2b91:	5b                   	pop    %rbx<br>2b92:	5d                   	pop    %rbp<br>2b93:	41 5c                	pop    %r12<br>2b95:	c3                   	ret<br>2b96:	e8 15 f7 ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>这是在干什么，这是要求最后按照我们的顺序排好后，链表中节点的值是递减的。</p>
+<p>回头去看看各个节点的值，便知道答案为 <code>5 2 6 1 4 3</code>。</p>
+<h2 id="secret-phase"><a class="markdownIt-Anchor" href="#secret-phase"></a> Secret Phase</h2>
+<h3 id="炸弹本地化"><a class="markdownIt-Anchor" href="#炸弹本地化"></a> 炸弹本地化</h3>
+<p>主要在于很无奈的是，现在提交 secret phase 会用掉两个 grace day。所以就只能破拆一下二进制文件的样子。</p>
+<p>先看 <code>initialize_bomb</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002d80 &lt;initialize_bomb&gt;:<br>    2d80:	f3 0f 1e fa          	endbr64<br>    2d84:	48 81 ec 00 10 00 00 	sub    $0x1000,%rsp<br>    2d8b:	48 83 0c 24 00       	orq    $0x0,(%rsp)<br>    2d90:	48 81 ec 00 10 00 00 	sub    $0x1000,%rsp<br>    2d97:	48 83 0c 24 00       	orq    $0x0,(%rsp)<br>    2d9c:	48 83 ec 58          	sub    $0x58,%rsp<br>    2da0:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2da7:	00 00 <br>    2da9:	48 89 84 24 48 20 00 	mov    %rax,0x2048(%rsp)<br>    2db0:	00 <br>    2db1:	31 c0                	xor    %eax,%eax<br>    2db3:	48 8d 35 d0 fe ff ff 	lea    -0x130(%rip),%rsi        # 2c8a &lt;sig_handler&gt;<br>    2dba:	bf 02 00 00 00       	mov    $0x2,%edi<br>    2dbf:	e8 2c f5 ff ff       	call   22f0 &lt;signal@plt&gt;<br>    2dc4:	48 89 e7             	mov    %rsp,%rdi<br>    2dc7:	be 40 00 00 00       	mov    $0x40,%esi<br>    2dcc:	e8 cf f5 ff ff       	call   23a0 &lt;gethostname@plt&gt;<br>    2dd1:	85 c0                	test   %eax,%eax<br>    2dd3:	75 39                	jne    2e0e &lt;initialize_bomb+0x8e&gt;<br>    2dd5:	48 8d 7c 24 40       	lea    0x40(%rsp),%rdi<br>    2dda:	e8 5b 10 00 00       	call   3e3a &lt;init_driver&gt;<br>    2ddf:	85 c0                	test   %eax,%eax<br>    2de1:	78 41                	js     2e24 &lt;initialize_bomb+0xa4&gt;<br>    2de3:	bf 04 00 00 00       	mov    $0x4,%edi<br>    2de8:	e8 53 f5 ff ff       	call   2340 &lt;malloc@plt&gt;<br>    2ded:	c7 00 11 fa 21 20    	movl   $0x2021fa11,(%rax)<br>    2df3:	48 8b 94 24 48 20 00 	mov    0x2048(%rsp),%rdx<br>    2dfa:	00 <br>    2dfb:	64 48 2b 14 25 28 00 	sub    %fs:0x28,%rdx<br>    2e02:	00 00 <br>    2e04:	75 43                	jne    2e49 &lt;initialize_bomb+0xc9&gt;<br>    2e06:	48 81 c4 58 20 00 00 	add    $0x2058,%rsp<br>    2e0d:	c3                   	ret<br>    2e0e:	48 8d 3d 93 25 00 00 	lea    0x2593(%rip),%rdi        # 53a8 &lt;array.0+0x48&gt;<br>    2e15:	e8 66 f4 ff ff       	call   2280 &lt;puts@plt&gt;<br>    2e1a:	bf 08 00 00 00       	mov    $0x8,%edi<br>    2e1f:	e8 8c f5 ff ff       	call   23b0 &lt;exit@plt&gt;<br>    2e24:	48 8d 54 24 40       	lea    0x40(%rsp),%rdx<br>    2e29:	48 8d 35 e2 27 00 00 	lea    0x27e2(%rip),%rsi        # 5612 &lt;array.0+0x2b2&gt;<br>    2e30:	bf 01 00 00 00       	mov    $0x1,%edi<br>    2e35:	b8 00 00 00 00       	mov    $0x0,%eax<br>    2e3a:	e8 41 f5 ff ff       	call   2380 &lt;__printf_chk@plt&gt;<br>    2e3f:	bf 08 00 00 00       	mov    $0x8,%edi<br>    2e44:	e8 67 f5 ff ff       	call   23b0 &lt;exit@plt&gt;<br>    2e49:	e8 62 f4 ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>发现正常情况下其会返回一个指针，指向的内容为 <code>0x2021fa11</code>，而且看主函数的代码可以发现返回值不对的话也会触发异常。</p>
+<p>那我们就只需要让其在函数一开始就完成指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov $0x4, %edi<br>call malloc<br>movl $0x2021fall, (%rax)<br>ret<br></code></pre></td></tr></table></figure>
+<p>就可以了。注意一开始的 <code>endbr64</code> 不能动。</p>
+<p>需要注意不能修改二进制文件的长度，只能直接就近覆盖。而且由于 <code>call</code> 是相对地址，所以也需要计算一下新的偏移量。更改后的如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002d80 &lt;initialize_bomb&gt;:<br>    2d80:	f3 0f 1e fa          	endbr64 <br>    2d84:	bf 04 00 00 00       	mov    $0x4,%edi<br>    2d89:	e8 b2 f5 ff ff       	call   2340 &lt;malloc@plt&gt;<br>    2d8e:	c7 00 11 fa 21 20    	movl   $0x2021fa11,(%rax)<br>    2d94:	c3                   	ret     <br></code></pre></td></tr></table></figure>
+<p>然后是 <code>send_msg</code>，即每次炸弹拆除后/炸弹爆炸时都会调用的函数，通过 IDA 反编译结果和前人资料我们知道 <code>send_msg</code> 的第二个参数是一个指向 32 位值的指针，而 <code>send_msg</code> 要将其的值置为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>。</p>
+<p>所以我们让 <code>send_msg</code> 的前几行变成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">endbr64<br>movl   $0x1,(%rsi)<br>ret<br></code></pre></td></tr></table></figure>
+<p>所以改成  <code>c7 06 01 00 00 00 c3</code> 即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002ee4 &lt;send_msg&gt;:<br>    2ee4:	f3 0f 1e fa          	endbr64 <br>    2ee8:	c7 06 01 00 00 00    	movl   $0x1,(%rsi)<br>    2eee:	c3                   	ret    <br></code></pre></td></tr></table></figure>
+<p>经过测试，完全不会有任何问题。</p>
+<h3 id="求解"><a class="markdownIt-Anchor" href="#求解"></a> 求解</h3>
+<p>似乎在 <code>main</code> 函数里面也没有找到 secret phase，还是先找找哪里 call 了 secret phase 吧。发现在 <code>phase_defused</code> 函数里面。我们先看第一部分控制流吧。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs assembly">000000000000324f &lt;phase_defused&gt;:<br>    324f:	f3 0f 1e fa          	endbr64<br>    3253:	53                   	push   %rbx<br>    3254:	48 89 fb             	mov    %rdi,%rbx<br>    3257:	c7 07 00 00 00 00    	movl   $0x0,(%rdi)<br>    325d:	48 89 fe             	mov    %rdi,%rsi<br>    3260:	bf 01 00 00 00       	mov    $0x1,%edi<br>    3265:	e8 7a fc ff ff       	call   2ee4 &lt;send_msg&gt;<br>    326a:	83 3b 01             	cmpl   $0x1,(%rbx)<br>    326d:	75 0b                	jne    327a &lt;phase_defused+0x2b&gt;<br>    326f:	83 3d 62 63 00 00 06 	cmpl   $0x6,0x6362(%rip)        # 95d8 &lt;num_input_strings&gt;<br>    3276:	74 22                	je     329a &lt;phase_defused+0x4b&gt;<br>    3278:	5b                   	pop    %rbx<br>    3279:	c3                   	ret<br>    327a:	48 8d 35 87 21 00 00 	lea    0x2187(%rip),%rsi        # 5408 &lt;array.0+0xa8&gt;<br>    3281:	bf 01 00 00 00       	mov    $0x1,%edi<br>    3286:	b8 00 00 00 00       	mov    $0x0,%eax<br>    328b:	e8 f0 f0 ff ff       	call   2380 &lt;__printf_chk@plt&gt;<br>    3290:	bf 08 00 00 00       	mov    $0x8,%edi<br>    3295:	e8 16 f1 ff ff       	call   23b0 &lt;exit@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>前面的东西不必理会，主要是看到有一个全局变量叫做 <code>num_input_strings</code>，经过实验发现用 <code>p (int)num_input_strings</code> 后发现这个变量即为 <code>read_line</code> 读入的字符串个数，放在这里也就是拆掉了的炸弹个数。所以必须拆掉前面所有炸弹之后才可能进入 secret phase。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs asm">329a:	e8 f9 f3 ff ff       	call   2698 &lt;abracadabra&gt;<br>329f:	85 c0                	test   %eax,%eax<br>32a1:	75 1a                	jne    32bd &lt;phase_defused+0x6e&gt;<br>32a3:	48 8d 3d be 22 00 00 	lea    0x22be(%rip),%rdi        # 5568 &lt;array.0+0x208&gt;<br>32aa:	e8 d1 ef ff ff       	call   2280 &lt;puts@plt&gt;<br>32af:	48 8d 3d fa 22 00 00 	lea    0x22fa(%rip),%rdi        # 55b0 &lt;array.0+0x250&gt;<br>32b6:	e8 c5 ef ff ff       	call   2280 &lt;puts@plt&gt;<br>32bb:	eb bb                	jmp    3278 &lt;phase_defused+0x29&gt;<br>32bd:	e8 63 f4 ff ff       	call   2725 &lt;alohomora&gt;<br>32c2:	85 c0                	test   %eax,%eax<br>32c4:	74 30                	je     32f6 &lt;phase_defused+0xa7&gt;<br>32c6:	48 8d 3d ab 21 00 00 	lea    0x21ab(%rip),%rdi        # 5478 &lt;array.0+0x118&gt;<br>32cd:	e8 ae ef ff ff       	call   2280 &lt;puts@plt&gt;<br>32d2:	48 8d 3d c7 21 00 00 	lea    0x21c7(%rip),%rdi        # 54a0 &lt;array.0+0x140&gt;<br>32d9:	e8 a2 ef ff ff       	call   2280 &lt;puts@plt&gt;<br>32de:	48 8d 3d f3 21 00 00 	lea    0x21f3(%rip),%rdi        # 54d8 &lt;array.0+0x178&gt;<br>32e5:	e8 96 ef ff ff       	call   2280 &lt;puts@plt&gt;<br>32ea:	b8 00 00 00 00       	mov    $0x0,%eax<br>32ef:	e8 f7 f8 ff ff       	call   2beb &lt;secret_phase&gt;<br>32f4:	eb ad                	jmp    32a3 &lt;phase_defused+0x54&gt;<br>32f6:	48 8d 3d 2b 22 00 00 	lea    0x222b(%rip),%rdi        # 5528 &lt;array.0+0x1c8&gt;<br>32fd:	e8 7e ef ff ff       	call   2280 &lt;puts@plt&gt;<br>3302:	48 8d 3d cf 21 00 00 	lea    0x21cf(%rip),%rdi        # 54d8 &lt;array.0+0x178&gt;<br>3309:	e8 72 ef ff ff       	call   2280 &lt;puts@plt&gt;<br>330e:	eb 93                	jmp    32a3 &lt;phase_defused+0x54&gt;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>%rip 是指令指针的意思，指向下一条要执行的指令。</p>
+</blockquote>
+<p>发现先调用了 <code>abracadabra</code>，若返回值为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，则会打印 <code>0x22be(%rip)</code> 和 <code>0x22fa(%rip)</code>。不过无所谓，只有返回值不为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 才会调用 <code>alohomora</code>。如果其返回值为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，会到 <code>32f6</code> 处，打印 <code>0x222b(%rip)</code> 和 <code>0x21cf(%rip)</code>，<strong>但只要其返回值不为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，就能够进入 secret phase 了</strong>。提示词如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/s *phase_defused+126+0x21ab<br>0x555555559478: <span class="hljs-string">&quot;Curses, you&#x27;ve found the secret phase!&quot;</span><br>(gdb) x/s *phase_defused+138+0x21c7<br>0x5555555594a0: <span class="hljs-string">&quot;But finding it and solving it are quite different...&quot;</span><br>(gdb) x/s *phase_defused+150+0x21f3<br>0x5555555594d8: <span class="hljs-string">&quot;And I can&#x27;t give you a clear answer yet. You need to measure it yourself...&quot;</span><br></code></pre></td></tr></table></figure>
+<p>emm，如果 <code>alohomora</code> 触发失败就是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs assembly">(gdb) x/s *phase_defused+174+0x222b<br>0x555555559528: &quot;Do you think you really trigger the secret phase? Mua ha ha ha!&quot;<br>(gdb) x/s *phase_defused+186+0x21cf<br>0x5555555594d8: &quot;And I can&#x27;t give you a clear answer yet. You need to measure it yourself...&quot;<br></code></pre></td></tr></table></figure>
+<p><s>什么沟槽的信科特色</s></p>
+<p>经过 gdb 调试，进入 <code>abracadabra</code> 的时候 <code>%rdi</code> 的值仍为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>（是当时要传给 <code>send_msg</code> 的），因此判断 <code>abracadabra</code> 是没有参数的。</p>
+<p>我们看看 <code>abracadabra</code> 在干什么吧：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002698 &lt;abracadabra&gt;:<br>    2698:	f3 0f 1e fa          	endbr64<br>    269c:	48 81 ec 98 00 00 00 	sub    $0x98,%rsp<br>    26a3:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    26aa:	00 00 <br>    26ac:	48 89 84 24 88 00 00 	mov    %rax,0x88(%rsp)<br>    26b3:	00 <br>    26b4:	31 c0                	xor    %eax,%eax<br>    26b6:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx<br>    26bb:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx<br>    26c0:	4c 8d 44 24 10       	lea    0x10(%rsp),%r8<br>    26c5:	48 8d 35 cf 2a 00 00 	lea    0x2acf(%rip),%rsi        # 519b &lt;_IO_stdin_used+0x19b&gt;<br>    26cc:	48 8d 3d 75 70 00 00 	lea    0x7075(%rip),%rdi        # 9748 &lt;input_strings+0x168&gt;<br>    26d3:	e8 88 fc ff ff       	call   2360 &lt;__isoc99_sscanf@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>发现又有一个 <code>sscanf</code>，我们把 <code>%rdi</code> 和 <code>%rsi</code> 指向的东西都打印出来看看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/s <span class="hljs-variable">$rdi</span><br>0x55555555d748 &lt;input_strings+360&gt;:     <span class="hljs-string">&quot;5 20&quot;</span><br>(gdb) x/s <span class="hljs-variable">$rsi</span><br>0x55555555919b: <span class="hljs-string">&quot;%d %d %s&quot;</span><br></code></pre></td></tr></table></figure>
+<p>发现是 phase 4 我们的输入。然后把数字分别存到 <code>%rsp+0x8</code> 和 <code>%rsp+0xc</code> 里面，再把后面的字符串放到 <code>%rsp+0x10</code> 里面，再看后面：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs assembly">26d8:	83 f8 03             	cmp    $0x3,%eax<br>26db:	74 20                	je     26fd &lt;abracadabra+0x65&gt;<br>26dd:	b8 00 00 00 00       	mov    $0x0,%eax<br>26e2:	48 8b 94 24 88 00 00 	mov    0x88(%rsp),%rdx<br>26e9:	00 <br>26ea:	64 48 2b 14 25 28 00 	sub    %fs:0x28,%rdx<br>26f1:	00 00 <br>26f3:	75 2b                	jne    2720 &lt;abracadabra+0x88&gt;<br>26f5:	48 81 c4 98 00 00 00 	add    $0x98,%rsp<br>26fc:	c3                   	ret<br>26fd:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi<br>2702:	48 8d 35 a7 2a 00 00 	lea    0x2aa7(%rip),%rsi        # 51b0 &lt;_IO_stdin_used+0x1b0&gt;<br>2709:	e8 23 06 00 00       	call   2d31 &lt;strings_not_equal&gt;<br>270e:	85 c0                	test   %eax,%eax<br>2710:	74 07                	je     2719 &lt;abracadabra+0x81&gt;<br>2712:	b8 00 00 00 00       	mov    $0x0,%eax<br>2717:	eb c9                	jmp    26e2 &lt;abracadabra+0x4a&gt;<br>2719:	b8 01 00 00 00       	mov    $0x1,%eax<br>271e:	eb c2                	jmp    26e2 &lt;abracadabra+0x4a&gt;<br>2720:	e8 8b fb ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>发现必须得读到第三个字符串，然后会与 <code>2702</code> 行取到的东西进行比较，我们具体看看是什么：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/s *abracadabra+113+0x2aa7<br>0x5555555591b0: <span class="hljs-string">&quot;...VeniVidiViciTwoThousandYearsAgo?&quot;</span><br></code></pre></td></tr></table></figure>
+<p>于是我们知道了，必须在第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 个字符串后面跟上 <code>...VeniVidiViciTwoThousandYearsAgo?</code> 才会触发 <code>alohomora</code>。接下来看看阿拉霍洞开吧！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002725 &lt;alohomora&gt;:<br>    2725:	f3 0f 1e fa          	endbr64<br>    2729:	48 81 ec 88 00 00 00 	sub    $0x88,%rsp<br>    2730:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2737:	00 00 <br>    2739:	48 89 44 24 78       	mov    %rax,0x78(%rsp)<br>    273e:	31 c0                	xor    %eax,%eax<br>    2740:	48 8d 05 11 6f 00 00 	lea    0x6f11(%rip),%rax        # 9658 &lt;input_strings+0x78&gt;<br>                                    # 取了第二问的答案 0 1 1 2 3 5<br>    2747:	eb 04                	jmp    274d &lt;alohomora+0x28&gt;<br>    2749:	48 83 c0 01          	add    $0x1,%rax<br>    274d:	80 38 00             	cmpb   $0x0,(%rax)<br>    2750:	75 f7                	jne    2749 &lt;alohomora+0x24&gt;<br>                                    # 这里的感觉就是，一直把 rax 往后加，加到遇到这个字符串的末尾为止<br>    <br>    2752:	48 83 e8 01          	sub    $0x1,%rax # rax 减一，循环从这里开始，rax 一开始指向字符串最后一个元素<br>    2756:	48 89 e2             	mov    %rsp,%rdx # 把栈指针赋给 rdx<br>    2759:	eb 0a                	jmp    2765 &lt;alohomora+0x40&gt;<br>    <br>    275b:	88 0a                	mov    %cl,(%rdx) # 把 rcx 扔给 rdx指向的位置（在栈里面）<br>    275d:	48 83 c2 01          	add    $0x1,%rdx  # ++rdx<br>    2761:	48 83 e8 01          	sub    $0x1,%rax  # rax -= 1<br>    2765:	0f b6 08             	movzbl (%rax),%ecx # 把 rax 指向的字符丢给 rcx<br>    2768:	80 f9 20             	cmp    $0x20,%cl   # 将其与 0x20(空格)比较<br>    276b:	74 0c                	je     2779 &lt;alohomora+0x54&gt;    # 如果等于空格，跳到 2779，循环结束<br>    276d:	48 8d 35 e4 6e 00 00 	lea    0x6ee4(%rip),%rsi        # 9658 &lt;input_strings+0x78&gt;<br>                                           # 经检查，还是第二问的答案<br>    2774:	48 39 f0             	cmp    %rsi,%rax  # 比较 rsi 和 rax<br>    2777:	75 e2                	jne    275b &lt;alohomora+0x36&gt; # 如果还没到头，跳到 275b<br>    <br>    2779:	c6 02 00             	movb   $0x0,(%rdx) # 字符串的末尾<br>    277c:	48 89 e7             	mov    %rsp,%rdi<br>    277f:	48 8d 35 52 2a 00 00 	lea    0x2a52(%rip),%rsi        # 51d8 &lt;_IO_stdin_used+0x1d8&gt;<br>    2786:	e8 a6 05 00 00       	call   2d31 &lt;strings_not_equal&gt;<br>    278b:	85 c0                	test   %eax,%eax<br>    278d:	74 1d                	je     27ac &lt;alohomora+0x87&gt;<br>    278f:	b8 00 00 00 00       	mov    $0x0,%eax<br>    2794:	48 8b 54 24 78       	mov    0x78(%rsp),%rdx<br>    2799:	64 48 2b 14 25 28 00 	sub    %fs:0x28,%rdx<br>    27a0:	00 00 <br>    27a2:	75 0f                	jne    27b3 &lt;alohomora+0x8e&gt;<br>    27a4:	48 81 c4 88 00 00 00 	add    $0x88,%rsp<br>    27ab:	c3                   	ret<br>    27ac:	b8 01 00 00 00       	mov    $0x1,%eax<br>    27b1:	eb e1                	jmp    2794 &lt;alohomora+0x6f&gt;<br>    27b3:	e8 f8 fa ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>于是我们可以看懂了，在第二个 phase 的字符串后面还要跟一段东西。应当是要跟上 <code>...diaSecnOraseaCsuiluJsuiaGtahTwonKUoD</code> 的 reverse，即 <code>DoUKnowThatGaiusJuliusCaesarOnceSaid...</code>，有点意思。</p>
+<p>此时，我们便已经能够进入 secret phase。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000002beb &lt;secret_phase&gt;:<br>    2beb:	f3 0f 1e fa          	endbr64<br>    2bef:	53                   	push   %rbx<br>    2bf0:	48 83 ec 10          	sub    $0x10,%rsp<br>    2bf4:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    2bfb:	00 00 <br>    2bfd:	48 89 44 24 08       	mov    %rax,0x8(%rsp)<br>    2c02:	31 c0                	xor    %eax,%eax<br>    2c04:	e8 08 05 00 00       	call   3111 &lt;read_line&gt;<br>    2c09:	48 89 c7             	mov    %rax,%rdi<br>    2c0c:	ba 0a 00 00 00       	mov    $0xa,%edx<br>    2c11:	be 00 00 00 00       	mov    $0x0,%esi<br>    2c16:	e8 05 f7 ff ff       	call   2320 &lt;strtol@plt&gt;<br>    2c1b:	48 89 c3             	mov    %rax,%rbx<br>    2c1e:	48 8d 3d 8b 64 00 00 	lea    0x648b(%rip),%rdi        # 90b0 &lt;n1&gt;<br>    2c25:	e8 71 ff ff ff       	call   2b9b &lt;get_sum&gt;<br>    2c2a:	39 d8                	cmp    %ebx,%eax<br>    2c2c:	75 50                	jne    2c7e &lt;secret_phase+0x93&gt; # 炸弹爆炸<br>    2c2e:	48 8d 3d 0b 26 00 00 	lea    0x260b(%rip),%rdi        # 5240 &lt;_IO_stdin_used+0x240&gt;<br>    2c35:	e8 46 f6 ff ff       	call   2280 &lt;puts@plt&gt;<br>    2c3a:	48 8d 3d 27 26 00 00 	lea    0x2627(%rip),%rdi        # 5268 &lt;_IO_stdin_used+0x268&gt;<br>    2c41:	e8 3a f6 ff ff       	call   2280 &lt;puts@plt&gt;<br>    2c46:	48 8d 3d 63 26 00 00 	lea    0x2663(%rip),%rdi        # 52b0 &lt;_IO_stdin_used+0x2b0&gt;<br>    2c4d:	e8 2e f6 ff ff       	call   2280 &lt;puts@plt&gt;<br>    2c52:	48 8d 3d 8f 26 00 00 	lea    0x268f(%rip),%rdi        # 52e8 &lt;_IO_stdin_used+0x2e8&gt;<br>    2c59:	e8 22 f6 ff ff       	call   2280 &lt;puts@plt&gt;<br>    2c5e:	48 8d 7c 24 04       	lea    0x4(%rsp),%rdi<br>    2c63:	e8 e7 05 00 00       	call   324f &lt;phase_defused&gt;<br>    2c68:	48 8b 44 24 08       	mov    0x8(%rsp),%rax<br>    2c6d:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>    2c74:	00 00 <br>    2c76:	75 0d                	jne    2c85 &lt;secret_phase+0x9a&gt;<br>    2c78:	48 83 c4 10          	add    $0x10,%rsp<br>    2c7c:	5b                   	pop    %rbx<br>    2c7d:	c3                   	ret<br>    2c7e:	e8 c3 03 00 00       	call   3046 &lt;explode_bomb&gt;<br>    2c83:	eb a9                	jmp    2c2e &lt;secret_phase+0x43&gt;<br>    2c85:	e8 26 f6 ff ff       	call   22b0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>我们可以看出来，secret phase 读入的字符串会过一道 <code>strtol</code> 函数变成 <code>long</code>，然后调用一个 <code>get_sum</code> 并要求其返回的结果与我们输入的数相同。我们且看看 <code>get_sum</code> 是怎么个事，嗯其返回 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>63</mn></mrow><annotation encoding="application/x-tex">63</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">3</span></span></span></span>，然后就做完了。？</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">➜  ubuntu@ics-yangty ~/bomb162  &gt; ./bomb<br>Welcome <span class="hljs-keyword">to</span> Mr.Gin<span class="hljs-comment">&#x27;s little bomb. You have 6 phases with</span><br>which <span class="hljs-keyword">to</span> blow yourself up. Have a nice day! Mua ha ha ha!<br>Love <span class="hljs-built_in">is</span> a program that science <span class="hljs-built_in">and</span> logic can never explain.<br>Phase <span class="hljs-number">1</span> defused. How about the <span class="hljs-keyword">next</span> one?<br><span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">5</span> DoUKnowThatGaiusJuliusCaesarOnceSaid...<br>That<span class="hljs-comment">&#x27;s number 2. Keep going!</span><br><span class="hljs-number">0</span> <span class="hljs-number">1070</span><br>Halfway there! Good job!<br><span class="hljs-number">5</span> <span class="hljs-number">20</span> ...VeniVidiViciTwoThousandYearsAgo?<br>So you got that one. <span class="hljs-keyword">Try</span> this one.<br>M63487<br>Good work! <span class="hljs-keyword">On</span> <span class="hljs-keyword">to</span> the <span class="hljs-keyword">next</span>...<br><span class="hljs-number">5</span> <span class="hljs-number">2</span> <span class="hljs-number">6</span> <span class="hljs-number">1</span> <span class="hljs-number">4</span> <span class="hljs-number">3</span><br>Curses, you<span class="hljs-comment">&#x27;ve found the secret phase!</span><br>But finding it <span class="hljs-built_in">and</span> solving it are quite different...<br><span class="hljs-built_in">And</span> I can<span class="hljs-comment">&#x27;t give you a clear answer yet. You need to measure it yourself...</span><br><span class="hljs-number">63</span><br>Bravo! You<span class="hljs-comment">&#x27;ve defused the secret stage!</span><br>        Mr. Gin <span class="hljs-keyword">finally</span> knew that the students at PKU are <span class="hljs-built_in">not</span> easy <span class="hljs-keyword">to</span> defeat.<br>        He fled <span class="hljs-keyword">in</span> haste, but you know it <span class="hljs-built_in">is</span> <span class="hljs-built_in">not</span> over...<br>        <span class="hljs-string">&quot;A sleepless malice&quot;</span>, uttered you <span class="hljs-keyword">as</span> you caught a whiff <span class="hljs-keyword">of</span> the <span class="hljs-keyword">next</span> trouble...<br>Congratulations! You<span class="hljs-comment">&#x27;ve defused the bomb and saved your machine!</span><br>Your instructor has been notified <span class="hljs-built_in">and</span> will verify your solution.<br></code></pre></td></tr></table></figure>
+<h2 id="后记"><a class="markdownIt-Anchor" href="#后记"></a> 后记</h2>
+<p>好像这个 secret phase 是简单版本的。重新下载了个炸弹开始拆，前面的就用了 IDA：</p>
+<h3 id="phase-1-2"><a class="markdownIt-Anchor" href="#phase-1-2"></a> Phase 1</h3>
+<p>略</p>
+<h3 id="phase-2-2"><a class="markdownIt-Anchor" href="#phase-2-2"></a> Phase 2</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 __fastcall <span class="hljs-title function_">phase_2</span><span class="hljs-params">(__int64 a1)</span><br>&#123;<br>  <span class="hljs-type">int</span> i; <span class="hljs-comment">// ebx</span><br>  _DWORD v3[<span class="hljs-number">6</span>]; <span class="hljs-comment">// [rsp+0h] [rbp-28h] BYREF</span><br>  <span class="hljs-type">unsigned</span> __int64 v4; <span class="hljs-comment">// [rsp+18h] [rbp-10h]</span><br><br>  v4 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  read_six_numbers(a1, v3);<br>  <span class="hljs-keyword">if</span> ( v3[<span class="hljs-number">0</span>] &lt; <span class="hljs-number">0</span> )<br>    explode_bomb();<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">5</span>; ++i )<br>  &#123;<br>    <span class="hljs-keyword">if</span> ( v3[i] != v3[i - <span class="hljs-number">1</span>] + i )<br>      explode_bomb();<br>  &#125;<br>  <span class="hljs-keyword">return</span> v4 - __readfsqword(<span class="hljs-number">0x28</span>u);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="phase-3-2"><a class="markdownIt-Anchor" href="#phase-3-2"></a> Phase 3</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 __fastcall <span class="hljs-title function_">phase_3</span><span class="hljs-params">(__int64 a1)</span><br>&#123;<br>  <span class="hljs-type">char</span> v1; <span class="hljs-comment">// al</span><br>  <span class="hljs-type">char</span> v3; <span class="hljs-comment">// [rsp+Fh] [rbp-19h] BYREF</span><br>  <span class="hljs-type">int</span> v4; <span class="hljs-comment">// [rsp+10h] [rbp-18h] BYREF</span><br>  <span class="hljs-type">int</span> v5; <span class="hljs-comment">// [rsp+14h] [rbp-14h] BYREF</span><br>  <span class="hljs-type">unsigned</span> __int64 v6; <span class="hljs-comment">// [rsp+18h] [rbp-10h]</span><br><br>  v6 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-type">int</span>)__isoc99_sscanf(a1, <span class="hljs-string">&quot;%d %c %d&quot;</span>, &amp;v4, &amp;v3, &amp;v5) &lt;= <span class="hljs-number">2</span> )<br>    explode_bomb();<br>  <span class="hljs-keyword">switch</span> ( v4 )<br>  &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">505</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">120</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">552</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">102</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">295</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">105</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">422</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">121</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">825</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">121</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">777</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">122</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">6</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">866</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">100</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">case</span> <span class="hljs-number">7</span>:<br>      <span class="hljs-keyword">if</span> ( v5 != <span class="hljs-number">680</span> )<br>        explode_bomb();<br>      v1 = <span class="hljs-number">99</span>;<br>      <span class="hljs-keyword">break</span>;<br>    <span class="hljs-keyword">default</span>:<br>      explode_bomb();<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( v3 != v1 )<br>    explode_bomb();<br>  <span class="hljs-keyword">return</span> v6 - __readfsqword(<span class="hljs-number">0x28</span>u);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="phase-4-2"><a class="markdownIt-Anchor" href="#phase-4-2"></a> Phase 4</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 __fastcall <span class="hljs-title function_">phase_4</span><span class="hljs-params">(__int64 a1)</span><br>&#123;<br>  <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> v2; <span class="hljs-comment">// [rsp+0h] [rbp-18h] BYREF</span><br>  <span class="hljs-type">int</span> v3; <span class="hljs-comment">// [rsp+4h] [rbp-14h] BYREF</span><br>  <span class="hljs-type">unsigned</span> __int64 v4; <span class="hljs-comment">// [rsp+8h] [rbp-10h]</span><br><br>  v4 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)__isoc99_sscanf(a1, <span class="hljs-string">&quot;%d %d&quot;</span>, &amp;v2, &amp;v3) != <span class="hljs-number">2</span> || v2 &gt; <span class="hljs-number">0xE</span> )<br>    explode_bomb();<br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)func4(v2, <span class="hljs-number">0LL</span>, <span class="hljs-number">14LL</span>) != <span class="hljs-number">31</span> || v3 != <span class="hljs-number">31</span> )<br>    explode_bomb();<br>  <span class="hljs-keyword">return</span> v4 - __readfsqword(<span class="hljs-number">0x28</span>u);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那我们看看 <code>func4</code> 在干嘛：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c">__int64 __fastcall <span class="hljs-title function_">func4</span><span class="hljs-params">(__int64 a1, __int64 a2, __int64 a3)</span><br>&#123;<br>  <span class="hljs-type">int</span> v3; <span class="hljs-comment">// ebx</span><br><br>  v3 = a2 + ((<span class="hljs-type">int</span>)a3 - (<span class="hljs-type">int</span>)a2) / <span class="hljs-number">2</span>;<br>  <span class="hljs-keyword">if</span> ( v3 &gt; (<span class="hljs-type">int</span>)a1 )<br>  &#123;<br>    v3 += func4(a1, a2, (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)(v3 - <span class="hljs-number">1</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( v3 &lt; (<span class="hljs-type">int</span>)a1 )<br>  &#123;<br>    v3 += func4(a1, (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)(v3 + <span class="hljs-number">1</span>), a3);<br>  &#125;<br>  <span class="hljs-keyword">return</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)v3;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>直接写个程序硬跑就可以了：<code>13 31</code></p>
+<h3 id="phase-5-2"><a class="markdownIt-Anchor" href="#phase-5-2"></a> Phase 5</h3>
+<p>这个没法直接看出来了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> __int64 __fastcall <span class="hljs-title function_">phase_5</span><span class="hljs-params">(__int64 a1)</span><br>&#123;<br>  <span class="hljs-type">char</span> *v1; <span class="hljs-comment">// rsi</span><br>  __int64 v2; <span class="hljs-comment">// rcx</span><br>  __int64 v3; <span class="hljs-comment">// rdx</span><br>  <span class="hljs-type">int</span> v5; <span class="hljs-comment">// [rsp+0h] [rbp-18h] BYREF</span><br>  <span class="hljs-type">int</span> v6; <span class="hljs-comment">// [rsp+4h] [rbp-14h] BYREF</span><br>  <span class="hljs-type">unsigned</span> __int64 v7; <span class="hljs-comment">// [rsp+8h] [rbp-10h]</span><br><br>  v7 = __readfsqword(<span class="hljs-number">0x28</span>u);<br>  v1 = <span class="hljs-string">&quot;%d %d&quot;</span>;<br>  <span class="hljs-keyword">if</span> ( (<span class="hljs-type">int</span>)__isoc99_sscanf(a1, <span class="hljs-string">&quot;%d %d&quot;</span>, &amp;v5, &amp;v6) &lt;= <span class="hljs-number">1</span> )<br>    ((<span class="hljs-type">void</span> (__noreturn *)(<span class="hljs-type">void</span>))explode_bomb)();<br>  v5 &amp;= <span class="hljs-number">0xF</span>u;<br>  v2 = <span class="hljs-number">0LL</span>;<br>  v3 = <span class="hljs-number">0LL</span>;<br>  <span class="hljs-keyword">while</span> ( v5 != <span class="hljs-number">15</span> )<br>  &#123;<br>    v3 = (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)(v3 + <span class="hljs-number">1</span>);<br>    v1 = (<span class="hljs-type">char</span> *)array_0;<br>    v5 = array_0[v5];<br>    v2 = (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)(v5 + v2);<br>  &#125;<br>  <span class="hljs-keyword">if</span> ( (_DWORD)v3 != <span class="hljs-number">15</span> || v6 != (_DWORD)v2 )<br>    explode_bomb(a1, v1, v3, v2);<br>  <span class="hljs-keyword">return</span> v7 - __readfsqword(<span class="hljs-number">0x28</span>u);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个循环里面，有种跳链表的感觉。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/20dw <span class="hljs-variable">$rsi</span><br>0x555555558380 &lt;array.0&gt;:       10      2       14      7<br>0x555555558390 &lt;array.0+16&gt;:    8       12      15      11<br>0x5555555583a0 &lt;array.0+32&gt;:    0       4       1       13<br>0x5555555583b0 &lt;array.0+48&gt;:    3       9       6       5<br></code></pre></td></tr></table></figure>
+<p>整理一下就是：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0</span>  <span class="hljs-number">1</span>  <span class="hljs-number">2</span>  <span class="hljs-number">3</span>  <span class="hljs-number">4</span>  <span class="hljs-number">5</span>  <span class="hljs-number">6</span>  <span class="hljs-number">7</span>  <span class="hljs-number">8</span>  <span class="hljs-number">9</span>  <span class="hljs-number">10</span> <span class="hljs-number">11</span> <span class="hljs-number">12</span> <span class="hljs-number">13</span> <span class="hljs-number">14</span> <span class="hljs-number">15</span><br><span class="hljs-attribute">10</span> <span class="hljs-number">2</span>  <span class="hljs-number">14</span> <span class="hljs-number">7</span>  <span class="hljs-number">8</span>  <span class="hljs-number">12</span> <span class="hljs-number">15</span> <span class="hljs-number">11</span> <span class="hljs-number">0</span>  <span class="hljs-number">4</span>  <span class="hljs-number">1</span>  <span class="hljs-number">13</span> <span class="hljs-number">3</span>  <span class="hljs-number">9</span>  <span class="hljs-number">6</span>  <span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
+<p>因为 <code>v3</code> 一定最后要是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>15</mn></mrow><annotation encoding="application/x-tex">15</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">5</span></span></span></span>，所以我们把关系整理一下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">0</span> -&gt; <span class="hljs-number">10</span> -&gt; <span class="hljs-number">1</span> -&gt; <span class="hljs-number">2</span> -&gt; <span class="hljs-number">14</span> -&gt; <span class="hljs-number">6</span> -&gt; <span class="hljs-number">15</span> -&gt; <span class="hljs-number">5</span> -&gt; <span class="hljs-number">12</span> -&gt; <span class="hljs-number">3</span> -&gt; <span class="hljs-number">7</span> -&gt; <span class="hljs-number">11</span> -&gt; <span class="hljs-number">13</span> -&gt; <span class="hljs-number">9</span> -&gt; <span class="hljs-number">4</span> -&gt; <span class="hljs-number">8</span> -&gt; <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>重新排一下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">5</span> -&gt; <span class="hljs-number">12</span> -&gt; <span class="hljs-number">3</span> -&gt; <span class="hljs-number">7</span> -&gt; <span class="hljs-number">11</span> -&gt; <span class="hljs-number">13</span> -&gt; <span class="hljs-number">9</span> -&gt; <span class="hljs-number">4</span> -&gt; <span class="hljs-number">8</span> -&gt; <span class="hljs-number">0</span> -&gt; <span class="hljs-number">10</span> -&gt; <span class="hljs-number">1</span> -&gt; <span class="hljs-number">2</span> -&gt; <span class="hljs-number">14</span> -&gt; <span class="hljs-number">6</span> -&gt; <span class="hljs-number">15</span> <br></code></pre></td></tr></table></figure>
+<p>最后可以得到答案 <code>5 115</code>。</p>
+<h3 id="phase-6-2"><a class="markdownIt-Anchor" href="#phase-6-2"></a> Phase 6</h3>
+<p>和我的是一样的。</p>
+<h3 id="secret-phase-2"><a class="markdownIt-Anchor" href="#secret-phase-2"></a> Secret Phase</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000001cb3 &lt;secret_phase&gt;:<br>    1cb3:	f3 0f 1e fa          	endbr64<br>    1cb7:	55                   	push   %rbp<br>    1cb8:	53                   	push   %rbx<br>    1cb9:	48 83 ec 18          	sub    $0x18,%rsp<br>    1cbd:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax<br>    1cc4:	00 00 <br>    1cc6:	48 89 44 24 08       	mov    %rax,0x8(%rsp)<br>    1ccb:	31 c0                	xor    %eax,%eax<br>    1ccd:	e8 2b 05 00 00       	call   21fd &lt;read_line&gt;<br>    1cd2:	48 89 c5             	mov    %rax,%rbp<br>    1cd5:	bb 00 00 00 00       	mov    $0x0,%ebx<br>    1cda:	eb 03                	jmp    1cdf &lt;secret_phase+0x2c&gt;<br>    1cdc:	83 c3 01             	add    $0x1,%ebx<br>    1cdf:	48 63 c3             	movslq %ebx,%rax<br>    1ce2:	80 7c 05 00 00       	cmpb   $0x0,0x0(%rbp,%rax,1)<br>    1ce7:	74 0c                	je     1cf5 &lt;secret_phase+0x42&gt;<br>    1ce9:	83 fb 18             	cmp    $0x18,%ebx<br>    1cec:	7e ee                	jle    1cdc &lt;secret_phase+0x29&gt;<br>    1cee:	e8 3f 04 00 00       	call   2132 &lt;explode_bomb&gt;<br>    1cf3:	eb e7                	jmp    1cdc &lt;secret_phase+0x29&gt;<br>    1cf5:	48 89 ef             	mov    %rbp,%rdi<br>    1cf8:	e8 6c ff ff ff       	call   1c69 &lt;check_synchronizing_sequence&gt;<br>    1cfd:	85 c0                	test   %eax,%eax<br>    1cff:	75 69                	jne    1d6a &lt;secret_phase+0xb7&gt;<br>    1d01:	48 8d 3d 40 25 00 00 	lea    0x2540(%rip),%rdi        # 4248 &lt;_IO_stdin_used+0x248&gt;<br>    1d08:	e8 63 f5 ff ff       	call   1270 &lt;puts@plt&gt;<br>    1d0d:	48 8d 3d 6c 25 00 00 	lea    0x256c(%rip),%rdi        # 4280 &lt;_IO_stdin_used+0x280&gt;<br>    1d14:	e8 57 f5 ff ff       	call   1270 &lt;puts@plt&gt;<br>    1d19:	48 8d 3d a0 25 00 00 	lea    0x25a0(%rip),%rdi        # 42c0 &lt;_IO_stdin_used+0x2c0&gt;<br>    1d20:	e8 4b f5 ff ff       	call   1270 &lt;puts@plt&gt;<br>    1d25:	48 8d 3d cc 25 00 00 	lea    0x25cc(%rip),%rdi        # 42f8 &lt;_IO_stdin_used+0x2f8&gt;<br>    1d2c:	e8 3f f5 ff ff       	call   1270 &lt;puts@plt&gt;<br>    1d31:	48 8d 3d 00 26 00 00 	lea    0x2600(%rip),%rdi        # 4338 &lt;_IO_stdin_used+0x338&gt;<br>    1d38:	e8 33 f5 ff ff       	call   1270 &lt;puts@plt&gt;<br>    1d3d:	48 8d 3d 69 24 00 00 	lea    0x2469(%rip),%rdi        # 41ad &lt;_IO_stdin_used+0x1ad&gt;<br>    1d44:	e8 27 f5 ff ff       	call   1270 &lt;puts@plt&gt;<br>    1d49:	48 8d 7c 24 04       	lea    0x4(%rsp),%rdi<br>    1d4e:	e8 e8 05 00 00       	call   233b &lt;phase_defused&gt;<br>    1d53:	48 8b 44 24 08       	mov    0x8(%rsp),%rax<br>    1d58:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax<br>    1d5f:	00 00 <br>    1d61:	75 0e                	jne    1d71 &lt;secret_phase+0xbe&gt;<br>    1d63:	48 83 c4 18          	add    $0x18,%rsp<br>    1d67:	5b                   	pop    %rbx<br>    1d68:	5d                   	pop    %rbp<br>    1d69:	c3                   	ret<br>    1d6a:	e8 c3 03 00 00       	call   2132 &lt;explode_bomb&gt;<br>    1d6f:	eb 90                	jmp    1d01 &lt;secret_phase+0x4e&gt;<br>    1d71:	e8 2a f5 ff ff       	call   12a0 &lt;__stack_chk_fail@plt&gt;<br></code></pre></td></tr></table></figure>
+<p>前面的地方是在检测串长，要求串长不能超过 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>25</mn></mrow><annotation encoding="application/x-tex">25</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">5</span></span></span></span>。然后调用一个 <code>check_synchronizing_sequence</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000001c69 &lt;check_synchronizing_sequence&gt;:<br>    1c69:	f3 0f 1e fa          	endbr64<br>    1c6d:	41 54                	push   %r12<br>    1c6f:	55                   	push   %rbp<br>    1c70:	53                   	push   %rbx<br>    1c71:	48 89 fd             	mov    %rdi,%rbp<br>    1c74:	48 89 fe             	mov    %rdi,%rsi<br>    1c77:	bf 00 00 00 00       	mov    $0x0,%edi<br>    1c7c:	e8 91 ff ff ff       	call   1c12 &lt;emulate_fsm&gt;<br>    1c81:	41 89 c4             	mov    %eax,%r12d<br>    1c84:	bb 01 00 00 00       	mov    $0x1,%ebx<br>    1c89:	83 fb 06             	cmp    $0x6,%ebx<br>    1c8c:	7f 14                	jg     1ca2 &lt;check_synchronizing_sequence+0x39&gt;<br>    1c8e:	48 89 ee             	mov    %rbp,%rsi<br>    1c91:	89 df                	mov    %ebx,%edi<br>    1c93:	e8 7a ff ff ff       	call   1c12 &lt;emulate_fsm&gt;<br>    1c98:	44 39 e0             	cmp    %r12d,%eax<br>    1c9b:	75 0f                	jne    1cac &lt;check_synchronizing_sequence+0x43&gt;<br>    1c9d:	83 c3 01             	add    $0x1,%ebx<br>    1ca0:	eb e7                	jmp    1c89 &lt;check_synchronizing_sequence+0x20&gt;<br>    1ca2:	b8 00 00 00 00       	mov    $0x0,%eax<br>    1ca7:	5b                   	pop    %rbx<br>    1ca8:	5d                   	pop    %rbp<br>    1ca9:	41 5c                	pop    %r12<br>    1cab:	c3                   	ret<br>    1cac:	b8 ff ff ff ff       	mov    $0xffffffff,%eax<br>    1cb1:	eb f4                	jmp    1ca7 &lt;check_synchronizing_sequence+0x3e&gt;<br></code></pre></td></tr></table></figure>
+<p>又发现有个叫做 <code>emulate_fsm</code> 的东西。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0000000000001c12 &lt;emulate_fsm&gt;:<br>    1c12:	f3 0f 1e fa          	endbr64<br>    1c16:	55                   	push   %rbp<br>    1c17:	53                   	push   %rbx<br>    1c18:	48 83 ec 08          	sub    $0x8,%rsp<br>    1c1c:	89 fd                	mov    %edi,%ebp<br>    1c1e:	48 89 f3             	mov    %rsi,%rbx<br>    1c21:	eb 28                	jmp    1c4b &lt;emulate_fsm+0x39&gt;<br>    1c23:	0f be 03             	movsbl (%rbx),%eax<br>    1c26:	83 e8 30             	sub    $0x30,%eax<br>    1c29:	48 63 ed             	movslq %ebp,%rbp<br>    1c2c:	48 98                	cltq<br>    1c2e:	48 8d 14 c5 00 00 00 	lea    0x0(,%rax,8),%rdx<br>    1c35:	00 <br>    1c36:	48 29 c2             	sub    %rax,%rdx<br>    1c39:	48 8d 04 2a          	lea    (%rdx,%rbp,1),%rax<br>    1c3d:	48 8d 15 7c 27 00 00 	lea    0x277c(%rip),%rdx        # 43c0 &lt;transition_table&gt;<br>    1c44:	8b 2c 82             	mov    (%rdx,%rax,4),%ebp<br>    1c47:	48 83 c3 01          	add    $0x1,%rbx<br>    1c4b:	0f b6 03             	movzbl (%rbx),%eax<br>    1c4e:	84 c0                	test   %al,%al<br>    1c50:	74 0e                	je     1c60 &lt;emulate_fsm+0x4e&gt;<br>    1c52:	83 e8 30             	sub    $0x30,%eax<br>    1c55:	3c 01                	cmp    $0x1,%al<br>    1c57:	76 ca                	jbe    1c23 &lt;emulate_fsm+0x11&gt;<br>    1c59:	e8 d4 04 00 00       	call   2132 &lt;explode_bomb&gt;<br>    1c5e:	eb c3                	jmp    1c23 &lt;emulate_fsm+0x11&gt;<br>    1c60:	89 e8                	mov    %ebp,%eax<br>    1c62:	48 83 c4 08          	add    $0x8,%rsp<br>    1c66:	5b                   	pop    %rbx<br>    1c67:	5d                   	pop    %rbp<br>    1c68:	c3                   	ret<br></code></pre></td></tr></table></figure>
+<p>很有趣。反编译出来长这样的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c">__int64 __fastcall <span class="hljs-title function_">emulate_fsm</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a1, _BYTE *a2)</span><br>&#123;<br>  <span class="hljs-keyword">while</span> ( *a2 )<br>  &#123;<br>    <span class="hljs-keyword">if</span> ( (<span class="hljs-type">unsigned</span> __int8)(*a2 - <span class="hljs-number">48</span>) &gt; <span class="hljs-number">1u</span> )<br>      explode_bomb();<br>    a1 = transition_table[<span class="hljs-number">7</span> * (<span class="hljs-type">char</span>)*a2++ - <span class="hljs-number">336</span> + a1];<br>  &#125;<br>  <span class="hljs-keyword">return</span> a1;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>把 <code>transition_table</code> 弄出来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">(gdb) x/20dw 0x5555555583c0<br>0x5555555583c0 &lt;transition_table&gt;:      6       1       3       0<br>0x5555555583d0 &lt;transition_table+16&gt;:   2       4       5       0<br>0x5555555583e0 &lt;transition_table+32&gt;:   2       1       3       1<br>0x5555555583f0 &lt;transition_table+48&gt;:   5       6       2032168787      1948284271<br>0x555555558400: 1802398056      1970239776      1851876128      1869902624<br></code></pre></td></tr></table></figure>
+<p>所以 transition_table 就是 <code>6, 1, 3, 0, 2, 4, 5, 0, 2, 1, 3, 1, 5, 6</code>。</p>
+<p>这便指引我们，需要枚举一个长度小于等于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>25</mn></mrow><annotation encoding="application/x-tex">25</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">5</span></span></span></span> 的 0-1 序列，写个脚本判断吧：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;assert.h&gt;</span></span><br><br><span class="hljs-type">int</span> transition_table[] = &#123;<span class="hljs-number">6</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>&#125;;<br><span class="hljs-type">char</span> str[<span class="hljs-number">30</span>];<br><br><span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">emulate_fsm</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a1, <span class="hljs-type">char</span> *a2)</span><br>&#123;<br>  <span class="hljs-keyword">while</span> ( *a2 )<br>  &#123;<br>    assert(*a2 == <span class="hljs-string">&#x27;0&#x27;</span> || *a2 == <span class="hljs-string">&#x27;1&#x27;</span>);<br>    a1 = transition_table[<span class="hljs-number">7</span> * (<span class="hljs-type">char</span>)*a2++ - <span class="hljs-number">336</span> + a1];<br>  &#125;<br>  <span class="hljs-keyword">return</span> a1;<br>&#125;<br><br><span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">check_synchronizing_sequence</span><span class="hljs-params">(<span class="hljs-type">char</span>* s)</span><br>&#123;<br>  <span class="hljs-type">int</span> v1; <span class="hljs-comment">// r12d</span><br>  <span class="hljs-type">int</span> i; <span class="hljs-comment">// ebx</span><br><br>  v1 = emulate_fsm(<span class="hljs-number">0LL</span>, s);<br>  <span class="hljs-keyword">for</span> ( i = <span class="hljs-number">1</span>; ; ++i )<br>  &#123;<br>    <span class="hljs-keyword">if</span> ( i &gt; <span class="hljs-number">6</span> )<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">0LL</span>;<br>    <span class="hljs-keyword">if</span> ( (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)emulate_fsm((<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)i, s) != v1 )<br>      <span class="hljs-keyword">break</span>;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0xFFFFFFFF</span>LL;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">gen_str</span><span class="hljs-params">(<span class="hljs-type">int</span> len, <span class="hljs-type">int</span> idx)</span> &#123;<br>  <span class="hljs-keyword">if</span> (len == idx) &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-type">long</span> res = check_synchronizing_sequence(str);<br>    <span class="hljs-keyword">if</span> (!res) &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;found answer %s\n&quot;</span>, str);<br>    &#125;<br>    <span class="hljs-keyword">return</span>;<br>  &#125;<br>  str[idx] = <span class="hljs-string">&#x27;1&#x27;</span>;<br>  gen_str(len, idx + <span class="hljs-number">1</span>);<br>  str[idx] = <span class="hljs-string">&#x27;0&#x27;</span>;<br>  gen_str(len, idx + <span class="hljs-number">1</span>);<br>  <span class="hljs-keyword">return</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> len = <span class="hljs-number">1</span>; len &lt;= <span class="hljs-number">25</span>; ++len) &#123;<br>    gen_str(len, <span class="hljs-number">0</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>跑出来结果了。搞定。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Fear</span> of death is worse than death itself.<br><span class="hljs-attribute">0</span> <span class="hljs-number">1</span> <span class="hljs-number">3</span> <span class="hljs-number">6</span> <span class="hljs-number">10</span> <span class="hljs-number">15</span> DoUKnowThatGaiusJuliusCaesarOnceSaid...<br><span class="hljs-attribute">0</span> x <span class="hljs-number">505</span><br><span class="hljs-attribute">13</span> <span class="hljs-number">31</span> ...VeniVidiViciTwoThousandYearsAgo?<br><span class="hljs-attribute">5</span> <span class="hljs-number">115</span><br><span class="hljs-attribute">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">1</span> <span class="hljs-number">6</span><br><span class="hljs-attribute">1000100101001000101000001</span><br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ICS/" class="print-no-link">#ICS</a>
+      
+        <a href="/tags/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" class="print-no-link">#本科课程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Bomblab 手记</div>
+      <div>https://blog.imyangty.com/note-bomblab/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>YangTY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 13, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/note-ml2024fall/representer-theorem/" title="24秋机器学习笔记-05-表示定理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">24秋机器学习笔记-05-表示定理</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/note-ml2024fall/svm/" title="24秋机器学习笔记-04-支持向量机（SVM）">
+                        <span class="hidden-mobile">24秋机器学习笔记-04-支持向量机（SVM）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"Cgfyufsygsm/cgfyufsygsm.github.io","repo-id":"MDEwOlJlcG9zaXRvcnkzOTIyMDA0MzQ=","category":"Announcements","category-id":"DIC_kwDOF2CA8s4CZEyl","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"top","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <p>Copyright© 2020-2026 <a href="/">YangTY's Blog</a></p> <br> <a target="_blank" rel="noopener" href="https://clustrmaps.com/site/1c1rp"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=K0MO4d8JdrSjeQTYqe1d2JXGwDGExBIbgHOhU_V8eGE&cl=ffffff" srcset="/img/loading.gif" lazyload /></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Views: 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Visitors: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

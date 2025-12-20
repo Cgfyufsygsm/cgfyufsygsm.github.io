@@ -1,0 +1,1155 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/avatar.jpg">
+  <link rel="icon" href="/assets/avatar.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YangTY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="2025-06-06  SSH：把本地的公钥添加到远程的 ~&#x2F;.ssh&#x2F;authorized_keys 即可免密登录。   2025-06-07   用 pyplot 可以在浏览器里可视化三维点云。代码如下： 12import plotly.io as piopio.renderers.default &#x3D; &quot;browser&quot; 剩下部分让大模型写就好了。   对于三维的任务，每">
+<meta property="og:type" content="article">
+<meta property="og:title" content="倒腾日记">
+<meta property="og:url" content="https://blog.imyangty.com/tech-diary/index.html">
+<meta property="og:site_name" content="YangTY&#39;s Blog">
+<meta property="og:description" content="2025-06-06  SSH：把本地的公钥添加到远程的 ~&#x2F;.ssh&#x2F;authorized_keys 即可免密登录。   2025-06-07   用 pyplot 可以在浏览器里可视化三维点云。代码如下： 12import plotly.io as piopio.renderers.default &#x3D; &quot;browser&quot; 剩下部分让大模型写就好了。   对于三维的任务，每">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-06T14:04:58.000Z">
+<meta property="article:modified_time" content="2025-12-20T14:08:45.996Z">
+<meta property="article:author" content="YangTY">
+<meta property="article:tag" content="Latex">
+<meta property="article:tag" content="Typst">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+    <!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZS41KYKYZ"></script><script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag("js", new Date());  gtag("config", "G-8ZS41KYKYZ:");</script>
+  
+  <title>倒腾日记 - YangTY&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.imyangty.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<!-- hexo injector head_end start --><style id="banner-theme-css">
+#banner {
+  background-image: url("/assets/banner-light.jpg") !important;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/banner-dark.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+#banner .mask {
+  z-index: 1;
+}
+html[data-user-color-scheme="dark"] #banner::after {
+  opacity: 1;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 1;
+  }
+}
+@media (prefers-color-scheme: light) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 0;
+  }
+}
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YangTY&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://yangty-pic.oss-cn-beijing.aliyuncs.com/blog_banner.JPG') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="倒腾日记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        YangTY
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-06 22:04" pubdate>
+          June 6, 2025 10:04 PM
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">倒腾日记</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on December 20, 2025 10:08 PM
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="2025-06-06"><a class="markdownIt-Anchor" href="#2025-06-06"></a> 2025-06-06</h2>
+<ul>
+<li>SSH：把本地的公钥添加到远程的 <code>~/.ssh/authorized_keys</code> 即可免密登录。</li>
+</ul>
+<h2 id="2025-06-07"><a class="markdownIt-Anchor" href="#2025-06-07"></a> 2025-06-07</h2>
+<ul>
+<li>
+<p>用 <code>pyplot</code> 可以在浏览器里可视化三维点云。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> plotly.io <span class="hljs-keyword">as</span> pio<br>pio.renderers.default = <span class="hljs-string">&quot;browser&quot;</span><br></code></pre></td></tr></table></figure>
+<p>剩下部分让大模型写就好了。</p>
+</li>
+<li>
+<p>对于三维的任务，每次操作前务必花点时间写一下<strong>可视化</strong>，不会耗费很久的。</p>
+</li>
+</ul>
+<h2 id="2025-06-20"><a class="markdownIt-Anchor" href="#2025-06-20"></a> 2025-06-20</h2>
+<ul>
+<li>命名规范：<code>T_a_b</code> 命名，表示 b 在 a 坐标系下的 transform。</li>
+</ul>
+<h2 id="2025-07-03"><a class="markdownIt-Anchor" href="#2025-07-03"></a> 2025-07-03</h2>
+<ul>
+<li>
+<p>ImageMagick</p>
+<p>图片处理，mogrify</p>
+</li>
+</ul>
+<h2 id="2025-07-12"><a class="markdownIt-Anchor" href="#2025-07-12"></a> 2025-07-12</h2>
+<ul>
+<li>RoboTwin 2.0：
+<ul>
+<li>现有合成数据面临的三个问题：缺乏自动化质量控制、域随机化不够、忽略了 cross embodiment。</li>
+<li>使用三个主要部件进行解决：
+<ul>
+<li>利用多模态大模型做自动闭环反馈的自动化数据合成管线</li>
+<li>域随机化：language instructions, object clutter, background textures, lighting conditions, and tabletop configurations</li>
+<li>embodiment-aware adaptation</li>
+</ul>
+</li>
+<li>自动化专家演示代码生成：用一个 Code Agent，合成的是完成任务的 Python 代码。十次仿真执行，若失败概率超过一半，用 VLM 进行诊断（结合 log 和 observation），然后反馈给 Code Agent。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-07-18"><a class="markdownIt-Anchor" href="#2025-07-18"></a> 2025-07-18</h2>
+<ul>
+<li>
+<p>node.js 安装教程：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/442215189">(5 封私信 / 5 条消息) node.js安装及环境配置超详细教程【Windows系统安装包方式】 - 知乎</a> 配置环境变量有点麻烦。</p>
+</li>
+<li>
+<p>安装了 gemini-cli</p>
+</li>
+<li>
+<p>设置终端代理很简单，Windows 直接</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs clojure">[System.Environment]<span class="hljs-symbol">::SetEnvironmentVariable</span>(<span class="hljs-string">&quot;HTTP_PROXY&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;http://127.0.0.1:7897&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;User&quot;</span>)<br>[System.Environment]<span class="hljs-symbol">::SetEnvironmentVariable</span>(<span class="hljs-string">&quot;HTTPS_PROXY&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;http://127.0.0.1:7897&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;User&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>设置环境变量即可，可用 <code>Invoke-WebRequest https://ipinfo.io/ip</code> 来验证</p>
+</li>
+<li>
+<p>Gemini-cli 文档：<a target="_blank" rel="noopener" href="https://gemini-cli.doczh.com/cli/commands/">命令 - Gemini CLI 中文文档</a></p>
+</li>
+</ul>
+<h2 id="2025-07-21"><a class="markdownIt-Anchor" href="#2025-07-21"></a> 2025-07-21</h2>
+<ul>
+<li>
+<p>B 站播放调速：<code>document.querySelector('video').playbackRate = 5</code></p>
+</li>
+<li>
+<p>备忘录：记得仔细再看看 BatchNorm 和 LayerNorm 的对比</p>
+</li>
+<li>
+<p>Transformer</p>
+<ul>
+<li>
+<p><strong>Autoregressive</strong> 的含义</p>
+<blockquote>
+<p>事实上是在机翻架构中，encoder 和 decoder 的职能区别。</p>
+<p>encoder 只跑一次，负责弄出一组上下文表示 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">{</mo><msub><mi>z</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\{z_i\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>。</p>
+<p>decoder 是一个词一个词生成输出的，前面的所有输出会作为下一次的输入，所以叫“自回归”，这也是为什么 decoder 的 self-attention 层需要 <strong>causal mask</strong>。</p>
+</blockquote>
+</li>
+<li>
+<p>Attention 块是“横向”处理，提取 context 信息，而后面的 MLP 是对序列中每个 position 单独做的，相当于做语义空间的一个转换。</p>
+</li>
+<li>
+<p>Attention 弄出来的结果实际是 value 的线性组合，所以不包含位置信息，需要一开始加一个 positional embedding。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>BERT</p>
+<ul>
+<li>纯 encoder 架构，最后弄出来的东西是<strong>上下文信息</strong>的高维向量，可以是 word 级别的也可以是句子级别的（CLS token），这些东西接到具体下游任务中去做。</li>
+<li>bidirectional 和 autoregressive 的区别</li>
+<li>预训练的时候相当于在做完形填空</li>
+</ul>
+</li>
+<li>
+<p>ViT</p>
+<ul>
+<li>非常 naive 地将图片切成 16x16 的 patches，tokenize 之后丢给 transformer。<em>主要是太 tm 有钱了所以 train 出来了</em>。</li>
+<li>inductive bias（归纳偏置）：ViT 在中等规模数据集训练且不加强正则化的能力不如 CNN 的原因是缺乏归纳偏置。CNN：locality 和 translation equivariance。相当于 CNN 已经有了这些先验信息（针对图片处理更好）</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-07-22"><a class="markdownIt-Anchor" href="#2025-07-22"></a> 2025-07-22</h2>
+<ul>
+<li>
+<p>MAE</p>
+<ul>
+<li>
+<p>Masked Autoencoders Are Scalable Vision Learners</p>
+<p>这个标题的 xxx 是好的 xxx 句式可以参考</p>
+</li>
+<li>
+<p>Kaiming 的 story telling 能力确实牛逼，在 Introduction 部分把 BERT 迁移到 CV 领域遇到的问题以及为什么这样设计 MAE 都讲得很清楚了。</p>
+</li>
+<li>
+<p>Encoder 和 decoder 是<strong>非对称</strong>结构。Encoder 只看到没有被遮住的块，然后生成 latent representation，decoder 则是需要还原出整张图片。Decoder 的规模也远小于 encoder。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>GPT</p>
+<ul>
+<li>GPT-1：2018 年，比 BERT 早，decoder-only 架构，自回归，也是 pretrain + 下游任务 fine-tune 的范式，但是被 BERT 打爆了。Generative 的技术路线是比 BERT 的完型填空更难的，当时的数据规模并不够大，所以被暴打也正常。</li>
+<li>GPT-2：2019 年，用了更大的数据集，<strong>主打 zero-shot</strong>。也因此开创了 prompt 范式。</li>
+<li>GPT-3：2020 年，175B，<strong>few-shot</strong>，主打 <strong>in-context learning</strong>，预训练好之后不再动模型参数。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-07-28"><a class="markdownIt-Anchor" href="#2025-07-28"></a> 2025-07-28</h2>
+<ul>
+<li>对比学习：
+<ul>
+<li>Pretext task：代理任务，相当于在无监督的情况下“自己造”一个标签来进行监督。一般是人们实际不关心但有助于模型学习表征的任务，比如说 instance discrimination</li>
+<li>MoCo 就是在用动量学习法。以动量的方式来更新字典的 encoder。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-07-30"><a class="markdownIt-Anchor" href="#2025-07-30"></a> 2025-07-30</h2>
+<ul>
+<li>
+<p>记录一则：用 rust cargo 下载依赖的时候代理出了问题。经过排查是 git 的代理设置问题（端口号搞错了）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git config --global http.proxy http://127.0.0.1:7897<br>git config --global https.proxy http://127.0.0.1:7897<br></code></pre></td></tr></table></figure>
+<p>这样设置 git 代理就正常了。</p>
+</li>
+<li>
+<p>学习 Rust 的一些印象深刻的点：</p>
+<ul>
+<li>
+<p>表达式与语句的区别。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">calc_fib</span>(n: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>    <span class="hljs-keyword">if</span> n &lt;= <span class="hljs-number">1</span> &#123;<br>        <span class="hljs-keyword">return</span> n;<br>    &#125;<br>    <span class="hljs-title function_ invoke__">calc_fib</span>(n - <span class="hljs-number">1</span>) + <span class="hljs-title function_ invoke__">calc_fib</span>(n - <span class="hljs-number">2</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>甚至循环也可以</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-keyword">loop</span> &#123;<br>    counter += <span class="hljs-number">1</span>;<br><br>    <span class="hljs-keyword">if</span> counter == <span class="hljs-number">10</span> &#123;<br>        <span class="hljs-keyword">break</span> counter * <span class="hljs-number">2</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>然后的话循环可以打标签，这样就可以 break/continue 外层循环了</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-symbol">&#x27;counting_up</span>: <span class="hljs-keyword">loop</span> &#123;<br>    <span class="hljs-keyword">loop</span> &#123;<br>        <span class="hljs-keyword">if</span> remaining == <span class="hljs-number">9</span> &#123;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> count == <span class="hljs-number">2</span> &#123;<br>            <span class="hljs-keyword">break</span> <span class="hljs-symbol">&#x27;counting_up</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>引用：在写的时候都要加上 <code>&amp;</code> 号。然后可以用 <code>&amp;mut</code> 来创建可变引用。<strong>同一时刻只能有一个可变引用，这样可以避免 data race</strong>。<strong>也不能在有不可变引用的时候创建可变引用</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-08-01"><a class="markdownIt-Anchor" href="#2025-08-01"></a> 2025-08-01</h2>
+<ul>
+<li>
+<p>Rust 的 let if 和 let else 都很有说法。let else 是在匹配不上的时候直接执行里面的代码（必须返回），否则把匹配的值返回外层定义域。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">describe_state_quarter</span>(coin: Coin) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Option</span>&lt;<span class="hljs-type">String</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">Coin</span>::<span class="hljs-title function_ invoke__">Quarter</span>(state) = coin <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>;<br>    &#125;;<br>	<span class="hljs-comment">// state 可以在外面被取用</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2025-08-03"><a class="markdownIt-Anchor" href="#2025-08-03"></a> 2025-08-03</h2>
+<ul>
+<li><code>mmdet3d</code> 报错 <code>mmcv</code> 版本问题：直接改包里面的源码。</li>
+<li>torch 版本选 2.1，不然可能报 <code>implementation for device cuda:0 not found.</code> 错。</li>
+</ul>
+<h2 id="2025-08-04"><a class="markdownIt-Anchor" href="#2025-08-04"></a> 2025-08-04</h2>
+<ul>
+<li>
+<p>组织项目的时候可以开一个 <code>third_party</code> 文件夹放第三方库，然后用 <code>git submodule</code> 管理之。</p>
+<p>类似于这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">sys.path.append(<span class="hljs-string">&#x27;third_party/vggt&#x27;</span>)<br><span class="hljs-keyword">from</span> third_party.vggt.vggt.models.vggt <span class="hljs-keyword">import</span> VGGT<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2025-08-06"><a class="markdownIt-Anchor" href="#2025-08-06"></a> 2025-08-06</h2>
+<ul>
+<li>傻逼 Windows 的切换应用输入法问题：按 win+tab，重命名桌面的时候把输入法切成英文即可。不知道为什么有这么傻逼的 bug。</li>
+<li>MobaXTerm 转发图形界面：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/647850471">(7 封私信 / 10 条消息) MobaXterm 通过 X11 Forwarding 图形界面可视化及OpenPCDet demo 实现 - 知乎</a></li>
+<li>pip 删包的时候可以用 pip-autoremove 自动删掉依赖</li>
+<li>在 <code>.bashrc</code> 或 <code>.zshrc</code> 里加上 <code>export HF_ENDPOINT=https://hf-mirror.com</code>，然后安装 <code>pip install &quot;huggingface_hub[hf_xet]&quot;</code> 可以做到神速从 huggingface 上下东西</li>
+</ul>
+<h2 id="2025-08-08"><a class="markdownIt-Anchor" href="#2025-08-08"></a> 2025-08-08</h2>
+<ul>
+<li>Linux 查看文件状态（修改时间等）：<code>stat &lt;文件名&gt;</code></li>
+</ul>
+<h2 id="2025-08-09"><a class="markdownIt-Anchor" href="#2025-08-09"></a> 2025-08-09</h2>
+<ul>
+<li>Rust 解析命令行可以用 <code>clap</code> 包。在 <code>cargo run</code> 的时候用 <code>--</code> 来跟参数，比如说 <code>cargo run -- -koopa hello.c -o hello.koopa</code>。可以用宏的形式写出非常健壮且简洁的命令行解析。</li>
+<li>Rust 的 <code>Box&lt;T&gt;</code> 是一种智能指针，将值放在堆上，然后在栈上保留指向堆的指针。非常适合大小不能确定的递归类型（比如编译器中的 <code>Exp</code>）</li>
+</ul>
+<h2 id="2025-08-25"><a class="markdownIt-Anchor" href="#2025-08-25"></a> 2025-08-25</h2>
+<ul>
+<li>Powershell 的输入重定向没有 LInux 中 <code>&lt; InputFile</code> 的格式，可以用 <code>Get-Content input.txt | command</code>。</li>
+</ul>
+<h2 id="2025-08-26"><a class="markdownIt-Anchor" href="#2025-08-26"></a> 2025-08-26</h2>
+<ul>
+<li>
+<p>善用 Jupyter Notebook 进行调试，极大提高效率，不用每次都重新 load 之类的了。</p>
+<p>在 <code>.gitignore</code> 里面直接忽略掉所有 <code>*.ipynb</code> 即可。</p>
+</li>
+<li>
+<p>目前需要做的几件事：</p>
+<ul>
+<li>等数据集下载好之后测试一下 mesh 的效果、
+<ul>
+<li>可能需要再多调一下 Qwen-VL 2.5 的 prompt</li>
+<li>如果这个数据集 8 太行的话考虑一下 RealEState</li>
+</ul>
+</li>
+<li>写一个用 blender 渲染 mesh 的接口，目前能想到可能需要解决的一些问题：
+<ul>
+<li><s>mesh 的坐标是没有和世界坐标系对齐的，光照的方向需要想办法怎么弄</s>
+<ul>
+<li><strong>目前这个是最难搞的</strong>
+<ul>
+<li>因为确实就是很难搞啊x</li>
+</ul>
+</li>
+<li><strong>笑嘻了，全是相机坐标系下的，根本无所谓好吧</strong></li>
+</ul>
+</li>
+<li>重建出来的 mesh 只有一半，怎么进行 masking（目前不是很明白细节）
+<ul>
+<li><em>参考 sketch3dve 里面的处理方法</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>一些需要明确的细节：
+<ul>
+<li>FPS 问题：数据集的帧率，数据集里每条视频抽几帧出来，生成轨迹以供 blender 渲染</li>
+<li>blender 渲染出来的东西的分辨率？以及要用什么样不同的 proxy materials？
+<ul>
+<li>分辨率：480*832</li>
+<li>proxy materials：diffuse+3个不同roughness的GGX就行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>X11 图形界面转发配置：</p>
+<ul>
+<li>
+<p>编辑 <code>/etc/ssh/sshd_config</code></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">X11Forwarding</span> <span class="hljs-literal">yes</span><br>X11DisplayOffset <span class="hljs-number">10</span><br>X11UseLocalhost <span class="hljs-literal">no</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>云容器上没法 <code>sudo systemctl restart sshd</code>，但是可以 <code>service ssh restart</code>，这样就可以用 MobaXterm 连接了。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>现在最头疼的还是数据集的问题，明天必须得仔细想想办法解决这个</strong></p>
+</li>
+</ul>
+<h2 id="2025-08-28"><a class="markdownIt-Anchor" href="#2025-08-28"></a> 2025-08-28</h2>
+<ul>
+<li>
+<p>Huggingface 不知道为什么抽风，hf-mirror 报错。</p>
+<p>可以 <code>apt install aria2</code> 然后用 <code>hfd</code> 来解决。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://hf-mirror.com/hfd/hfd.shchmod a+x hfd.sh<br><span class="hljs-built_in">chmod</span> a+x hfd.sh<br><span class="hljs-built_in">export</span> HF_ENDPOINT=https://hf-mirror.com<br>./hfd.sh [MODEL_NAME]<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>对于 github ssh 22 端口超时错误，可以编辑 <code>~/.ssh/config</code> 将端口改成 443：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host github.com<br>    Hostname ssh.github.com<br>    <span class="hljs-keyword">User</span> <span class="hljs-title">git</span><br>    Port <span class="hljs-number">443</span><br>    PreferredAuthentications publickey<br>    IdentityFile ~/.ssh/id_ed25519<br></code></pre></td></tr></table></figure>
+<p>改到 443 后有概率能解决。</p>
+</li>
+</ul>
+<h2 id="2025-09-03"><a class="markdownIt-Anchor" href="#2025-09-03"></a> 2025-09-03</h2>
+<ul>
+<li>tmux 的 UTF-8 字符问题：启动的时候加一个 <code>-u</code> 参数就行了。</li>
+</ul>
+<h2 id="2025-09-17"><a class="markdownIt-Anchor" href="#2025-09-17"></a> 2025-09-17</h2>
+<ul>
+<li><code>set -g mouse on</code> 即可启用 tmux 鼠标滚轮</li>
+</ul>
+<h2 id="2025-10-04"><a class="markdownIt-Anchor" href="#2025-10-04"></a> 2025-10-04</h2>
+<ul>
+<li>CineMaster：
+<ul>
+<li>用物体的 3d bbox 来精确指定物体 motion 和 camera motion。</li>
+<li>渲染 3d bbox 的深度图，和 bbox 的语义信息一起注入到 ControlNet 里面。</li>
+<li>他们的局限性：
+<ul>
+<li>光照不可控</li>
+<li>bbox 终归具有局限性，无法精准表征 3d 位姿</li>
+</ul>
+</li>
+<li>比我们强（？）的地方
+<ul>
+<li>物体的 motion 是可以指定的，我们是默认物体静止</li>
+<li>也不知道他们怎么就能把 bbox 弄出来而我们就没弄出来。。。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-10-06"><a class="markdownIt-Anchor" href="#2025-10-06"></a> 2025-10-06</h2>
+<ul>
+<li>Lumen：
+<ul>
+<li>视频重光照的一篇工作</li>
+<li>我觉得亮点在于数据集的处理。用 UR5 渲染了 20000 条数据。同时辅以真实数据 ~100k 条。
+<ul>
+<li>合成数据前景严格对齐，物理一致性强</li>
+<li>真实数据外观分布更广，更真实，但 preservation 不够强。</li>
+</ul>
+</li>
+<li>训练：
+<ul>
+<li>backbone 用的 Wan 2.1</li>
+<li>引入了一个用 LoRA 实现的 style adapter 来吸收 3D 渲染的风格信息，从而<strong>解耦域分布</strong>，并通过两阶段训练让模型既学到物理光照效果又能 generalize 到真实域。</li>
+<li>分 stage 训练，先只用合成数据对 adapter 专门训练，然后 mix 训练。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2025-10-15"><a class="markdownIt-Anchor" href="#2025-10-15"></a> 2025-10-15</h2>
+<ul>
+<li>Typst 合并单元格：<code>table.cell(rowspan: 2)[内容]</code> 这样就可以了。</li>
+<li>Typst 表格对齐的时候可以 <code>center + horizon</code>，二者用加号连接</li>
+</ul>
+<h2 id="2025-10-29"><a class="markdownIt-Anchor" href="#2025-10-29"></a> 2025-10-29</h2>
+<ul>
+<li>huggingface 的缓存默认会在 <code>~/.cache/huggingface</code> 下，可以通过指定 <code>HF_HOME</code> 环境变量来把他改到数据盘而不是用户盘。</li>
+<li><code>CONDA_PKGS_DIRS=/input0/conda_pkgs PIP_CACHE_DIR=/input0/pip_cache </code> 指定 conda 和 pip 的缓存路径（同样针对用户盘空间不足的问题）</li>
+</ul>
+<h2 id="2025-12-11"><a class="markdownIt-Anchor" href="#2025-12-11"></a> 2025-12-11</h2>
+<ul>
+<li><code>.gitignore</code> 必须是 UTF-8 编码</li>
+<li>Acrobat 会有很多乱七八糟的安装补丁 <code>.mcp</code> 文件在 <code>C:\Windows\Installer</code> 下，已严肃卸载省空间。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9D%82%E8%AE%B0/" class="category-chain-item">杂记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Latex/" class="print-no-link">#Latex</a>
+      
+        <a href="/tags/Typst/" class="print-no-link">#Typst</a>
+      
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+        <a href="/tags/%E7%A7%91%E7%A0%94/" class="print-no-link">#科研</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>倒腾日记</div>
+      <div>https://blog.imyangty.com/tech-diary/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>YangTY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 6, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/note-os/" title="操作系统（实验班）预习笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">操作系统（实验班）预习笔记</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/note-ml2024fall/generative-model/" title="24秋机器学习笔记-11-生成式模型">
+                        <span class="hidden-mobile">24秋机器学习笔记-11-生成式模型</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"Cgfyufsygsm/cgfyufsygsm.github.io","repo-id":"MDEwOlJlcG9zaXRvcnkzOTIyMDA0MzQ=","category":"Announcements","category-id":"DIC_kwDOF2CA8s4CZEyl","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"top","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <p>Copyright© 2020-2026 <a href="/">YangTY's Blog</a></p> <br> <a target="_blank" rel="noopener" href="https://clustrmaps.com/site/1c1rp"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=K0MO4d8JdrSjeQTYqe1d2JXGwDGExBIbgHOhU_V8eGE&cl=ffffff" srcset="/img/loading.gif" lazyload /></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Views: 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Visitors: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

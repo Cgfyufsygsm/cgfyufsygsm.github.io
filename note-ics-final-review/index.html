@@ -1,0 +1,1094 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/avatar.jpg">
+  <link rel="icon" href="/assets/avatar.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YangTY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Chap. 7 Linking 关于编译器驱动程序：  cpp [other args] main.c &#x2F;tmp&#x2F;main.i 是预处理器，main.i 是 ASCII 中间文件。 cc1 &#x2F;tmp.main.i -Og [other args] -o &#x2F;tmp&#x2F;main.s 是编译器，main.s 是 ASCII 汇编代码。 as [other args] -o &#x2F;tmp&#x2F;main.o &#x2F;tm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ICS 期末复习">
+<meta property="og:url" content="https://blog.imyangty.com/note-ics-final-review/index.html">
+<meta property="og:site_name" content="YangTY&#39;s Blog">
+<meta property="og:description" content="Chap. 7 Linking 关于编译器驱动程序：  cpp [other args] main.c &#x2F;tmp&#x2F;main.i 是预处理器，main.i 是 ASCII 中间文件。 cc1 &#x2F;tmp.main.i -Og [other args] -o &#x2F;tmp&#x2F;main.s 是编译器，main.s 是 ASCII 汇编代码。 as [other args] -o &#x2F;tmp&#x2F;main.o &#x2F;tm">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-12-22T13:31:19.000Z">
+<meta property="article:modified_time" content="2025-12-20T13:30:10.208Z">
+<meta property="article:author" content="YangTY">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="ICS">
+<meta property="article:tag" content="本科课程">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+    <!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-8ZS41KYKYZ"></script><script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag("js", new Date());  gtag("config", "G-8ZS41KYKYZ:");</script>
+  
+  <title>ICS 期末复习 - YangTY&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.imyangty.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<!-- hexo injector head_end start --><style id="banner-theme-css">
+#banner {
+  background-image: url("/assets/banner-light.jpg") !important;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/banner-dark.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+#banner .mask {
+  z-index: 1;
+}
+html[data-user-color-scheme="dark"] #banner::after {
+  opacity: 1;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 1;
+  }
+}
+@media (prefers-color-scheme: light) {
+  html:not([data-user-color-scheme]) #banner::after {
+    opacity: 0;
+  }
+}
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YangTY&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://yangty-pic.oss-cn-beijing.aliyuncs.com/blog_banner.JPG') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ICS 期末复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        YangTY
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-22 21:31" pubdate>
+          December 22, 2024 9:31 PM
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ICS 期末复习</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    Last updated on December 20, 2025 9:30 PM
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="chap-7-linking"><a class="markdownIt-Anchor" href="#chap-7-linking"></a> Chap. 7 Linking</h2>
+<p>关于编译器驱动程序：</p>
+<ul>
+<li><code>cpp [other args] main.c /tmp/main.i</code> 是预处理器，<code>main.i</code> 是 ASCII 中间文件。</li>
+<li><code>cc1 /tmp.main.i -Og [other args] -o /tmp/main.s</code> 是编译器，<code>main.s</code> 是 ASCII 汇编代码。</li>
+<li><code>as [other args] -o /tmp/main.o /tmp/main.s</code> 是汇编器，<code>main.o</code> 是<strong>可重定位目标文件</strong></li>
+<li><code>ld</code> 是链接器。</li>
+</ul>
+<hr />
+<p>ELF 的各个节：</p>
+<ul>
+<li>0：ELF header</li>
+<li>11：节头部表</li>
+<li>4：<code>.bss</code> 在<strong>目标文件中不占空间</strong>，在运行时分配。</li>
+<li>5：<code>.symtab</code>，不一定要 <code>-g</code> 才能得到。</li>
+<li><code>.debug</code>，<code>.line</code> 才是需要 <code>-g</code> 的。前者存<em>局部变量</em>。</li>
+</ul>
+<p>有三个伪节（在可执行文件中不存在）</p>
+<ul>
+<li><code>COMMON</code>：<strong>未初始化的全局变量</strong></li>
+<li><code>UNDEF</code>：未定义的外部符号</li>
+<li><code>ABS</code>：不该被重定位的符号</li>
+</ul>
+<p>有多个弱符号重名的时候会随便选一个。</p>
+<hr />
+<p>静态库编译：每个函数弄一个 <code>.o</code>，然后打包成 <code>.a</code>。用 <code>ar</code> 打包。</p>
+<p>链接器解析引用的流程：</p>
+<ul>
+<li>定义可重定位目标文件的集合 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi></mrow><annotation encoding="application/x-tex">E</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span>，未解析符号 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">U</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span></span></span></span>，已定义符号 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></li>
+<li>对于每个文件，若是 <code>.o</code>，正常进行维护</li>
+<li>若是 <code>.a</code>，尝试寻找包含 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">U</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span></span></span></span> 中符号定义的 <code>.o</code> 成员，找到了就加进去 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi></mrow><annotation encoding="application/x-tex">E</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span>，然后相应更新 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">U</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></li>
+</ul>
+<p><code>.o</code> 的顺序无冇所谓，但是 <code>.a</code> 的需要注意。</p>
+<p>把依赖关系图画出来，按着有向边的方向走一遍。</p>
+<hr />
+<p>重定位的步骤：</p>
+<ul>
+<li>重定位节与符号定义：把所有 <code>.o</code> 的同类型节 merge 到一起，然后把运行时内存地址赋给节、符号。</li>
+<li>重定位节的符号引用：字面意思</li>
+</ul>
+<p>代码的重定位条目在 <code>.rel.text</code>，<em>已初始化数据的重定位条目在 <code>.rel.data</code></em>。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">foreach section s &#123;<br>  foreach relocation entry r &#123;<br>    refptr = s + r.offset<br>    <span class="hljs-comment">// 此时已经知道了节的地址 ADDR(s) 和对象的地址 ADDR(r.symbol)</span><br>    <span class="hljs-comment">// refptr 是我们要修改的地址（在这个地址引用了符号）</span><br>    <span class="hljs-keyword">if</span> (r.<span class="hljs-keyword">type</span><span class="hljs-operator"> == </span>R_X86_64_PC32) &#123;<br>      <span class="hljs-comment">// PC相对寻址</span><br>      refaddr = <span class="hljs-constructor">ADDR(<span class="hljs-params">s</span>)</span> + r.offset <span class="hljs-comment">// 这是 ref 的运行时地址</span><br>      *refptr = (unsigned) (<span class="hljs-constructor">ADDR(<span class="hljs-params">r</span>.<span class="hljs-params">symbol</span>)</span> + r.addend - refaddr)<br>      <span class="hljs-comment">// r.addend = 4</span><br>      <span class="hljs-comment">// r.addend 实际上等于 %rip - refaddr，%rip 就是下一条指令的地址</span><br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (r.<span class="hljs-keyword">type</span><span class="hljs-operator"> == </span>R_X86_64_32) &#123;<br>      *refptr = (unsigned) (<span class="hljs-constructor">ADDR(<span class="hljs-params">r</span>.<span class="hljs-params">symbol</span>)</span> + r.addend)<br>      <span class="hljs-comment">// 这种情况 r.addend = 0，所以其实就是直接把地址弄上去</span><br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<hr />
+<p>可执行目标文件多了一个 <code>.init</code> 节，里面有 <code>_init</code> 函数。由于不需要重定位所以没有 <code>.rel</code> 了。</p>
+<p>代码段总从 <code>0x400000</code> 开始。用户栈从 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>48</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{48}-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 开始往下增长。</p>
+<p>注意到由于 ASLR（地址空间布局随机化）的存在，绝对地址会变，相对的不变。</p>
+<p>加载器过程：<code>_start</code>-&gt;<code>__libc_start_main</code>-&gt;<code>main</code>。</p>
+<hr />
+<p>动态链接：共享目标文件 <code>.so</code>，里面有个 <strong><code>interp</code> 节，包含了动态链接器的路径名，动态链接器 <code>ld.so</code> 本身也是个共享目标文件</strong>。</p>
+<hr />
+<p>TODO：PIC, GOT, PLT</p>
+<h2 id="chap-8-ecf"><a class="markdownIt-Anchor" href="#chap-8-ecf"></a> Chap. 8 ECF</h2>
+<p>异常表，异常表基址寄存器 + 84*异常号</p>
+<p>异常处理程序运行在<strong>内核态</strong></p>
+<p>四种异常：</p>
+<ul>
+<li>中断 interrupt：异步，总是返回到下一条。e. g. I/O</li>
+<li>陷阱 trap：同步，有意的异常，<strong>系统调用</strong></li>
+<li>故障 fault：<strong>可能返回到当前</strong>，常见的缺页，潜在可恢复</li>
+<li>终止 abort：<strong>不会返回</strong>，致命错误，硬件的那种</li>
+</ul>
+<hr />
+<p>系统调用：</p>
+<p><strong>%rax：系统调用号</strong>以及返回值。出现故障时等于负的 errno</p>
+<p>参数的顺序与过程调用不同：%rdi,%rsi,%rdx,<strong>%r10</strong>,%r8,%r9。<strong>寄存器 %rcx 和 %r11 会被破坏</strong>。</p>
+<hr />
+<p>进程上下文：内存中的代码与数据，栈，寄存器，PC，环境变量，opened fd</p>
+<p>每个进程有自己的私有地址空间，代码段从 <code>0x400000</code> 开始。顶部空间给内核。</p>
+<p>内核模式：控制寄存器中 mode bit，可以停止处理器，改变模式位，发起 IO 操作，访问任何地址。</p>
+<p>用户模式引用内核区的地址会导致<strong>保护故障</strong>。</p>
+<hr />
+<p>四种导致进程停止的信号：</p>
+<ul>
+<li>SIGSTOP</li>
+<li>SIGTSTP：terminal stop</li>
+<li>SIGTTIN：TTY input for bg</li>
+<li>SIGTTOU：TTY output for bg</li>
+</ul>
+<p>后两者的意思是：后台进程想要通过终端进行 I/O 操作的话必须要停下来直到转为前台。</p>
+<hr />
+<p><code>waitpid</code> 的 options：</p>
+<ul>
+<li>默认：挂起，等待集合中任意子进程<strong>终止</strong></li>
+<li><code>WNOHANG</code>：不挂起，如果没有的话，<strong>立即返回 0</strong></li>
+<li><code>WUNTRACED</code>：多关心<strong>停止</strong>的进程</li>
+<li><code>WCONTINUED</code>：多关心<strong>收到 SIGCONT 然后继续的进程</strong></li>
+</ul>
+<p>可以用按位或给他们或起来。</p>
+<blockquote>
+<p>wait 不等子进程的子进程</p>
+</blockquote>
+<hr />
+<p>execve 的时候</p>
+<p>从栈顶到栈底依次是：main 未来的栈帧 -&gt; libc_start_main 的栈帧 -&gt; argv[0], argv[1], … -&gt; envp[0], envp[1], … -&gt; argv 的内容 -&gt; envp 的内容（字符串）</p>
+<hr />
+<p>SIGKILL 和 SIGSTOP 不能被捕获/忽略。</p>
+<p>内核给每个进程维护一个 pending 位向量。接收到一个就把 pending 的对应位置 1，接收一个就置 0。</p>
+<p><strong>进程</strong>可以通过 signal 函数修改收到信号的行为，注意只管当前进程不管父进程。</p>
+<p>一个 handler 在运行的时候可能接收到信号，那么就会转到另一个 handler。</p>
+<ul>
+<li>在 handler 里面<strong>保存并恢复 <code>errno</code></strong></li>
+<li>如果要访问共享全局数据结构，<strong>暂时阻塞所有信号</strong></li>
+<li>用 <code>volatile</code> 声明全局变量（不会被缓存到寄存器中）</li>
+<li>用 <code>sig_atomic_t</code> 声明</li>
+<li>不要利用 handler 做给信号计数之类的工作。一来要视为来了一车。<code>while (waitpid)</code></li>
+</ul>
+<hr />
+<p><strong>异步信号安全</strong>：<strong>要么可重入（不引用线程间的共享数据），要么不能被信号处理程序中断</strong></p>
+<p>在 handler 中唯一安全的输出方法是用 <code>write</code>。</p>
+<hr />
+<p>显式等待信号（shell 的父进程等待子进程结束 SIGCHLD）</p>
+<p>基本思路是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">volatile</span> <span class="hljs-type">sig_atomic_t</span> pid;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">sigchld_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> s)</span> &#123;<br>    <span class="hljs-type">int</span> olderrno = errno;<br>    pid = waitpid(<span class="hljs-number">-1</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>);<br>    errno = errno;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    ...<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        Sigprocmask(SIG_BLOCK, &amp;mask, &amp;prev); <span class="hljs-comment">// 阻塞 SIGCHLD</span><br>        <span class="hljs-keyword">if</span> (Fork() == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>        &#125;<br>        <span class="hljs-comment">// parent</span><br>        pid = <span class="hljs-number">0</span>;<br>        Sigprocmask(SIG_SETMASK, &amp;prev, <span class="hljs-literal">NULL</span>);<br>        <span class="hljs-comment">// 等待 SIGCHLD</span><br>        <span class="hljs-keyword">while</span> (!pid);<br>        <br>        ...<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是这个 <code>while</code> 很占用资源。如果改成 <code>while(!pid) pause();</code> 会<strong>竞争</strong>（<code>while</code> 测试后且 <code>pause</code> 执行前收到信号的话，<code>pause</code> 就永远 <code>pause</code> 了）</p>
+<p>用 <code>sleep(1)</code> 替代，也很浪费时间。</p>
+<p>合理的方法是用 <code>sigsuspend(mask)</code>（阻塞 <code>mask</code> 的信号，收到信号后若是被杀就直接杀，若是 handler 就执行完后返回）。</p>
+<p>改成 <code>while (!pid) sigsuspend(&amp;prev)</code> 就可以了。</p>
+<hr />
+<p>非本地跳转。</p>
+<p><code>setjmp(env)</code> 在 <code>env</code> 保存当前调用环境（包括 PC，%rsp 和通用目的寄存器），<strong>返回值不能被赋值给变量但是可以用在 <code>switch</code> 或条件语句的测试</strong>。<code>longjmp</code> 从 <code>env</code> 中恢复调用环境，然后触发一个从最近一次初始化 <code>env</code> 的 <code>setjmp</code> 的返回。</p>
+<p>前者被调用一次返回多次，后者不返回。</p>
+<h2 id="chap-9-vm"><a class="markdownIt-Anchor" href="#chap-9-vm"></a> Chap. 9 VM</h2>
+<p>Core i7：四级页表。有 TLB（注意 TLB 是可以直接搞到页面基地址的）</p>
+<p>PTE 里的一些位：</p>
+<ul>
+<li>
+<p>第一级 PTE 独有的：第七位 PS，表明页面大小是 4KB 还是 4MB。</p>
+</li>
+<li>
+<blockquote>
+<p>zzy 的小班课 PPT 进行了勘误，这个应该是第三级的，代表是大页还是小页</p>
+</blockquote>
+</li>
+<li>
+<p>第四级 PTE 独有的：第六位 D，dirty bit。<strong>大题对 PTE 修改之后是需要更新 dirty bit 的</strong></p>
+</li>
+<li>
+<p>其他：U/S 是用户/内核，R/W 是可读/只读，XD 是禁止执行。</p>
+</li>
+<li>
+<p>不使用最低的 12 位，所以物理页表和物理内存页都要 4KB 对齐。</p>
+</li>
+</ul>
+<p>注意到 CI + CO = 12 = VPO，所以可以<strong>并行</strong>翻译 VPN 和在 cache 中查询，然后用 PPN 和 CT 来对比。</p>
+<hr />
+<p>缺页的时候可能发生的事情：</p>
+<ul>
+<li>访问不存在的页面：<strong>段错误</strong></li>
+<li>写一个只读的页面（权限问题）：<strong>保护异常</strong></li>
+<li>正常缺页</li>
+</ul>
+<hr />
+<p>COW 的时候可能发生的事情：<strong>保护故障</strong>，尝试写私有区域的某个页面，这个时候触发 COW，然后重新执行写操作。</p>
+<p>映射到匿名文件？.bss</p>
+<p>应用级内存映射：<code>void* mmap(void *start, size_t length, int prot, int flags, int fd, off_t offset)</code></p>
+<p><code>start</code> 通常是 NULL，<code>prot</code> 代表这段内存区域的权限位，<code>flags</code> 可以是 <code>MAP_ANON</code>（匿名文件），<code>MAP_PRIVATE</code>（私有，COW），<code>MAP_SHARED</code> 共享对象。</p>
+<p><code>munmap(void *start, size_t length)</code> 可以对 <code>mmap</code> 出来的东西进行释放。</p>
+<hr />
+<p><code>malloc</code> 返回的块地址在 32 位下是 8 的倍数，在 64 位下是 16 的倍数。</p>
+<p>外部碎片：没分配的小碎块</p>
+<p>内部碎片：有效载荷&lt;块大小</p>
+<p><strong>吞吐率：next fit &gt; first fit</strong></p>
+<p><strong>util: first fit &gt; next fit</strong></p>
+<p>显式链表：按照地址维护比 LIFO 利用率会高</p>
+<h2 id="chap-10-sysio"><a class="markdownIt-Anchor" href="#chap-10-sysio"></a> Chap. 10 SysIO</h2>
+<p>Unix 万物皆文件，输入输出等价于对文件的读写。</p>
+<p>每次打开文件都有唯一的非负 fd 与其对应。</p>
+<ul>
+<li>0 是 STDIN</li>
+<li>1 是 STDOUT</li>
+<li>2 是 STDERR</li>
+</ul>
+<p>所以正常而言 fd 是从 3 开始分配的，<strong>每次分配最小的未被占用的</strong></p>
+<p>对于每个打开的文件，内核维护一个<strong>文件位置 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></strong>，可以通过 <code>seek</code> 显式设置。</p>
+<p>读文件：<strong>文件结尾没有显式的 EOF 记号</strong></p>
+<hr />
+<p>文件的分类：普通文件，目录文件，socket。</p>
+<hr />
+<p>打开文件：<code>int open(char* filename, int flags, mode_t mode)</code>，返回一个 fd。</p>
+<p><code>flags</code> 参数，也是位向量掩码。</p>
+<ul>
+<li><code>O_RDONLY</code>：只读</li>
+<li><code>O_WRONLY</code>：只写</li>
+<li><code>o_RDWR</code>：可读可写</li>
+</ul>
+<p>额外指示：</p>
+<ul>
+<li><code>O_CREAT</code>：不存在就创建空的</li>
+<li><code>O_TRUNC</code>：存在就夹断</li>
+<li><code>O_APPEND</code>：写之前把文件位置设置到最尾</li>
+</ul>
+<p>进程上下文包含 <strong><code>umask</code></strong>，<code>mode</code> 可以是<code>S_I R/W/X USR/GRP/OTH</code>，用 <code>open</code> <strong>创建新文件</strong>的时候，其权限位会被设置成 <code>mode &amp; ~umask</code>。默认情况下是拥有者有读写权限，其他用户只读。</p>
+<p>用 <code>close(fd)</code> 可以关闭一个 fd，<em>关一个已关闭的会出错</em></p>
+<blockquote>
+<p>做题的时候注意 open 的参数是什么，是 <code>O_TRUNC</code> 或者 <code>O_APPEND</code> 的话都要格外注意。</p>
+</blockquote>
+<hr />
+<p>RIO 包健壮读写</p>
+<ul>
+<li><strong>无缓冲的 I/O 函数</strong></li>
+<li><strong>带缓冲的输入函数</strong>，没有带缓冲输出。</li>
+</ul>
+<blockquote>
+<p>缓冲区的意义是减少系统调用 <code>read</code> 的次数。每次系统调用都要陷入内核，比用户调用函数慢。</p>
+</blockquote>
+<p>不要用 <code>rio_readline(b)</code> 来读二进制文件。</p>
+<hr />
+<p><code>stat</code> 和 <code>fstat</code> 可以读取文件的 metadata。</p>
+<p><code>st_size</code> 文件大小，<code>st_mode</code> 是许可位和类型，可以用相关的宏判定文件类型。</p>
+<hr />
+<p><code>opendir(name)</code> 返回指向目录流的指针。</p>
+<p><code>readdir</code> 调用会返回指向下一个目录项的指针。</p>
+<hr />
+<p>内核用三个数据结构维护打开的文件：</p>
+<ul>
+<li>
+<p>fd 表：每个进程都有自己的 fd 表。</p>
+</li>
+<li>
+<p>文件表：打开文件的集合，<strong>所有进程共享</strong></p>
+<p>文件表表项：<strong>文件位置，refcnt，指向 v-node 表的指针</strong>。</p>
+</li>
+<li>
+<p>v-node 表：<strong>所有进程共享</strong>，每个表项包含 stat 结构中大部分信息。</p>
+</li>
+</ul>
+<p>注意：<strong>多个 fd 可以通过不同的文件表表项引用同一个文件</strong>，因为<strong>每个 fd 都有自己的文件位置</strong>，对不同 fd 操作就可以从文件不同位置读信息。</p>
+<p>fork 之后，子进程会有和父进程一样的 fd 表，自然其引用的文件，<code>refcnt</code> 会增加。内核直到 <code>refcnt</code> 为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 才会真正关闭文件。</p>
+<hr />
+<p>I/O 重定向：用 <code>dup2(oldfd, newfd)</code> 函数。</p>
+<p><strong>会把 <code>oldfd</code> 的 fd 表项复制到 <code>newfd</code> 的 fd 表项</strong>。</p>
+<p>相当于这个时候，oldfd 和 newfd 都对应了原来 oldfd 指向的文件，<code>refcnt</code> 会增加。</p>
+<p>把 STDIN 重定向到 5 就是 <code>dup(5, 0)</code>。</p>
+<blockquote>
+<p>做题的时候千万看清楚哪个进程里，哪个文件表项，对应的文件位置是什么。不知道为什么出题的就喜欢在这上面整花活</p>
+</blockquote>
+<h2 id="chap-11-netprog"><a class="markdownIt-Anchor" href="#chap-11-netprog"></a> Chap. 11 NetProg</h2>
+<p>client 和 server 都是<strong>进程</strong></p>
+<ul>
+<li>最低层是<em>局域网 LAN</em>，常见技术 以太网。主机之间由<strong>集线器 hub</strong>连接，<strong>帧会被转发到每个主机</strong></li>
+<li>用<strong>网桥</strong>可以把若干以太网连起来形成<strong>桥接以太网</strong>。网桥有分配算法。</li>
+<li>多个不兼容的局域网通过<strong>路由器 router</strong> 连接成<strong>互联网 Internet</strong>（注意区分 Internet）</li>
+</ul>
+<p>各种协议：</p>
+<ul>
+<li>IP 协议：<strong>主机到主机</strong>，<strong>数据报 datagram</strong>，<strong>不可靠</strong></li>
+<li>UDP 协议：<strong>进程间</strong>，不可靠</li>
+<li>TCP 协议：<strong>进程间，全双工</strong></li>
+</ul>
+<p>client 和 server 通过在<strong>连接</strong>上发送字节流来通信，<strong>点对点，全双工</strong>。</p>
+<p>接下来分别考虑 client 和 server 的套接字接口：</p>
+<ul>
+<li>client：
+<ul>
+<li><code>getaddrinfo</code>：传进去主机名，返回一个 <code>ai_addr</code> 链表。记得用 <code>freeaddrinfo</code> 给释放</li>
+<li><code>socket</code>：创建一个套接字 fd，在这里为 <code>clientfd</code>，<strong>不能直接用于读写</strong></li>
+<li><code>connect</code>：传入 <code>clientfd</code> 和待连接服务器的套接字地址 <code>addr</code>，<strong>阻塞，直到连接成功或者失败</strong>。成功了就可以用 <code>clientfd</code> 来 IO 了。</li>
+<li>然后就用 <code>rio_writen</code> 和 <code>rio_readlineb</code> 来进行通信。</li>
+<li><code>close</code> 来结束。</li>
+</ul>
+</li>
+<li>server：
+<ul>
+<li><code>getaddrinfo</code>：主机名的地方<em>传 <code>NULL</code></em> 进去，<code>hints</code> 里面的 <code>ai_flags</code> 要带上 <strong><code>AI_PASSIVE</code></strong>。</li>
+<li><code>socket</code> 创建一个套接字 fd，一样的。</li>
+<li><code>int bind(int sockfd, const struct sockaddr *addr, socketlent_t addrlen)</code>：<em>把 <code>socket</code> 创建的 fd 与 <code>getaddrinfo</code> 搞到的 <code>addr</code> 给绑定起来</em>。</li>
+<li><code>listen</code>：把 <code>sockfd</code> 从<strong>主动套接字转化为监听套接字</strong>，注意：<strong>不会阻塞</strong>。</li>
+<li><code>int accept(int listenfd, sockaddr *addr, int *addrlen)</code>：<strong>阻塞</strong>，直到收到连接请求，把客户端的 sockaddr 填写到第二个参数里面，返回一个<strong>connfd，接下来用这个 fd 来通信</strong>。</li>
+<li>然后就用 <code>rio_writen</code> 和 <code>rio_readlineb</code> 来进行通信。read 到 EOF 了就结束。</li>
+</ul>
+</li>
+</ul>
+<p><code>getaddrinfo</code> 和 <code>getnameinfo</code> 二者是相反关系。注意其与具体协议无关。</p>
+<blockquote>
+<p>注意 <code>open_listenfd</code> 和 <code>open_clientfd</code> 的实现，注意失败的情况一定要记得关闭对应的 fd</p>
+</blockquote>
+<p>HTTP 是应用级协议。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AC%94%E8%AE%B0/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" class="category-chain-item">本科课程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/" class="print-no-link">#笔记</a>
+      
+        <a href="/tags/ICS/" class="print-no-link">#ICS</a>
+      
+        <a href="/tags/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B/" class="print-no-link">#本科课程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ICS 期末复习</div>
+      <div>https://blog.imyangty.com/note-ics-final-review/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>YangTY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 22, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/note-ml2024fall/generative-model/" title="24秋机器学习笔记-11-生成式模型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">24秋机器学习笔记-11-生成式模型</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/note-ml2024fall/unsupervised-learning/" title="24秋机器学习笔记-10-无监督学习">
+                        <span class="hidden-mobile">24秋机器学习笔记-10-无监督学习</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"Cgfyufsygsm/cgfyufsygsm.github.io","repo-id":"MDEwOlJlcG9zaXRvcnkzOTIyMDA0MzQ=","category":"Announcements","category-id":"DIC_kwDOF2CA8s4CZEyl","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"top","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> <p>Copyright© 2020-2026 <a href="/">YangTY's Blog</a></p> <br> <a target="_blank" rel="noopener" href="https://clustrmaps.com/site/1c1rp"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=K0MO4d8JdrSjeQTYqe1d2JXGwDGExBIbgHOhU_V8eGE&cl=ffffff" srcset="/img/loading.gif" lazyload /></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        Views: 
+        <span id="busuanzi_value_site_pv"></span>
+        
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        Visitors: 
+        <span id="busuanzi_value_site_uv"></span>
+        
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
