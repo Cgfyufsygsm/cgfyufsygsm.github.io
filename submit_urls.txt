@@ -1,5 +1,5 @@
-https://blog.imyangty.com/note-ml2024fall/generative-model/
 https://blog.imyangty.com/note-rl/
+https://blog.imyangty.com/note-ml2024fall/generative-model/
 https://blog.imyangty.com/note-os/
 https://blog.imyangty.com/tech-diary/
 https://blog.imyangty.com/testblog/
@@ -7,4 +7,4 @@ https://blog.imyangty.com/xianhua220710/
 https://blog.imyangty.com/xianhua230908/
 https://blog.imyangty.com/password-test/
 https://blog.imyangty.com/notes-cssyb-final/
-https://blog.imyangty.com/note-simple-math-tricks/
+https://blog.imyangty.com/notes-concise-latex/
