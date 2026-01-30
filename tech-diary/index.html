@@ -29,7 +29,7 @@
 <meta property="og:description" content="2025-06-06  SSH：把本地的公钥添加到远程的 ~&#x2F;.ssh&#x2F;authorized_keys 即可免密登录。   2025-06-07   用 pyplot 可以在浏览器里可视化三维点云。代码如下： 12import plotly.io as piopio.renderers.default &#x3D; &quot;browser&quot; 剩下部分让大模型写就好了。   对于三维的任务，每">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-06T14:04:58.000Z">
-<meta property="article:modified_time" content="2025-12-29T16:30:26.447Z">
+<meta property="article:modified_time" content="2026-01-29T16:27:46.203Z">
 <meta property="article:author" content="YangTY">
 <meta property="article:tag" content="Latex">
 <meta property="article:tag" content="Typst">
@@ -298,7 +298,7 @@ html[data-user-color-scheme="dark"] #banner::after {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k words
+          2.7k words
         
       </span>
     
@@ -309,7 +309,7 @@ html[data-user-color-scheme="dark"] #banner::after {
         
         
         
-          22 mins
+          23 mins
         
       </span>
     
@@ -351,7 +351,7 @@ html[data-user-color-scheme="dark"] #banner::after {
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on December 30, 2025 12:30 AM
+                    Last updated on January 30, 2026 12:27 AM
                   
                 
               </p>
@@ -703,7 +703,23 @@ html[data-user-color-scheme="dark"] #banner::after {
 </ul>
 <h2 id="2025-12-30"><a class="markdownIt-Anchor" href="#2025-12-30"></a> 2025-12-30</h2>
 <ul>
-<li>在 hexo 的公式里面有连续两个左大括号的时候 `</li>
+<li>在 hexo 的公式里面有连续两个左大括号的时候，会触发 Nunjunks 的语法而报错。解决方案就是加一个空格。</li>
+</ul>
+<h2 id="2026-01-13"><a class="markdownIt-Anchor" href="#2026-01-13"></a> 2026-01-13</h2>
+<ul>
+<li>Copilot 可能无法在 Docker 里联网，解决方案：把 <code>Http: Proxy Support</code> 设置成 <code>off</code>。很抽象，我也不理解为啥。</li>
+</ul>
+<h2 id="2026-01-29"><a class="markdownIt-Anchor" href="#2026-01-29"></a> 2026-01-29</h2>
+<ul>
+<li>
+<p>ssh 反向代理：<code>ssh -N -R 17890:127.0.0.1:7897</code>，然后在远程 <code>export ALL_PROXY=socks5://127.0.0.1:17890</code> 即可。</p>
+<blockquote>
+<p>这样就可以愉快在云端用 codex 了。</p>
+</blockquote>
+</li>
+<li>
+<p>一些无法解决的依赖问题可能是 <code>apt</code> 的源压根写错版本了，比如把 <code>jammy</code> 写成 <code>focal</code>。</p>
+</li>
 </ul>
 
                 
