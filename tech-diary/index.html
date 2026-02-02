@@ -29,7 +29,7 @@
 <meta property="og:description" content="2025-06-06  SSH：把本地的公钥添加到远程的 ~&#x2F;.ssh&#x2F;authorized_keys 即可免密登录。   2025-06-07   用 pyplot 可以在浏览器里可视化三维点云。代码如下： 12import plotly.io as piopio.renderers.default &#x3D; &quot;browser&quot; 剩下部分让大模型写就好了。   对于三维的任务，每">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-06T14:04:58.000Z">
-<meta property="article:modified_time" content="2026-01-29T16:27:46.203Z">
+<meta property="article:modified_time" content="2026-02-02T07:35:08.084Z">
 <meta property="article:author" content="YangTY">
 <meta property="article:tag" content="Latex">
 <meta property="article:tag" content="Typst">
@@ -298,7 +298,7 @@ html[data-user-color-scheme="dark"] #banner::after {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k words
+          2.9k words
         
       </span>
     
@@ -309,7 +309,7 @@ html[data-user-color-scheme="dark"] #banner::after {
         
         
         
-          23 mins
+          25 mins
         
       </span>
     
@@ -351,7 +351,7 @@ html[data-user-color-scheme="dark"] #banner::after {
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on January 30, 2026 12:27 AM
+                    Last updated on February 2, 2026 3:35 PM
                   
                 
               </p>
@@ -719,6 +719,14 @@ html[data-user-color-scheme="dark"] #banner::after {
 </li>
 <li>
 <p>一些无法解决的依赖问题可能是 <code>apt</code> 的源压根写错版本了，比如把 <code>jammy</code> 写成 <code>focal</code>。</p>
+</li>
+</ul>
+<h2 id="2026-02-02"><a class="markdownIt-Anchor" href="#2026-02-02"></a> 2026-02-02</h2>
+<ul>
+<li>
+<p>PowerShell 的代理设置：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/17276972422">PowerShell 代理设置：让你的命令行畅通无阻 - 知乎</a>，在配置文件里面添加</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">proxy</span></span> &#123;<br>    <span class="hljs-variable">$env:http_proxy</span> = <span class="hljs-string">&quot;http://127.0.0.1:[端口号]&quot;</span><br>    <span class="hljs-variable">$env:https_proxy</span> = <span class="hljs-string">&quot;http://127.0.0.1:[端口号]&quot;</span><br>    [<span class="hljs-type">System.Net.WebRequest</span>]::DefaultWebProxy = <span class="hljs-built_in">New-Object</span> System.Net.WebProxy(<span class="hljs-string">&quot;http://127.0.0.1:[端口号]&quot;</span>)<br>    <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;Proxy enabled: http://127.0.0.1:[端口号]&quot;</span> <span class="hljs-literal">-ForegroundColor</span> Green<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unproxy</span></span> &#123;<br>    <span class="hljs-variable">$env:http_proxy</span> = <span class="hljs-variable">$null</span><br>    <span class="hljs-variable">$env:https_proxy</span> = <span class="hljs-variable">$null</span><br>    [<span class="hljs-type">System.Net.WebRequest</span>]::DefaultWebProxy = <span class="hljs-variable">$null</span><br>    <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;Proxy disabled&quot;</span> <span class="hljs-literal">-ForegroundColor</span> Yellow<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check-proxy</span></span> &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$env:http_proxy</span> <span class="hljs-operator">-or</span> <span class="hljs-variable">$env:https_proxy</span>) &#123;<br>        <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;Current proxy settings:&quot;</span> <span class="hljs-literal">-ForegroundColor</span> Cyan<br>        <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;HTTP Proxy: <span class="hljs-variable">$env:http_proxy</span>&quot;</span><br>        <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;HTTPS Proxy: <span class="hljs-variable">$env:https_proxy</span>&quot;</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;No proxy is currently set.&quot;</span> <span class="hljs-literal">-ForegroundColor</span> Cyan<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>即可，然后在终端里面就可以 <code>proxy</code>，<code>unproxy</code> 和 <code>check-proxy</code> 了。</p>
 </li>
 </ul>
 
