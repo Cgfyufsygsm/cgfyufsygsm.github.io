@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言 新换成了 Mac（实则公司发的.jpg），记录一下一些配置。 感觉没啥不好适应的，Cmd 和 Ctrl 分开感觉甚至比 windows 合理。 还是有很多地方很难绷的，嗯。MacOS 的产品经理多少脑子是有点问题的（没说 Windows 的没有）。  基础设施  Homebrew 是一定要安装的，不装的话很多事情都没法做。 浏览器使用 Arc 终端使用 Warp，同时安装好 oh-my-z">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-04-10T10:21:18.000Z">
-<meta property="article:modified_time" content="2026-04-12T09:15:40.990Z">
+<meta property="article:modified_time" content="2026-04-13T05:42:08.074Z">
 <meta property="article:author" content="YangTY">
 <meta property="article:tag" content="Mac">
 <meta name="twitter:card" content="summary_large_image">
@@ -295,7 +295,7 @@ html[data-user-color-scheme="dark"] #banner::after {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          535 words
+          578 words
         
       </span>
     
@@ -348,7 +348,7 @@ html[data-user-color-scheme="dark"] #banner::after {
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on April 12, 2026 5:15 PM
+                    Last updated on April 13, 2026 1:42 PM
                   
                 
               </p>
@@ -377,9 +377,11 @@ html[data-user-color-scheme="dark"] #banner::after {
 </ul>
 <h2 id="触控板鼠标键盘"><a class="markdownIt-Anchor" href="#触控板鼠标键盘"></a> 触控板/鼠标/键盘</h2>
 <p>触控板滑动和鼠标滚轮的自然滚动绑定起来确实太抽象了，所以选择使用工具</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">brew </span><span class="hljs-keyword">install </span>mac-mouse-fix<br></code></pre></td></tr></table></figure>
-<p>配置就好了。</p>
-<p>把滚动什么的配置好，嗯。</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-variable">$ </span>brew install --cask mos<span class="hljs-variable">@beta</span><br></code></pre></td></tr></table></figure>
+<p>打开反向滚动（默认打开）并稍微调一下平滑参数应该就好了。</p>
+<blockquote>
+<p>对于预览/ppt 等不需要平滑滚动的软件，可以单独进行设置，这是 mac mouse fix 无法做到的。</p>
+</blockquote>
 <p>触控板配置</p>
 <ul>
 <li>跟踪速度调快</li>
