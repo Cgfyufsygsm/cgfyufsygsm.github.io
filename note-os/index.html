@@ -29,7 +29,7 @@
 <meta property="og:description" content="0218  Lab 代码量较大（几千行），需要注意实现 Design Doc  TacOS：基于 Rust，指令集是 RISCV 本地测试点和测评测试点一致 Design Doc 不用卷字数   五个 lab，两次考试（期中期末） 考勤 5%，Lab 30%，期中 25%，期末 40%  lab：4% + 6.5% + 6.5% + 6.5% + 6.5%     0220  四个基本概念：线程">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-12-14T07:45:54.000Z">
-<meta property="article:modified_time" content="2026-04-10T10:12:53.429Z">
+<meta property="article:modified_time" content="2026-04-27T16:32:43.153Z">
 <meta property="article:author" content="YangTY">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="本科课程">
@@ -297,7 +297,7 @@ html[data-user-color-scheme="dark"] #banner::after {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k words
+          3.8k words
         
       </span>
     
@@ -308,7 +308,7 @@ html[data-user-color-scheme="dark"] #banner::after {
         
         
         
-          16 mins
+          32 mins
         
       </span>
     
@@ -350,7 +350,7 @@ html[data-user-color-scheme="dark"] #banner::after {
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    Last updated on April 10, 2026 6:12 PM
+                    Last updated on April 28, 2026 12:32 AM
                   
                 
               </p>
@@ -545,27 +545,322 @@ very time consuming</p>
 </li>
 <li>
 <p>更好的实现：只让 busy-wait 来原子化检查锁：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> guard = <span class="hljs-number">0</span>; <span class="hljs-comment">// 小锁</span><br><span class="hljs-type">int</span> value = FREE; <span class="hljs-comment">// 真正的锁</span><br><br><span class="hljs-built_in">Acquire</span>() &#123;<br>    <span class="hljs-keyword">while</span> (test&amp;<span class="hljs-built_in">set</span>(guard)); <span class="hljs-comment">// short busy wait time</span><br>    <span class="hljs-keyword">if</span> (value == BUSY) &#123;<br>        put thread on wait queue;<br>        <span class="hljs-function">go to <span class="hljs-title">sleep</span><span class="hljs-params">()</span> &amp; guard </span>= <span class="hljs-number">0</span>; <span class="hljs-comment">// 要求这一步是原子的</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        value = BUSY;<br>        guard = <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-built_in">Release</span>() &#123;<br>    <span class="hljs-keyword">while</span> (test&amp;<span class="hljs-built_in">set</span>(guard));<br>    <span class="hljs-keyword">if</span> anyone on wait queue &#123;<br>        take thread off wait queue;<br>        place on wait queue;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        value = FREE;<br>    &#125;<br>    guard = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> guard = <span class="hljs-number">0</span>; <span class="hljs-comment">// 小锁</span><br><span class="hljs-type">int</span> value = FREE; <span class="hljs-comment">// 真正的锁</span><br><br><span class="hljs-built_in">Acquire</span>() &#123;<br>    <span class="hljs-keyword">while</span> (test&amp;<span class="hljs-built_in">set</span>(guard)); <span class="hljs-comment">// short busy wait time</span><br>    <span class="hljs-keyword">if</span> (value == BUSY) &#123;<br>        put thread on wait queue;<br>        <span class="hljs-function">go to <span class="hljs-title">sleep</span><span class="hljs-params">()</span> &amp; guard </span>= <span class="hljs-number">0</span>; <span class="hljs-comment">// 要求这一步是原子的</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        value = BUSY;<br>        guard = <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-built_in">Release</span>() &#123;<br>    <span class="hljs-keyword">while</span> (test&amp;<span class="hljs-built_in">set</span>(guard));<br>    <span class="hljs-keyword">if</span> anyone on wait queue &#123;<br>        take thread off wait queue;<br>        place on ready queue;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        value = FREE;<br>    &#125;<br>    guard = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>其实就很像关中断的那个实现，只不过把开关中断换成了一个 <code>guard</code> 变量。</p>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="管程"><a class="markdownIt-Anchor" href="#管程"></a> 管程</h3>
-<p>信号量的问题：把约束和互斥一起进行了处理。</p>
-<p><strong>管程（monitor）</strong>：将约束和互斥进行解耦。一把锁以及若干<strong>条件变量</strong>。某些语言（Java）天生支持管程。</p>
-<p><strong>条件变量</strong>：a queue of threads waiting for something <strong>inside a critical section</strong>（注意信号量是不支持在临界区内 wait 的）</p>
-<p>操作：</p>
-<ul>
-<li><code>Wait(&amp;lock)</code>：自动释放锁然后睡眠，返回之前重新获取锁。</li>
-<li><code>Signal()</code>：唤醒其中一个等待中的线程（如果有）</li>
-<li><code>Broadcase()</code>：唤醒所有等待中的线程。</li>
-</ul>
-<p>例子：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++">lock buf_lock;<br>condition buf_CV;<br>queue queue;<br><br><span class="hljs-built_in">Producer</span>(item) &#123;<br>    <span class="hljs-built_in">acquire</span>(&amp;buf_lock);<br>    <span class="hljs-built_in">enqueue</span>(&amp;queue, item);<br>    <span class="hljs-built_in">cond_signal</span>(&amp;buf_CV); <span class="hljs-comment">// signal any waiters</span><br>    <span class="hljs-built_in">release</span>(&amp;buf_lock);<br>&#125;<br><br><span class="hljs-built_in">Consumer</span>() &#123;<br>    <span class="hljs-built_in">acquire</span>(&amp;buf_lock);<br>    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">isEmpty</span>(&amp;queue)) &#123;<br>        <span class="hljs-built_in">cond_wait</span>(&amp;buf_CV, &amp;buf_lock); <span class="hljs-comment">// if empty, sleep</span><br>    &#125;<br>    item = <span class="hljs-built_in">dequeue</span>(&amp;queue);<br>    <span class="hljs-built_in">release</span>(&amp;buf_lock);<br>    <span class="hljs-keyword">return</span> item;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>为什么要用 <code>while</code> 而不是 <code>if</code>？因为<em>大多数 OS 使用 Mesa 调度而不是 Hoare 调度，虽然后者更“符合语义”，但也更难以实现</em>。</p>
-<h2 id="0318-sync-4-读者写者"><a class="markdownIt-Anchor" href="#0318-sync-4-读者写者"></a> 0318 SYNC 4 读者写者</h2>
+<p>​</p>
+<h2 id="0331-sync-4-读者写者"><a class="markdownIt-Anchor" href="#0331-sync-4-读者写者"></a> 0331 SYNC 4 读者写者</h2>
+<h3 id="读者写者"><a class="markdownIt-Anchor" href="#读者写者"></a> 读者写者</h3>
 <p><strong>期中必考</strong></p>
+<p>课上讲了用管程实现读者写者（写者优先）的一个例子。</p>
+<p>约束：</p>
+<ul>
+<li>读者只能在没有写者的时候访问数据库</li>
+<li>写者只能在没有读者/写者的时候访问数据库</li>
+<li>只有一个线程能操作状态变量。</li>
+</ul>
+<p>状态变量：</p>
+<ul>
+<li>AR, WR, AW, WW</li>
+<li>条件变量 okToRead, okToWrite</li>
+</ul>
+<p>读者代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c">Reader() &#123;<br>  <span class="hljs-comment">// check self into system</span><br>  acquire(&amp;lock);<br>  <span class="hljs-keyword">while</span> ((AW + WW) &gt; <span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-comment">// 没有写者，且没有等待的写者（写者优先）</span><br>    WR++;<br>    cond_wait(&amp;okToRead, &amp;lock); <span class="hljs-comment">// sleep on condvar</span><br>    WR--;<br>  &#125;<br>  AR++; <span class="hljs-comment">// now active</span><br>  release(&amp;lock);<br>  <br>  AccessDataBase(ReadOnly);<br>  <br>  acquire(&amp;lock);<br>  AR--;<br>  <span class="hljs-keyword">if</span> (AR == <span class="hljs-number">0</span> &amp;&amp; WR &gt; <span class="hljs-number">0</span>) &#123;<br>    cond_signal(&amp;okToWrite); <span class="hljs-comment">// wake up a waiting writer</span><br>  &#125;<br>  release(&amp;lock); <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>写者代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c">Writer() &#123;<br>  acquire(&amp;lock);<br>  <span class="hljs-keyword">while</span> ((AW + AR) &gt; <span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-comment">// not safe to write</span><br>    WW++;<br>    cond_wait(&amp;okToWrite, &amp;lock);<br>    WW--;<br>  &#125;<br>  AW++;<br>  release(&amp;lock);<br>  <br>  AccessDataBase(readAndWrite);<br>  <br>  acquire(&amp;lock);<br>  AW--;<br>  <span class="hljs-keyword">if</span> (WW &gt; <span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-comment">// 写者优先，优先唤醒写者</span><br>    cond_signal(&amp;okToWrite);<br>  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (WR &gt; <span class="hljs-number">0</span>) &#123;<br>    cond_broadcast(&amp;okToRead); <span class="hljs-comment">// 这里唤醒**所有**读者，所以要用 broadcast</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="辨析"><a class="markdownIt-Anchor" href="#辨析"></a> 辨析</h3>
+<ol>
+<li>
+<p>读者会饥饿吗</p>
+<blockquote>
+<p>会的，因为这个是写者优先，如果一直有写者来那么读者是会一直等待的</p>
+</blockquote>
+</li>
+<li>
+<p>如果把读者退出代码的那个 <code>if</code> 删掉呢</p>
+<blockquote>
+<p>也没问题，writer 会睡回去的，但是效率变差了</p>
+</blockquote>
+</li>
+<li>
+<p>那把 <code>signal</code> 换成 <code>broadcast</code> 呢</p>
+<blockquote>
+<p>也没问题，只有一个 writer 能写，效率变差而已。</p>
+</blockquote>
+</li>
+<li>
+<p>只用一个条件变量 <code>okToContinue</code> 呢</p>
+<blockquote>
+<p>可以，必须用 <code>broadcast</code>，因为无法保证唤醒的是读者还是写者，有可能会永远醒不来。</p>
+</blockquote>
+</li>
+</ol>
+<p>OSDI 06 The Chubby Lock</p>
+<h2 id="0402-schedule-1"><a class="markdownIt-Anchor" href="#0402-schedule-1"></a> 0402 Schedule 1</h2>
+<p>调度的三个 objective：</p>
+<ul>
+<li>最小化完成时间</li>
+<li>最大化吞吐量</li>
+<li>“公平”</li>
+</ul>
+<p>四类调度算法：</p>
+<ul>
+<li>
+<p><strong>FCFS</strong>：最简单的队列策略，先处理先到的</p>
+</li>
+<li>
+<p><strong>Round Robin</strong>：每个 ready process 最多运行一个固定时间片 quantum <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi></mrow><annotation encoding="application/x-tex">q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span>。如果时间片用完还没结束，就被抢占，并放回 ready queue 队尾。相当于使用了 <strong>timer interrupt</strong>。核心在于抢占。</p>
+<p>但是不考虑任务长短，且上下文开销更大，quantum 太小也不行，平均完成时间不一定优于 FCFS。</p>
+</li>
+<li>
+<p><strong>Strictly Priority Scheduling</strong>：维护多个优先级队列，优先处理高优先级的。</p>
+<p>问题：1. 饥饿 2. 优先级逆转，即低优先级持锁，which 高优先级在等待。一般可能需要一些动态优先级设计。</p>
+</li>
+<li>
+<p><strong>SJF</strong>：short jobs first，可以减少平均完成时间，但是难预测这个，而且长任务可能饥饿。</p>
+</li>
+<li>
+<p><strong>SRTF</strong>：short remaining time first，始终运行剩余时间最短的 job。如果一个新 job 到来，并且它的总运行时间小于当前 job 的剩余时间，则立即抢占当前 job。</p>
+</li>
+</ul>
+<p>问题：</p>
+<ol>
+<li>
+<p>RR 一定比 FCFS 更优吗？</p>
+<blockquote>
+<p>不是的，只是能避免短任务长期被卡住，但所有任务时间相同的话 RR 的平均完成时间是劣于 FCFS 的。</p>
+</blockquote>
+</li>
+<li>
+<p>RR 的 quantum 时间越小越好吗？举出三个例子：</p>
+<blockquote>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub><mo>=</mo><mn>10</mn><mo separator="true">,</mo><msub><mi>T</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">T_1=10,T_2=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">q=10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span> 劣于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">q=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo><msub><mi>T</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">T_1=1,T_2=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">q=10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">q=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 一样；</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo><msub><mi>T</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">T_1=1,T_2=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">q=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 劣于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">q=0.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span></span></span></span>；</li>
+</ul>
+</blockquote>
+<p>所以都是不一定的</p>
+</li>
+</ol>
+<h2 id="0407-schedule-2"><a class="markdownIt-Anchor" href="#0407-schedule-2"></a> 0407 Schedule 2</h2>
+<h3 id="adaptive-scheduling"><a class="markdownIt-Anchor" href="#adaptive-scheduling"></a> Adaptive Scheduling</h3>
+<p>对于 SRTF，有个很关键的问题在于无法预测任务时间，所以可以使用 <strong>adaptive scheduling</strong>，根据之前观测到的 CPU burst 时间来预计之后的 CPU burst 时间。标准指数平均：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>τ</mi><mi>n</mi></msub><mo>=</mo><mi>α</mi><msub><mi>t</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false">)</mo><msub><mi>τ</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\tau_n = \alpha t_{n-1}+ (1-\alpha)\tau_{n-1}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.1132em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8234109999999999em;vertical-align:-0.208331em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.1132em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<h3 id="lottery-scheduling"><a class="markdownIt-Anchor" href="#lottery-scheduling"></a> Lottery Scheduling</h3>
+<p>给每个任务发 tickets，每个时间片抽一张来调度。</p>
+<p>这样可以表达 priority，同时可以避免严格 starvation。</p>
+<p>但是如果需要硬实时/low latency 的话不适合，且公平是统计意义上的。</p>
+<h3 id="mlfq"><a class="markdownIt-Anchor" href="#mlfq"></a> MLFQ</h3>
+<p>multi-level feedback queue</p>
+<p>维护多个队列，每个对应不同优先级。</p>
+<ul>
+<li>高优先级队列对应更低 quantum，用于前台/交互性任务</li>
+<li>低优先级队列对应更高 quantum，甚至 FCFS，用于后台/CPU bound 的任务</li>
+<li>每个队列用自己的调度算法</li>
+</ul>
+<p>关键在于 <strong>feedback</strong>：任务优先级会动态调整。</p>
+<ul>
+<li>新任务从最高优先级开始</li>
+<li>若其用完了 quantum，说明可能是 CPU-bound，降级</li>
+<li>若没用完就阻塞了（例如去 I/O）了，说明可能是 interactive / I/O bound，升级或者保持</li>
+</ul>
+<p>其<strong>近似 SRTF</strong>，但是根据行为推断 CPU burst 时间，近似满足了短 CPU burst 任务优先。</p>
+<blockquote>
+<p>但是，用户可以通过行为欺骗，比如插入大量 <code>printf</code> 来 I/O 显得自己像 interactive task，保持高优先级。</p>
+</blockquote>
+<p>所以说问题很复杂， 对于一些 sleep 很久然后 compute 很久的，或者是对 deadline 敏感的，或者必须周期性运行的，当多种现实情况混合起来，调度是很复杂的，光看短 burst 优先是不够的。</p>
+<h3 id="多核调度"><a class="markdownIt-Anchor" href="#多核调度"></a> 多核调度</h3>
+<ul>
+<li>倾向于在各自核上维护调度数据结构</li>
+<li><em>Affinity Scheduling</em>，CPU 倾向于把调度过的线程重新调度到同一个核上，利用<strong>局部性</strong>（cache）</li>
+</ul>
+<p>自旋锁：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> value = <span class="hljs-number">0</span>;<br><br>Acquire() &#123;<br>  <span class="hljs-keyword">while</span> (test&amp;<span class="hljs-built_in">set</span>(&amp;value)) ;<br>&#125;<br><br>Release() &#123;<br>  value = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这种锁不会让线程休眠，而是在用户态/内核态 busy wait。</p>
+<p>如果等待时间短，spinlock 可能更好，比如多核程序的 barrier，这种情况 sleep/wakeup 开销可能反而更大。</p>
+<p><strong>Cache ping-pong</strong> 问题：多核情况下，每次 test&amp;set 都是写操作，会导致锁变量在多个 core cache 之间来回失效并迁移，所以推荐用 test-and-test-and-set：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c">Acquire() &#123;<br>  <span class="hljs-keyword">do</span> &#123;<br>    <span class="hljs-keyword">while</span> (value);<br>  &#125; <span class="hljs-keyword">while</span> (test&amp;<span class="hljs-built_in">set</span>(&amp;value));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>Gang Scheduling</strong>：多个线程一起工作时最好一起被调度，感觉这个是显然的。</p>
+<p>一般而言，调度的<strong>单位是线程</strong>。考虑线程/进程切换需要切换的上下文。</p>
+<h3 id="实时调度"><a class="markdownIt-Anchor" href="#实时调度"></a> 实时调度</h3>
+<p>关心的是<strong>能否在 ddl 前完成</strong>，而非平均跑得多快。</p>
+<p>硬实时：</p>
+<ul>
+<li>
+<p>ddl miss 可能有严重后果</p>
+</li>
+<li>
+<p>尽可能满足所有 ddl</p>
+</li>
+<li>
+<p>最好在运行前就判断能否满足</p>
+</li>
+<li>
+<p>常见算法：EDF (earliest ddl first), RMS (rate-monotonic scheduling), DM (ddl monotonic scheduling)</p>
+</li>
+<li>
+<blockquote>
+<p>像 RR 就只能满足公平，但是不保证 ddl</p>
+</blockquote>
+</li>
+</ul>
+<p>软实时：</p>
+<ul>
+<li>ddl miss 可能影响体验</li>
+<li>主要是多媒体场景：视频播放，游戏渲染等</li>
+<li>Constant Bandwith Server</li>
+</ul>
+<h4 id="edf"><a class="markdownIt-Anchor" href="#edf"></a> EDF</h4>
+<p>所有 active tasks 中，选择 <strong>absolute ddl</strong> 最近的任务运行。周期性任务的话，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>D</mi><mi>i</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><msub><mi>P</mi><mi>i</mi></msub><mo>+</mo><msubsup><mi>D</mi><mi>i</mi><mi>t</mi></msubsup></mrow><annotation encoding="application/x-tex">D_i^{t+1} = P_i + D_{i}^{t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.131103em;vertical-align:-0.276864em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854239em;"><span style="top:-2.4231360000000004em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.1031310000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.276864em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.05222em;vertical-align:-0.258664em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7935559999999999em;"><span style="top:-2.441336em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.258664em;"><span></span></span></span></span></span></span></span></span></span></p>
+<p>判断能否满足的条件：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mfrac><msub><mi>C</mi><mi>i</mi></msub><msub><mi>D</mi><mi>i</mi></msub></mfrac><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_{i=1}^n \frac{C_i}{D_i}\le 1
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.929066em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.36033em;"><span style="top:-2.3139999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8360000000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span></p>
+<h3 id="饥饿"><a class="markdownIt-Anchor" href="#饥饿"></a> 饥饿</h3>
+<p>LCFS 可能饥饿，FCFS 如果遇到不 yield CPU 的后续也会饥饿。RR 一般不太会饥饿，但不一定在吞吐量意义下公平。</p>
+<p>Priority Scheduling 会饥饿，高优先级会压制低优先级。更严重的是 priority inversion。</p>
+<p>SRTF 和 MLFQ 也可能导致长任务饥饿。</p>
+<p><strong>Priority 只是手段，不是目标</strong>，所以现在的真实调度器逐渐从严格优先级走向更公平更可控。</p>
+<h3 id="o1-scheduler"><a class="markdownIt-Anchor" href="#o1-scheduler"></a> O(1) Scheduler</h3>
+<p>140 个优先级：</p>
+<ul>
+<li>0-99：real-time 或者 kernel 任务</li>
+<li>100-139：用户任务，由 nice 值影响。</li>
+</ul>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 指调度操作时间不随任务数量增长，用 bit mask 表示哪些优先级非空。</p>
+<p>有两个队列集合：active 和 expired。任务用完时间片后进入 expired，当 active 空了之后和 expired 交换。</p>
+<p>有很多 ad-hoc heuristics。</p>
+<h3 id="linux-cfs-completely-fair-scheduler"><a class="markdownIt-Anchor" href="#linux-cfs-completely-fair-scheduler"></a> Linux CFS (Completely Fair Scheduler)</h3>
+<p>跟踪每个线程已经获得的 CPU 时间，每次选择获得 CPU 最少的线程运行。使用红黑树来维护。</p>
+<p>Target latency 和 minimum granularity：最小反应时间窗口以及每个任务最少运行的时间。</p>
+<p>也支持 proportional share 来调整大家获得的 CPU 时间的权重。</p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<table>
+<thead>
+<tr>
+<th>你关心什么</th>
+<th>适合选择</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU throughput</td>
+<td>FCFS</td>
+</tr>
+<tr>
+<td>平均完成时间</td>
+<td>SRTF approximation</td>
+</tr>
+<tr>
+<td>I/O throughput</td>
+<td>SRTF approximation</td>
+</tr>
+<tr>
+<td>CPU time fairness</td>
+<td>Linux CFS</td>
+</tr>
+<tr>
+<td>等待 CPU 的公平性</td>
+<td>Round Robin</td>
+</tr>
+<tr>
+<td>meeting deadlines</td>
+<td>EDF</td>
+</tr>
+<tr>
+<td>favoring important tasks</td>
+<td>Priority Scheduling</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>核心思想</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FCFS</td>
+<td>先来先服务</td>
+<td>简单、吞吐好、切换少</td>
+<td>队头阻塞、响应差</td>
+<td>batch compute</td>
+</tr>
+<tr>
+<td>RR</td>
+<td>时间片轮转</td>
+<td>waiting-time 公平、响应好</td>
+<td>切换开销、平均完成时间不一定好</td>
+<td>time-sharing</td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>高优先级先跑</td>
+<td>表达任务重要性</td>
+<td>starvation、priority inversion</td>
+<td>重要任务优先</td>
+</tr>
+<tr>
+<td>SJF/SRTF</td>
+<td>短任务/剩余时间最短优先</td>
+<td>平均完成时间最优</td>
+<td>需要预测未来、不公平</td>
+<td>理论基准、近似策略</td>
+</tr>
+<tr>
+<td>Lottery</td>
+<td>按 ticket 随机调度</td>
+<td>比例公平、避免绝对 starvation</td>
+<td>短期不稳定</td>
+<td>proportional share</td>
+</tr>
+<tr>
+<td>MLFQ</td>
+<td>多级反馈队列</td>
+<td>自动识别 interactive / CPU-bound，近似 SRTF</td>
+<td>heuristic、可被欺骗、可能 starvation</td>
+<td>通用 OS</td>
+</tr>
+<tr>
+<td>EDF</td>
+<td>deadline 最近先跑</td>
+<td>实时 deadline-aware</td>
+<td>需要任务参数，overload 敏感</td>
+<td>real-time</td>
+</tr>
+<tr>
+<td>Linux O(1)</td>
+<td>多优先级队列 + active/expired</td>
+<td>调度快，工程高效</td>
+<td>heuristic 多，公平模型弱</td>
+<td>旧 Linux</td>
+</tr>
+<tr>
+<td>Linux CFS</td>
+<td>最小 vruntime / 公平 CPU share</td>
+<td>原则清晰，公平，交互性自然</td>
+<td>非硬实时，复杂度 (O(\log N))</td>
+<td>现代通用 Linux</td>
+</tr>
+</tbody>
+</table>
+<h2 id="schedule-3"><a class="markdownIt-Anchor" href="#schedule-3"></a> Schedule 3</h2>
+<p>死锁的四个条件（缺一不可）：</p>
+<ul>
+<li>mutual exclusion</li>
+<li>hold and wait</li>
+<li>no preemption</li>
+<li>circular wait</li>
+</ul>
 
                 
               </div>
