@@ -7,4 +7,4 @@ https://blog.imyangty.com/password-test/
 https://blog.imyangty.com/tech-diary/
 https://blog.imyangty.com/testblog/
 https://blog.imyangty.com/writeup-cs336-lab1/
-https://blog.imyangty.com/note-rl/
+https://blog.imyangty.com/note-simple-math-tricks/
